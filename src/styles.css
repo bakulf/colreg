@@ -1,0 +1,569 @@
+/*
+ * Dark by default: this gets used at night and on a phone, and the light and
+ * buoyage renderers coming in M1/M5 draw on a night background anyway.
+ */
+
+:root {
+  --bg: #08131c;
+  --surface: #0f2231;
+  --surface-2: #16303f;
+  --border: #23485c;
+  --text: #e8f1f6;
+  --muted: #94b2c4;
+  --accent: #46b0d8;
+  --port: #e0453c;
+  --starboard: #35b56a;
+  --warn: #e8b13d;
+
+  color-scheme: dark;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-text-size-adjust: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.app {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 4rem;
+}
+
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+
+.masthead h1 {
+  font-size: 1.35rem;
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
+.masthead .sub {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.card h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+/* --- topic picker --- */
+
+.topics {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.topic {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: transparent;
+  text-align: left;
+  width: 100%;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.topic:hover {
+  background: var(--surface-2);
+}
+
+.topic[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.topic .tick {
+  width: 1.1rem;
+  flex: none;
+  color: var(--accent);
+}
+
+.topic .count {
+  margin-left: auto;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+}
+
+.lengths {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.primary {
+  display: block;
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: none;
+  border-radius: 0.6rem;
+  background: var(--accent);
+  color: #04141d;
+  font-weight: 650;
+  font-size: 1rem;
+}
+
+.primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.secondary {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: transparent;
+}
+
+.secondary:hover {
+  background: var(--surface-2);
+}
+
+/* A file input dressed as a button: the native control cannot be styled. */
+.filebtn {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.filebtn input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.filebtn:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- quiz --- */
+
+.progressbar {
+  height: 3px;
+  background: var(--surface-2);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progressbar > div {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.2s ease;
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* --- night scene --- */
+
+.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: #01070c;
+}
+
+.scene.day {
+  background: #c9dbe6;
+}
+
+.scene.small {
+  max-width: 20rem;
+  margin-bottom: 0.6rem;
+}
+
+/*
+ * Rule 21(f): a flashing light flashes at 120 or more per minute, so 2 Hz is
+ * the floor. Drawn at the floor because that is what you have to recognise.
+ */
+@keyframes colreg-flash {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  50%,
+  92% {
+    opacity: 0.06;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.scene .flashing {
+  animation: colreg-flash 0.5s steps(1, end) infinite;
+}
+
+/*
+ * Deliberately not slowed under prefers-reduced-motion. The rate *is* the
+ * information — Rule 21(f) defines a flashing light by its rate, and the buoy
+ * characters are recognised by counting flashes against a period. Slowing them
+ * would quietly teach a wrong answer, so both renderers run at true rate and
+ * neither honours the preference. The alternative worth building one day is a
+ * static timeline of the character, as the sound signals already have.
+ */
+
+.gen {
+  color: var(--accent);
+}
+
+.prompt {
+  font-size: 1.1rem;
+  line-height: 1.45;
+  margin: 0 0 1rem;
+}
+
+.choices {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.choice {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  width: 100%;
+  text-align: left;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: transparent;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.choice:not(:disabled):hover {
+  background: var(--surface-2);
+}
+
+.choice .key {
+  flex: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.choice:disabled {
+  cursor: default;
+  opacity: 1;
+}
+
+.choice.correct {
+  border-color: var(--starboard);
+  background: color-mix(in srgb, var(--starboard) 16%, transparent);
+}
+
+.choice.correct .key {
+  border-color: var(--starboard);
+  color: var(--starboard);
+}
+
+.choice.wrong {
+  border-color: var(--port);
+  background: color-mix(in srgb, var(--port) 16%, transparent);
+}
+
+.choice.wrong .key {
+  border-color: var(--port);
+  color: var(--port);
+}
+
+.choice.dim {
+  opacity: 0.55;
+}
+
+/* --- feedback --- */
+
+.feedback {
+  margin-top: 1rem;
+  border-left: 3px solid var(--accent);
+  padding: 0.1rem 0 0.1rem 0.9rem;
+}
+
+.feedback h3 {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+  margin: 0.9rem 0 0.25rem;
+  font-weight: 600;
+}
+
+.feedback h3:first-child {
+  margin-top: 0;
+}
+
+.feedback p {
+  margin: 0;
+}
+
+.feedback.teaching {
+  border-left-color: var(--starboard);
+}
+
+.feedback.trap {
+  border-left-color: var(--warn);
+}
+
+.refs {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+
+.ref {
+  font-size: 0.75rem;
+  padding: 0.12rem 0.55rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  color: var(--muted);
+}
+
+.actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.actions .primary {
+  width: auto;
+  flex: 1;
+}
+
+/* --- results --- */
+
+.bigscore {
+  text-align: center;
+  padding: 0.5rem 0 1rem;
+}
+
+.bigscore .n {
+  font-size: 2.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.bigscore .pct {
+  color: var(--muted);
+}
+
+.bars {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.3rem 0.75rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.bar .track {
+  grid-column: 1 / -1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.bar .fill {
+  height: 100%;
+  background: var(--starboard);
+}
+
+.bar .num {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.review {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.review .item {
+  border-top: 1px solid var(--border);
+  padding-top: 0.9rem;
+}
+
+.review .item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.review .q {
+  margin: 0 0 0.35rem;
+  font-weight: 550;
+}
+
+.review .given {
+  color: var(--port);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.review .right {
+  color: var(--starboard);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.bar .fill.hard {
+  background: var(--warn);
+}
+
+.readiness {
+  text-align: center;
+  padding: 0.2rem 0 0.9rem;
+}
+
+.bigpct {
+  font-size: 2.4rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  color: var(--accent);
+}
+
+.duerow {
+  display: flex;
+  justify-content: space-around;
+  gap: 0.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.duerow b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.scene.plot,
+.scene.signal {
+  background: #061520;
+}
+
+.scene.signal {
+  margin-bottom: 0.75rem;
+}
+
+.footnote {
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.kbdhint {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 0.9rem;
+}
+
+kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 0.25rem;
+  padding: 0.05rem 0.3rem;
+  background: var(--surface-2);
+}
+
+@media (max-width: 30rem) {
+  .app {
+    padding: 1rem 0.75rem 3rem;
+  }
+  .prompt {
+    font-size: 1.02rem;
+  }
+}
