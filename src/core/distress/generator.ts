@@ -27,11 +27,12 @@ function recogniseDrill(signal: DistressSignal, rng: Rng): Question {
     })),
     correct: 'a',
     ruleRefs: ['Rule 37', signal.ref],
-    explanation: `${signal.ref}. ${signal.note ?? ''}`.trim(),
-    teachingNote:
-      'Annex IV is a closed list of fifteen. Paragraph 2 then prohibits using any of them except to indicate distress, and prohibits any other signal that might be confused with one — which is why the list being closed matters.',
-    misconception: wrong
-      .map((w) => `${w.observation}: ${w.truth}`)
+    explanation: [
+      `${signal.ref}.`,
+      signal.note,
+      ...wrong.map((w) => `${w.observation}: ${w.truth}`),
+    ]
+      .filter(Boolean)
       .join(' '),
     difficulty: 2,
     scene: signal.visual ? { type: 'distress', visual: signal.visual } : undefined,
@@ -53,8 +54,6 @@ function exclusionDrill(impostor: NotDistress, rng: Rng): Question {
     correct: 'a',
     ruleRefs: ['Rule 37', 'Annex IV'],
     explanation: impostor.truth,
-    teachingNote:
-      'Knowing what a signal does not mean is worth as much as knowing what it does. Every option here except one is on the Annex IV list; the odd one out is something people reliably mistake for it.',
     difficulty: 3,
   };
 }
@@ -76,8 +75,6 @@ function armsDrill(): Question {
     ruleRefs: ['Annex IV, 1(k)'],
     explanation:
       'Both arms, outstretched to each side, raised and lowered slowly and repeatedly. Every word carries: one arm waved reads as a greeting, and a fast movement reads as excitement rather than distress.',
-    teachingNote:
-      'Make the student do it. It feels absurd on dry land and that is exactly why they will remember it, and why they will do it slowly enough to be understood if they ever need to.',
     difficulty: 2,
   };
 }
@@ -105,11 +102,7 @@ function attentionDrill(): Question {
     correct: 'a',
     ruleRefs: ['Rule 36'],
     explanation:
-      'Rule 36 permits any light or sound signal that cannot be mistaken for a signal authorised elsewhere, and permits directing a searchlight in the direction of the danger in such a way as not to embarrass any vessel. Any light used to attract attention must not be mistakable for an aid to navigation, and high-intensity flashing or revolving lights, such as strobes, shall be avoided.',
-    teachingNote:
-      'Rule 36 and Annex IV are easily muddled. Rule 36 says "look at me"; Annex IV says "help me". A searchlight on the danger is Rule 36; a red flare is Annex IV.',
-    misconception:
-      'Five short and rapid blasts is the Rule 34(d) doubt signal, not a general attention signal, and it applies between vessels in sight of one another.',
+      'Rule 36 permits any light or sound signal that cannot be mistaken for a signal authorised elsewhere, and permits directing a searchlight in the direction of the danger in such a way as not to embarrass any vessel. Any light used to attract attention must not be mistakable for an aid to navigation, and high-intensity flashing or revolving lights, such as strobes, shall be avoided. Five short and rapid blasts is the Rule 34(d) doubt signal, not a general attention signal, and it applies between vessels in sight of one another.',
     difficulty: 3,
   };
 }
@@ -135,8 +128,6 @@ function annexThreeDrill(): Question {
     ruleRefs: ['Annex IV, 3'],
     explanation:
       'Annex IV, 1 lists the distress signals. Annex IV, 3 separately draws attention to the International Code of Signals, the search and rescue manual, the orange canvas with a black square and circle for identification from the air, and the dye marker. Useful, carried in liferafts, and not on the list.',
-    teachingNote:
-      'A fine distinction, but a fair one to ask: the orange canvas is for being found once someone is already looking, not for raising the alarm.',
     difficulty: 3,
   };
 }

@@ -11,7 +11,7 @@
  */
 
 export interface RuleEntry {
-  /** Rule number, 1..38. */
+  /** Rule number, 1..41. */
   n: number;
   title: string;
   part: string;
@@ -90,6 +90,9 @@ export const RULES: readonly RuleEntry[] = [
   { n: 36, title: 'Signals to attract attention', part: PARTS.D },
   { n: 37, title: 'Distress signals', part: PARTS.D },
   { n: 38, title: 'Exemptions', part: PARTS.E },
+  { n: 39, title: 'Definitions', part: PARTS.F },
+  { n: 40, title: 'Application', part: PARTS.F },
+  { n: 41, title: 'Verification of compliance', part: PARTS.F },
 ] as const;
 
 const BY_NUMBER = new Map(RULES.map((r) => [r.n, r]));

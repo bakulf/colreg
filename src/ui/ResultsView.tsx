@@ -2,6 +2,7 @@ import type { QuizSession } from '../core/quiz.ts';
 import { score } from '../core/quiz.ts';
 import { TOPIC_LABELS } from '../core/types.ts';
 import { SceneView } from './SceneView.tsx';
+import { LinkedText, RefChips } from './RegText.tsx';
 
 interface Props {
   session: QuizSession;
@@ -64,15 +65,9 @@ export function ResultsView({ session, onAgain, onHome }: Props) {
                 <p className="given">✗ {choiceText(item.question, item.given)}</p>
                 <p className="right">✓ {choiceText(item.question, item.question.correct)}</p>
                 <p className="muted" style={{ fontSize: '0.88rem', marginTop: '0.4rem' }}>
-                  {item.question.explanation}
+                  <LinkedText text={item.question.explanation} />
                 </p>
-                <div className="refs">
-                  {item.question.ruleRefs.map((ref) => (
-                    <span className="ref" key={ref}>
-                      {ref}
-                    </span>
-                  ))}
-                </div>
+                <RefChips refs={item.question.ruleRefs} />
               </div>
             ))}
           </div>

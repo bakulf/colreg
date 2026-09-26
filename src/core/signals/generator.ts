@@ -94,11 +94,9 @@ export function composeSignalDrill(signal: Signal, rng: Rng): SignalDrill {
     choices: texts.map((text, i) => ({ id: String.fromCharCode(97 + i), text })),
     correct: 'a',
     ruleRefs: [...new Set(group.flatMap((s) => s.ruleRefs))],
-    explanation: `That is ${signal.notation}${interval}. ${signal.meaning}.`,
-    teachingNote:
-      signal.teachingNote ??
-      'Count the blasts before you interpret them, and count the long ones separately from the short. Rule 32 fixes the lengths: a short blast is about one second, a prolonged blast four to six. Get the student to time five seconds out loud — it is far longer than anyone expects.',
-    misconception: sharedNote(group),
+    explanation: [`That is ${signal.notation}${interval}. ${signal.meaning}.`, signal.note, sharedNote(group)]
+      .filter(Boolean)
+      .join(' '),
     difficulty: group.length > 1 ? 3 : 2,
     scene: { type: 'signal', signalId: signal.id },
   };

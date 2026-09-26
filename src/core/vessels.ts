@@ -30,12 +30,18 @@ export const VESSEL_POOL: readonly VesselState[] = [
   // Rule 24 — towing and pushing
   { kind: 'towing', lengthM: 30, makingWay: true, towLengthM: 90 },
   { kind: 'towing', lengthM: 30, makingWay: true, towLengthM: 260 },
+  // At 50 metres and over the towing column replaces one masthead light and
+  // the other is still carried, so a big tug shows three or four whites.
+  { kind: 'towing', lengthM: 60, makingWay: true, towLengthM: 150 },
+  { kind: 'towing', lengthM: 60, makingWay: true, towLengthM: 260 },
   { kind: 'pushing', lengthM: 40, makingWay: true },
+  { kind: 'pushing', lengthM: 60, makingWay: true },
   { kind: 'composite', lengthM: 45, makingWay: true },
   { kind: 'pushed-ahead', lengthM: 60, makingWay: true },
   { kind: 'towed-alongside', lengthM: 55, makingWay: true },
   { kind: 'towed', lengthM: 60, makingWay: true, towLengthM: 260 },
   { kind: 'submerged-tow', lengthM: 80, makingWay: true },
+  { kind: 'submerged-tow', lengthM: 80, makingWay: true, breadthM: 30 },
 
   // Rule 25 — sailing vessels and vessels under oars
   { kind: 'sailing', lengthM: 12, makingWay: true },
@@ -48,9 +54,15 @@ export const VESSEL_POOL: readonly VesselState[] = [
   { kind: 'trawler', lengthM: 24, makingWay: true },
   { kind: 'trawler', lengthM: 24, makingWay: false },
   { kind: 'trawler', lengthM: 62, makingWay: true },
+  { kind: 'trawler', lengthM: 62, makingWay: false },
+  // Rule 26(b)(ii) permits the after masthead light below 50 metres, so her
+  // picture is the big trawler's, for the same reason as the power-driven
+  // vessel above.
+  { kind: 'trawler', lengthM: 30, makingWay: true, secondMasthead: true },
   { kind: 'fishing', lengthM: 18, makingWay: true },
   { kind: 'fishing', lengthM: 18, makingWay: false },
   { kind: 'fishing', lengthM: 18, makingWay: true, gearSide: 'starboard' },
+  { kind: 'fishing', lengthM: 18, makingWay: false, gearSide: 'port' },
   { kind: 'fishing', lengthM: 16, makingWay: false, basket: true },
   // Rule 26(d) and Annex II — the signals fishing vessels show each other.
   { kind: 'trawler', lengthM: 26, makingWay: true, annexII: 'shooting' },
@@ -63,7 +75,9 @@ export const VESSEL_POOL: readonly VesselState[] = [
   { kind: 'nuc', lengthM: 80, makingWay: true },
   { kind: 'ram', lengthM: 70, makingWay: false },
   { kind: 'ram', lengthM: 70, makingWay: true },
-  { kind: 'restricted-towing', lengthM: 60, makingWay: true, towLengthM: 250 },
+  { kind: 'ram', lengthM: 70, makingWay: false, atAnchor: true },
+  { kind: 'restricted-towing', lengthM: 40, makingWay: true, towLengthM: 150 },
+  { kind: 'restricted-towing', lengthM: 40, makingWay: true, towLengthM: 250 },
   { kind: 'dredger', lengthM: 45, makingWay: true, obstructionSide: 'port' },
   { kind: 'dredger', lengthM: 45, makingWay: false, obstructionSide: 'starboard', atAnchor: true },
   { kind: 'diving', lengthM: 10, makingWay: false },
@@ -74,7 +88,8 @@ export const VESSEL_POOL: readonly VesselState[] = [
   { kind: 'pilot', lengthM: 20, makingWay: true },
   { kind: 'pilot', lengthM: 20, makingWay: false, atAnchor: true },
   { kind: 'anchored', lengthM: 30, makingWay: false },
-  { kind: 'anchored', lengthM: 120, makingWay: false },
+  // Between 50 and 100 metres, where lighting the decks is optional.
+  { kind: 'anchored', lengthM: 80, makingWay: false },
   { kind: 'anchored', lengthM: 150, makingWay: false, illuminatedDecks: true },
   { kind: 'aground', lengthM: 30, makingWay: false },
   { kind: 'aground', lengthM: 120, makingWay: false },

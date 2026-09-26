@@ -80,10 +80,10 @@ export function composeBuoyDrill(kind: MarkKind, mode: BuoyMode, rng: Rng): Buoy
     correct: 'a',
     ruleRefs: ['IALA Region A'],
     explanation:
-      mode === 'night'
+      (mode === 'night'
         ? `${mark.light.label} — ${mark.light.spoken}. By day she is ${describeBody(kind)}, with ${describeTopmark(kind)}. ${describeAction(kind)}`
-        : `${describeBody(kind)}, with ${describeTopmark(kind)}. Her light is ${mark.light.label}, ${mark.light.spoken}. ${describeAction(kind)}`,
-    teachingNote: teachingNoteFor(kind, mode),
+        : `${describeBody(kind)}, with ${describeTopmark(kind)}. Her light is ${mark.light.label}, ${mark.light.spoken}. ${describeAction(kind)}`) +
+      noteFor(kind, mode),
     difficulty: mode === 'night' ? 3 : 2,
     scene: { type: 'buoy', kind, mode },
   };
@@ -91,27 +91,21 @@ export function composeBuoyDrill(kind: MarkKind, mode: BuoyMode, rng: Rng): Buoy
   return { question, kind, mode, distractors };
 }
 
-function teachingNoteFor(kind: MarkKind, mode: BuoyMode): string {
-  if (kind.startsWith('cardinal')) {
-    return mode === 'night'
-      ? 'Count against a clock face: east three, south six, west nine, north continuous. The long flash after the south group exists only so that six is not miscounted as nine — it carries no extra meaning, and students reliably assume it does.'
-      : 'Read the topmark first and derive the colours from it: the black band always sits at the end the cones point to. North, cones up, black on top. South, cones down, black at the bottom. West is a wine glass, east is an egg.';
+/** The facts about a mark that the description alone does not carry. */
+function noteFor(kind: MarkKind, mode: BuoyMode): string {
+  if (kind.startsWith('cardinal') && mode === 'night') {
+    return ' East three, south six, west nine, north continuous, as on a clock face. The long flash after the south group only stops six being miscounted as nine; it carries no meaning of its own.';
   }
   if (kind.startsWith('preferred')) {
-    return 'Two questions in order, always: what is the body, and what is the band? The body tells you what to do; the band tells you where the main channel goes. Students who read it as one symbol get it backwards. The 2+1 rhythm is the giveaway — no plain lateral mark uses composite group flashing.';
-  }
-  if (kind === 'isolated-danger') {
-    return 'Two black spheres, two flashes. The topmark and the rhythm agree, which is the easiest way to hold it.';
+    return ' The body tells you what to do; the band tells you where the main channel goes. The 2+1 rhythm is the giveaway: no plain lateral mark uses composite group flashing.';
   }
   if (kind === 'safe-water') {
-    return 'Safe water lights are deliberately unlike anything else in the system: isophase, occulting, one long flash every ten seconds, or Morse A. If the rhythm does not look like a flash pattern, suspect safe water.';
+    return ' Safe water lights are deliberately unlike anything else in the system: isophase, occulting, one long flash every ten seconds, or Morse A.';
   }
   if (kind === 'emergency-wreck') {
-    return 'Blue appears nowhere else in the system. That is the design intent — it is meant to look wrong and stop you assuming you know what it is. Introduced after the Tricolor collisions in the Dover Strait in 2002.';
+    return ' Blue appears nowhere else in the system, so that the mark looks wrong and stops you assuming you know what it is.';
   }
-  return mode === 'night'
-    ? 'Colour first, then rhythm. Red and green lights are lateral marks and nothing else; white is cardinal, isolated danger or safe water; yellow is special.'
-    : 'Shape survives the change from Region A to Region B; colour does not. A student who anchors on "can to port, cone to starboard" has one thing to relearn rather than two.';
+  return '';
 }
 
 export function buoyageSources(): QuestionSource[] {

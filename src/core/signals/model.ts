@@ -43,7 +43,8 @@ export interface Signal {
   /** How often it is repeated, where the Rules say. */
   interval?: string;
   ruleRefs: string[];
-  teachingNote?: string;
+  /** What the timeline and the meaning do not say on their own. */
+  note?: string;
   /** Other signals that mean something different but sound the same. */
   ambiguity?: string;
 }
@@ -60,7 +61,7 @@ export const MANOEUVRING: Signal[] = [
     notation: 'one short blast',
     meaning: 'I am altering my course to starboard',
     ruleRefs: ['Rule 34(a)'],
-    teachingNote:
+    note:
       'These signals state what you are doing, not what you intend to do. The rule says "when manoeuvring as authorized or required by these Rules" — you sound them as you act.',
   },
   {
@@ -78,7 +79,7 @@ export const MANOEUVRING: Signal[] = [
     notation: 'three short blasts',
     meaning: 'I am operating astern propulsion',
     ruleRefs: ['Rule 34(a)'],
-    teachingNote:
+    note:
       'About the engines, not about movement. A large vessel sounding three short blasts may still be making several knots ahead; she has put the engines astern and will carry her way for a long time yet. Hearing this and assuming she is backing away from you is a good way to be run down.',
   },
   {
@@ -89,7 +90,7 @@ export const MANOEUVRING: Signal[] = [
     meaning:
       'I do not understand your intentions or actions, or I doubt whether you are taking sufficient action to avoid collision',
     ruleRefs: ['Rule 34(d)'],
-    teachingNote:
+    note:
       'Mandatory, not an expression of irritation: the rule says "shall". And "at least" five — five is the minimum, not the number. It may be supplemented by five or more short and rapid flashes.',
   },
   {
@@ -100,7 +101,7 @@ export const MANOEUVRING: Signal[] = [
     meaning:
       'I am approaching a bend or an obstruction where other vessels may be obscured',
     ruleRefs: ['Rule 34(e)'],
-    teachingNote:
+    note:
       'The answering signal is part of the rule: any vessel within hearing round the bend replies with one prolonged blast.',
     ambiguity:
       'In restricted visibility the identical signal — one prolonged blast every two minutes — means a power-driven vessel making way through the water. Which one you are hearing depends on whether you can see her, which is exactly the distinction Rule 11 and Rule 19 turn on.',
@@ -112,7 +113,7 @@ export const MANOEUVRING: Signal[] = [
     notation: 'two prolonged blasts followed by one short blast',
     meaning: 'I intend to overtake you on your starboard side',
     ruleRefs: ['Rule 34(c)(i)', 'Rule 9(e)'],
-    teachingNote:
+    note:
       'The short blasts follow the ordinary convention — one for starboard, two for port — so only the two prolonged blasts as a prefix need remembering.',
   },
   {
@@ -130,7 +131,7 @@ export const MANOEUVRING: Signal[] = [
     notation: 'one prolonged, one short, one prolonged, one short',
     meaning: 'I agree: you may overtake as you propose',
     ruleRefs: ['Rule 34(c)(ii)'],
-    teachingNote:
+    note:
       'Only the vessel being overtaken sounds this, and only in a narrow channel or fairway. Silence is not agreement.',
   },
 ];
@@ -156,7 +157,7 @@ export const FOG: Signal[] = [
     interval: 'at intervals of not more than two minutes',
     meaning: 'A power-driven vessel underway but stopped and making no way through the water',
     ruleRefs: ['Rule 35(b)'],
-    teachingNote:
+    note:
       'This is where the underway and making way distinction pays off. One prolonged, she is moving; two, she is stopped but not anchored — and she may start moving at any moment.',
   },
   {
@@ -168,8 +169,20 @@ export const FOG: Signal[] = [
     meaning:
       'A vessel not under command, restricted in her ability to manoeuvre, constrained by her draught, sailing, engaged in fishing, or towing or pushing',
     ruleRefs: ['Rule 35(c)'],
-    teachingNote:
+    note:
       'Six categories share this one signal, so it tells you she is one of them and nothing more. It does not make her a stand-on vessel or you a give-way vessel: out of sight of one another there is no such relationship, and Rule 19 governs what you both do.',
+  },
+  {
+    id: 'snd-rv-at-work-anchored',
+    context: 'restricted-visibility',
+    blasts: [...prolonged(1), ...short(2)],
+    notation: 'one prolonged blast followed by two short blasts',
+    interval: 'at intervals of not more than two minutes',
+    meaning:
+      'A vessel engaged in fishing at anchor, or a vessel restricted in her ability to manoeuvre carrying out her work at anchor',
+    ruleRefs: ['Rule 35(d)'],
+    note:
+      'Instead of the bell. A vessel at anchor that is still at work sounds her working signal, because what she is doing matters more to you than the fact that she is anchored.',
   },
   {
     id: 'snd-rv-towed',
@@ -179,7 +192,7 @@ export const FOG: Signal[] = [
     interval: 'at intervals of not more than two minutes',
     meaning: 'A manned vessel being towed, or the last vessel of a tow if more than one is manned',
     ruleRefs: ['Rule 35(e)'],
-    teachingNote:
+    note:
       'Sounded immediately after the towing vessel\'s signal where practicable. Hearing the pair — one long two short, then one long three short — tells you there is a tow and roughly how far the far end is. That is genuinely useful in fog.',
   },
   {
@@ -190,8 +203,23 @@ export const FOG: Signal[] = [
     interval: 'at intervals of not more than one minute',
     meaning: 'A vessel at anchor',
     ruleRefs: ['Rule 35(g)'],
-    teachingNote:
+    note:
       'One minute, not two. Most of Rule 35 is on a two-minute cycle, which is exactly why this one is asked. At 100 metres and over the bell is sounded forward and a gong aft.',
+  },
+  {
+    id: 'snd-rv-anchored-100',
+    context: 'restricted-visibility',
+    blasts: [
+      { kind: 'bell', ms: 5000 },
+      { kind: 'gong', ms: 5000 },
+    ],
+    notation:
+      'rapid ringing of the bell in the fore part for about five seconds, then immediately the gong in the after part for about five seconds',
+    interval: 'at intervals of not more than one minute',
+    meaning: 'A vessel of 100 metres or more at anchor',
+    ruleRefs: ['Rule 35(g)', 'Rule 33(a)'],
+    note:
+      'The gong is what tells you her length: Rule 33(a) requires one only at 100 metres and over, and it is sounded aft immediately after the bell forward.',
   },
   {
     id: 'snd-rv-anchored-warning',
@@ -201,7 +229,7 @@ export const FOG: Signal[] = [
     meaning:
       'A vessel at anchor, warning an approaching vessel of her position and of the possibility of collision',
     ruleRefs: ['Rule 35(g)'],
-    teachingNote:
+    note:
       'Optional — the rule says "may" — and sounded in addition to the bell, not instead of it.',
   },
   {
@@ -217,7 +245,7 @@ export const FOG: Signal[] = [
     interval: 'at intervals of not more than one minute',
     meaning: 'A vessel aground',
     ruleRefs: ['Rule 35(h)'],
-    teachingNote:
+    note:
       'The anchor signal with three distinct strokes wrapped round it. She may in addition sound an appropriate whistle signal.',
   },
   {
@@ -226,8 +254,8 @@ export const FOG: Signal[] = [
     blasts: short(4),
     notation: 'four short blasts',
     meaning: 'A pilot vessel on pilotage duty, sounding her identity signal',
-    ruleRefs: ['Rule 35(j)'],
-    teachingNote:
+    ruleRefs: ['Rule 35(k)'],
+    note:
       'Sounded in addition to the signal her category requires, not instead of it. Four short blasts mean nothing else in the Rules.',
   },
 ];

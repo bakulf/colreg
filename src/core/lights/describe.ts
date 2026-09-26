@@ -30,11 +30,11 @@ export function describeVessel(v: VesselState): string {
     case 'wig':
       return 'A WIG craft taking off, landing or flying near the surface';
     case 'towing':
-      return (v.towLengthM ?? 0) > 200
-        ? 'A power-driven vessel towing astern, length of tow more than 200 metres'
-        : 'A power-driven vessel towing astern, length of tow 200 metres or less';
+      return `A power-driven vessel of ${sizeClause(v.lengthM)} towing astern, length of tow ${
+        (v.towLengthM ?? 0) > 200 ? 'more than 200 metres' : '200 metres or less'
+      }`;
     case 'pushing':
-      return 'A power-driven vessel pushing ahead or towing alongside, not a composite unit';
+      return `A power-driven vessel of ${sizeClause(v.lengthM)} pushing ahead or towing alongside, not a composite unit`;
     case 'towed':
       return 'A vessel being towed';
     case 'composite':
@@ -44,7 +44,9 @@ export function describeVessel(v: VesselState): string {
     case 'towed-alongside':
       return 'A vessel being towed alongside';
     case 'submerged-tow':
-      return 'An inconspicuous, partly submerged vessel or object being towed';
+      return (v.breadthM ?? 0) >= 25
+        ? 'An inconspicuous, partly submerged vessel or object being towed, 25 metres or more in breadth'
+        : 'An inconspicuous, partly submerged vessel or object being towed, less than 25 metres in breadth';
     case 'sailing':
       if (v.tricolour) return 'A sailing vessel under 20 metres underway, using a combined lantern';
       if (v.optionalRedGreen)
@@ -55,8 +57,9 @@ export function describeVessel(v: VesselState): string {
     case 'torch':
       return 'A sailing vessel under 7 metres, or a vessel under oars, showing a lantern';
     case 'trawler':
-      return v.annexII
-        ? `A vessel engaged in trawling, ${ANNEX_II[v.annexII]}`
+      if (v.annexII) return `A vessel engaged in trawling, ${ANNEX_II[v.annexII]}`;
+      return v.secondMasthead && v.lengthM < 50
+        ? `A vessel engaged in trawling of less than 50 metres, ${way}, showing the masthead light Rule 26(b)(ii) leaves optional for her`
         : `A vessel engaged in trawling of ${sizeClause(v.lengthM)}, ${way}`;
     case 'fishing':
       if (v.annexII) return `A vessel engaged in fishing, ${ANNEX_II[v.annexII]}`;
@@ -66,9 +69,13 @@ export function describeVessel(v: VesselState): string {
     case 'nuc':
       return `A vessel not under command, ${way}`;
     case 'ram':
-      return `A vessel restricted in her ability to manoeuvre, ${way}`;
+      return v.atAnchor
+        ? 'A vessel restricted in her ability to manoeuvre, at anchor'
+        : `A vessel restricted in her ability to manoeuvre, ${way}`;
     case 'restricted-towing':
-      return 'A vessel engaged in a towing operation which severely restricts her ability to deviate';
+      return `A vessel engaged in a towing operation which severely restricts her ability to deviate, length of tow ${
+        (v.towLengthM ?? 0) > 200 ? 'more than 200 metres' : '200 metres or less'
+      }`;
     case 'dredger':
       return v.atAnchor
         ? 'A vessel engaged in dredging or underwater operations, at anchor, with an obstruction on one side'
@@ -114,9 +121,13 @@ export function describeLights(v: VesselState): string {
     case 'towing':
       return `${
         (v.towLengthM ?? 0) > 200 ? 'three' : 'two'
-      } masthead lights in a vertical line, sidelights, a sternlight and a yellow towing light above the sternlight`;
+      } masthead lights in a vertical line${
+        big ? ', a second masthead light abaft of and higher than them' : ''
+      }, sidelights, a sternlight and a yellow towing light above the sternlight`;
     case 'pushing':
-      return 'two masthead lights in a vertical line, sidelights and a sternlight, with no towing light';
+      return `two masthead lights in a vertical line${
+        big ? ', a second masthead light abaft of and higher than them' : ''
+      }, sidelights and a sternlight, with no towing light`;
     case 'towed':
       return 'sidelights and a sternlight';
     case 'composite':
@@ -126,7 +137,9 @@ export function describeLights(v: VesselState): string {
     case 'towed-alongside':
       return 'a sternlight, and sidelights at the forward end';
     case 'submerged-tow':
-      return 'an all-round white light at or near each end, close to the water';
+      return (v.breadthM ?? 0) >= 25
+        ? 'an all-round white light at or near each end and two more at or near the extremities of her breadth, all close to the water'
+        : 'an all-round white light at or near each end, close to the water';
     case 'sailing':
       if (v.tricolour)
         return 'sidelights and a sternlight combined in one lantern at or near the top of the mast';
@@ -139,7 +152,7 @@ export function describeLights(v: VesselState): string {
       return 'an electric torch or lighted lantern showing a white light, exhibited in time to prevent collision';
     case 'trawler':
       return `two all-round lights in a vertical line, green over white${
-        big ? ', a masthead light abaft of and higher than the green' : ''
+        big || v.secondMasthead ? ', a masthead light abaft of and higher than the green' : ''
       }${
         v.annexII ? `, and the Annex II signal for a vessel ${ANNEX_II[v.annexII]}` : ''
       }, and sidelights and a sternlight only when making way`;
@@ -152,11 +165,15 @@ export function describeLights(v: VesselState): string {
     case 'nuc':
       return 'two all-round red lights in a vertical line, and sidelights and a sternlight only when making way';
     case 'ram':
-      return 'three all-round lights in a vertical line, red white red, and masthead lights, sidelights and a sternlight only when making way';
+      return v.atAnchor
+        ? 'three all-round lights in a vertical line, red white red, and in addition her anchor lights'
+        : 'three all-round lights in a vertical line, red white red, and masthead lights, sidelights and a sternlight only when making way';
     case 'restricted-towing':
       return 'the red white red lights of Rule 27(b) together with the full Rule 24(a) towing lights';
     case 'dredger':
-      return 'the red white red lights of Rule 27(b), two all-round red on the side where the obstruction is, and two all-round green on the side a vessel may pass';
+      return v.atAnchor
+        ? 'the red white red lights of Rule 27(b), two all-round red on the side where the obstruction is, and two all-round green on the side a vessel may pass — and no anchor light, because Rule 27(d)(iii) has these shown instead of it'
+        : 'the red white red lights of Rule 27(b), two all-round red on the side where the obstruction is, two all-round green on the side a vessel may pass, and masthead lights, sidelights and a sternlight when making way';
     case 'diving':
       return 'three all-round lights in a vertical line, red white red, and by day a rigid replica of the International Code flag A not less than one metre high';
     case 'mineclearance':
@@ -197,6 +214,10 @@ export function ambiguityNote(v: VesselState): string | undefined {
       return v.tricolour || v.optionalRedGreen
         ? undefined
         : 'Sidelights and a sternlight and nothing above them is also what a vessel under tow shows, and what a vessel under oars may show. In a busy seaway, look for towing lights ahead before you assume yacht.';
+    case 'dredger':
+      return v.atAnchor
+        ? 'A dredger at anchor shows no anchor light: Rule 27(d)(iii) has her working lights shown instead. A vessel restricted in her ability to manoeuvre for any other reason does the opposite and adds the anchor lights under Rule 27(b)(iv).'
+        : undefined;
     case 'motorsailing':
       return 'Her lights are those of a power-driven vessel, so at night she is indistinguishable from a motorboat of her size. The cone of Rule 25(e) is the only signal that marks her out, and only by day.';
     default:
@@ -217,9 +238,9 @@ export function ruleRefsFor(v: VesselState): string[] {
     case 'wig':
       return ['Rule 23(c)'];
     case 'towing':
-      return ['Rule 24(a)'];
+      return v.lengthM >= 50 ? ['Rule 24(a)', 'Rule 24(d)'] : ['Rule 24(a)'];
     case 'pushing':
-      return ['Rule 24(c)'];
+      return v.lengthM >= 50 ? ['Rule 24(c)', 'Rule 24(d)'] : ['Rule 24(c)'];
     case 'towed':
       return ['Rule 24(e)'];
     case 'composite':
@@ -229,7 +250,7 @@ export function ruleRefsFor(v: VesselState): string[] {
     case 'towed-alongside':
       return ['Rule 24(f)'];
     case 'submerged-tow':
-      return ['Rule 24(g)'];
+      return (v.breadthM ?? 0) >= 25 ? ['Rule 24(g)(i)', 'Rule 24(g)(ii)'] : ['Rule 24(g)(i)'];
     case 'sailing':
       if (v.tricolour) return ['Rule 25(b)'];
       if (v.optionalRedGreen) return ['Rule 25(c)'];
@@ -239,18 +260,19 @@ export function ruleRefsFor(v: VesselState): string[] {
     case 'torch':
       return ['Rule 25(d)'];
     case 'trawler':
-      return v.annexII ? ['Rule 26(d)', 'Annex II'] : ['Rule 26(b)'];
+      if (v.annexII) return ['Rule 26(d)', 'Annex II'];
+      return v.secondMasthead && v.lengthM < 50 ? ['Rule 26(b)(ii)'] : ['Rule 26(b)'];
     case 'fishing':
       if (v.annexII) return ['Rule 26(d)', 'Annex II'];
       return v.gearSide ? ['Rule 26(c)(ii)'] : ['Rule 26(c)'];
     case 'nuc':
       return ['Rule 27(a)'];
     case 'ram':
-      return ['Rule 27(b)'];
+      return v.atAnchor ? ['Rule 27(b)(iv)', 'Rule 30(a)'] : ['Rule 27(b)'];
     case 'restricted-towing':
       return ['Rule 27(c)', 'Rule 24(a)'];
     case 'dredger':
-      return ['Rule 27(d)'];
+      return v.atAnchor ? ['Rule 27(d)(iii)'] : ['Rule 27(d)'];
     case 'diving':
       return ['Rule 27(e)'];
     case 'mineclearance':
@@ -281,24 +303,34 @@ export function conceptFor(v: VesselState): string {
       return 'lights:sailing';
     case 'trawler':
       if (v.annexII) return `lights:annex-ii-${v.annexII}`;
-      return big
-        ? 'lights:trawler-over-50'
-        : v.makingWay
+      if (v.secondMasthead && !big) return 'lights:trawler-optional-masthead';
+      if (big) return v.makingWay ? 'lights:trawler-over-50' : 'lights:trawler-over-50-stopped';
+      return v.makingWay
           ? 'lights:trawler-making-way'
           : 'lights:trawler-stopped';
     case 'fishing':
       if (v.annexII) return `lights:annex-ii-${v.annexII}`;
-      return v.gearSide
-        ? 'lights:fishing-outlying-gear'
-        : v.makingWay
+      if (v.gearSide) {
+        return v.makingWay ? 'lights:fishing-outlying-gear' : 'lights:fishing-outlying-gear-stopped';
+      }
+      return v.makingWay
           ? 'lights:fishing-making-way'
           : 'lights:fishing-stopped';
     case 'nuc':
       return v.makingWay ? 'lights:nuc-making-way' : 'lights:nuc-stopped';
     case 'ram':
+      if (v.atAnchor) return 'lights:ram-anchored';
       return v.makingWay ? 'lights:ram-making-way' : 'lights:ram-stopped';
     case 'towing':
-      return (v.towLengthM ?? 0) > 200 ? 'lights:towing-over-200' : 'lights:towing-under-200';
+      return `lights:towing-${(v.towLengthM ?? 0) > 200 ? 'over' : 'under'}-200${big ? '-over-50' : ''}`;
+    case 'pushing':
+      return big ? 'lights:pushing-over-50' : 'lights:pushing';
+    case 'restricted-towing':
+      return (v.towLengthM ?? 0) > 200
+        ? 'lights:restricted-towing'
+        : 'lights:restricted-towing-under-200';
+    case 'submerged-tow':
+      return (v.breadthM ?? 0) >= 25 ? 'lights:submerged-tow-wide' : 'lights:submerged-tow';
     case 'dredger':
       return v.atAnchor ? 'lights:dredger-anchored' : 'lights:dredger';
     case 'pilot':

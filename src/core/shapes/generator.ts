@@ -99,12 +99,9 @@ export function composeShapeDrill(vessel: VesselState, rng: Rng): ShapeDrill {
     choices: texts.map((text, i) => ({ id: String.fromCharCode(97 + i), text })),
     correct: 'a',
     ruleRefs: [...new Set(group.flatMap(shapeRuleRefs))],
-    explanation: `She is showing ${describeShapes(vessel)}.`,
-    teachingNote:
-      'Shapes are read the way lights are: count them, name them, then read the vertical ' +
-      'order. Unlike lights they are all-round visible, so the aspect tells you nothing — ' +
-      'which is exactly why the day signals carry less information than the night ones.',
-    misconception: shapeAmbiguityNote(vessel),
+    explanation: [`She is showing ${describeShapes(vessel)}.`, shapeAmbiguityNote(vessel)]
+      .filter(Boolean)
+      .join(' '),
     difficulty: group.length > 1 ? 3 : 2,
     scene: { type: 'shapes', vessel },
   };

@@ -61,9 +61,11 @@ describe('coverage of the Regulations', () => {
         if (match) annexes.add(match[1] as string);
       }
     }
+    // Annex I: positioning and technical details of lights and shapes.
     // Annex II: additional signals for fishing vessels in close proximity.
+    // Annex III: technical details of sound signal appliances.
     // Annex IV: distress signals.
-    expect([...annexes].sort()).toEqual(['II', 'IV']);
+    expect([...annexes].sort()).toEqual(['I', 'II', 'III', 'IV']);
   });
 
   it('drills the rules an examiner leans on hardest more than once', () => {

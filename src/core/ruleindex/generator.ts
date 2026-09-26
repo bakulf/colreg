@@ -68,8 +68,6 @@ function subjectDrill(rule: RuleEntry, rng: Rng): Question {
     explanation: `Rule ${rule.n}, ${subjectOf(rule)}. It sits in ${rule.part}.${
       rule.key ? ` ${rule.key}` : ''
     }`,
-    teachingNote:
-      'Learn the Rules as a shape before learning them as a list. Part A is general, Part B is the steering and sailing rules in three sections, Part C is lights and shapes, Part D is signals. Given the shape, most numbers can be reconstructed rather than memorised.',
     difficulty: 2,
   };
 }
@@ -108,8 +106,6 @@ function wordingDrill(rule: RuleEntry, rng: Rng): Question {
     correct: 'a',
     ruleRefs: [`Rule ${rule.n}`],
     explanation: `Rule ${rule.n}, ${subjectOf(rule)}, in ${rule.part}.`,
-    teachingNote:
-      'Producing the number from the wording is the version that matters when you are quoting a rule at someone. Recognising the subject from the number is the easier half.',
     difficulty: 3,
   };
 }

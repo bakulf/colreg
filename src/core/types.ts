@@ -96,10 +96,6 @@ export interface Question {
   ruleRefs: string[];
   /** Why the answer is right. Shown after answering. */
   explanation: string;
-  /** How you would put it to a student. The instructor layer. */
-  teachingNote?: string;
-  /** The mistake students reliably make here. */
-  misconception?: string;
   difficulty: Difficulty;
   /** Optional picture the question is about. */
   scene?: Scene;

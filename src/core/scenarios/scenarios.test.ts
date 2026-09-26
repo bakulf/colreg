@@ -115,6 +115,44 @@ describe('who gives way', () => {
     expect(v.action).toContain('not the same as giving way');
   });
 
+  it('puts not under command and restricted in ability to manoeuvre on the same rung', () => {
+    // Rule 18 orders everyone else below both, and says nothing between them.
+    const v = resolve(power({ own: 'ram', her: 'nuc', bearing: 300, herHeading: 120 }));
+    expect(v.situation).not.toBe('precedence');
+  });
+
+  it('asks sailing and fishing vessels, too, not to impede a vessel constrained by her draught', () => {
+    for (const own of ['sailing', 'fishing'] as const) {
+      const v = resolve(power({ own, her: 'cbd', bearing: 300, herHeading: 120 }));
+      expect(v.role, own).toBe('not-impede');
+      expect(v.rule, own).toBe('Rule 18(d)');
+    }
+  });
+
+  it('leaves a vessel constrained by her draught giving way to sailing once risk exists', () => {
+    const v = resolve(power({ own: 'cbd', her: 'sailing', bearing: 60, herHeading: 240 }));
+    expect(v.rule).toBe('Rule 18(d)');
+    expect(v.action).toContain('keep out of the way');
+  });
+
+  it('gives way to a vessel not under command even when constrained by draught', () => {
+    const v = resolve(power({ own: 'cbd', her: 'nuc', bearing: 60, herHeading: 240 }));
+    expect(v.situation).toBe('precedence');
+    expect(v.role).toBe('give-way');
+  });
+
+  it('makes seaplanes and WIG craft keep well clear of everyone', () => {
+    const sea = resolve(power({ own: 'seaplane', her: 'power', bearing: 300, herHeading: 120 }));
+    expect([sea.role, sea.rule]).toEqual(['give-way', 'Rule 18(e)']);
+    const wig = resolve(power({ own: 'wig', her: 'sailing', bearing: 60, herHeading: 240 }));
+    expect([wig.role, wig.rule]).toEqual(['give-way', 'Rule 18(f)']);
+  });
+
+  it('keeps a sailing vessel overtaking a power-driven vessel out of her way', () => {
+    const v = resolve(power({ own: 'sailing', her: 'power', bearing: 5, herHeading: 10 }));
+    expect([v.situation, v.role]).toEqual(['overtaking', 'give-way']);
+  });
+
   it('never names a stand-on vessel in fog, from any bearing', () => {
     for (let b = 0; b < 360; b += 7) {
       const v = resolve(power({ bearing: b, herHeading: (b + 137) % 360, restrictedVisibility: true }));

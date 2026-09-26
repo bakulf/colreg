@@ -215,8 +215,8 @@ export function HomeView({
       )}
 
       <p className="footnote">
-        Rule text from the Merchant Shipping (Distress Signals and Prevention of
-        Collisions) Regulations 1996, © Crown copyright, Open Government Licence v3.0.
+        Rule text from MSN 1781 (M+F), the UK text of the Collision Regulations,
+        © Crown copyright, Open Government Licence v3.0.
       </p>
     </>
   );

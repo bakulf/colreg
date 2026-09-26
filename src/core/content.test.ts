@@ -40,9 +40,10 @@ describe('question bank', () => {
       expect(q.ruleRefs.length, `${q.id} cites no rule`).toBeGreaterThan(0);
       for (const ref of q.ruleRefs) {
         const n = ruleNumberOf(ref);
-        // Buoyage cites IALA, which has no rule number; COLREG refs must resolve.
+        // Buoyage cites IALA and the Annexes have no rule number; the regs
+        // tests check that Annex citations resolve. Rule refs must resolve here.
         if (n === undefined) {
-          expect(ref, `${q.id} ref "${ref}"`).toMatch(/IALA/);
+          expect(ref, `${q.id} ref "${ref}"`).toMatch(/IALA|^Annex (IV|I{1,3})\b/);
         } else {
           expect(getRule(n), `${q.id} cites nonexistent Rule ${n}`).toBeDefined();
         }

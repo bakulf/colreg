@@ -242,8 +242,9 @@ export interface VesselState {
   /** Sailing vessel under 20 metres using a combined lantern, Rule 25(b). */
   tricolour?: boolean;
   /**
-   * A vessel under 50 metres exercising the option in Rule 23(a)(ii) to show
-   * the second masthead light she is not obliged to carry.
+   * A vessel under 50 metres exercising the option to show the after masthead
+   * light she is not obliged to carry: Rule 23(a)(ii) for a power-driven
+   * vessel, Rule 26(b)(ii) for a trawler.
    */
   secondMasthead?: boolean;
   /** Sailing vessel showing the optional red over green, Rule 25(c). */
@@ -263,9 +264,20 @@ export interface VesselState {
    * by day instead of the two cones.
    */
   basket?: boolean;
+  /**
+   * Breadth of a partly submerged tow, Rule 24(g)(ii): at 25 metres or more
+   * she carries two more all-round white lights at the extremities of her
+   * breadth.
+   */
+  breadthM?: number;
   /** Side on which a dredger's obstruction lies, Rule 27(d). */
   obstructionSide?: Side;
-  /** At anchor as well as on duty or at work: Rules 29(a)(iii), 27(d)(iv). */
+  /**
+   * At anchor as well as on duty or at work. A pilot vessel (Rule 29(a)(iii))
+   * and a vessel restricted in her ability to manoeuvre (Rule 27(b)(iv)) add
+   * the anchor lights; a dredger (Rule 27(d)(iii)) shows her working lights
+   * instead of them.
+   */
   atAnchor?: boolean;
   /** Rule 30(c): decks illuminated, required at 100 metres and over. */
   illuminatedDecks?: boolean;
@@ -384,19 +396,29 @@ export function lightsFor(v: VesselState): Light[] {
       // sidelights at the forward end.
       return [...sidelights(0.92, SIDE_U, 0.22), sternlight()];
 
-    case 'submerged-tow':
+    case 'submerged-tow': {
       // Rule 24(g): an inconspicuous, partly submerged object under tow shows
-      // an all-round white light at or near each end, barely above the water.
-      return [
+      // an all-round white light at or near each end, barely above the water,
+      // and at 25 metres or more in breadth one at each side as well.
+      const out: Light[] = [
         { colour: 'white', kind: 'all-round', u: 0, v: 0.95, w: 0.06 },
         { colour: 'white', kind: 'all-round', u: 0, v: -0.95, w: 0.06 },
       ];
+      if ((v.breadthM ?? 0) >= 25) {
+        out.push(
+          { colour: 'white', kind: 'all-round', u: -0.4, v: 0, w: 0.06 },
+          { colour: 'white', kind: 'all-round', u: 0.4, v: 0, w: 0.06 },
+        );
+      }
+      return out;
+    }
 
     case 'trawler': {
       // Rule 26(b): green over white, plus a masthead light abaft of and
-      // higher than the green at 50 metres and over.
+      // higher than the green — required at 50 metres and over, permitted
+      // below it.
       const out = stack(['green', 'white'], 0.62);
-      if (v.lengthM >= 50) {
+      if (hasSecondMasthead(v)) {
         out.push({ colour: 'white', kind: 'masthead', u: MAST_AFT.u, v: MAST_AFT.v, w: 1.06 });
       }
       if (v.annexII) out.push(...annexIILights(v.annexII));
@@ -432,12 +454,14 @@ export function lightsFor(v: VesselState): Light[] {
 
     case 'ram':
     case 'diving': {
-      // Rule 27(b): red, white, red, with masthead lights only when making way.
-      // Rule 27(e)(i) gives a small diving boat the same three lights, so by
-      // night she is indistinguishable from any other vessel restricted in her
-      // ability to manoeuvre. The flag A replica is a day signal only.
+      // Rule 27(b): red, white, red, with masthead lights only when making way
+      // and the anchor lights as well when at anchor. Rule 27(e)(i) gives a
+      // small diving boat the same three lights, so by night she is
+      // indistinguishable from any other vessel restricted in her ability to
+      // manoeuvre. The flag A replica is a day signal only.
       const out = stack(['red', 'white', 'red'], 0.8);
-      if (v.makingWay) out.push(...mastheads(v), ...sidelights(), sternlight());
+      if (v.atAnchor) out.push(...anchorLights(v.lengthM));
+      else if (v.makingWay) out.push(...mastheads(v), ...sidelights(), sternlight());
       return out;
     }
 
@@ -458,7 +482,8 @@ export function lightsFor(v: VesselState): Light[] {
     case 'dredger': {
       // Rule 27(d): the Rule 27(b) lights, plus two all-round red on the side
       // where the obstruction is and two all-round green on the side a vessel
-      // may pass.
+      // may pass. Rule 27(d)(iii): at anchor these are shown *instead of* the
+      // anchor lights, unlike Rule 27(b)(iv) where they are added.
       const obstruction = v.obstructionSide ?? 'port';
       const clear: Side = obstruction === 'port' ? 'starboard' : 'port';
       const out = [
@@ -472,8 +497,7 @@ export function lightsFor(v: VesselState): Light[] {
           u: sideSign(clear) * 0.5,
         })),
       ];
-      if (v.atAnchor) out.push(...anchorLights(v.lengthM));
-      else if (v.makingWay) out.push(...mastheads(v), ...sidelights(), sternlight());
+      if (!v.atAnchor && v.makingWay) out.push(...mastheads(v), ...sidelights(), sternlight());
       return out;
     }
 

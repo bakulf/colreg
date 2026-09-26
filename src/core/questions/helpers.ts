@@ -12,8 +12,6 @@ export interface QuestionSpec {
   distractors: string[];
   ruleRefs: string[];
   explanation: string;
-  teachingNote?: string;
-  misconception?: string;
   scene?: Scene;
 }
 
@@ -37,8 +35,6 @@ export function mcq(spec: QuestionSpec): Question {
     correct: 'a',
     ruleRefs: spec.ruleRefs,
     explanation: spec.explanation,
-    teachingNote: spec.teachingNote,
-    misconception: spec.misconception,
     difficulty: spec.difficulty,
     scene: spec.scene,
   };

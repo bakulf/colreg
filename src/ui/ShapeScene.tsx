@@ -1,6 +1,6 @@
 import type { VesselState } from '../core/lights/model.ts';
 import type { Shape, ShapeForm } from '../core/shapes/model.ts';
-import { shapesFor } from '../core/shapes/model.ts';
+import { FORWARD, shapesFor } from '../core/shapes/model.ts';
 
 /**
  * Day signals, drawn on the masts and yard that carry them.
@@ -112,9 +112,12 @@ function ShapeMark({ form, cx, cy }: { form: ShapeForm; cx: number; cy: number }
 export function ShapeScene({ vessel, compact = false }: { vessel: VesselState; compact?: boolean }) {
   const shapes: Shape[] = shapesFor(vessel);
   const columns = [...new Set(shapes.map((s) => s.column))].sort((a, b) => a - b);
+  // The forward signal hangs on its own staff, not from the yard.
+  const yard = columns.filter((c) => c !== FORWARD);
 
   const maxRow = Math.max(0, ...shapes.map((s) => s.row));
-  const xOf = (col: number) => WIDTH / 2 + col * COLUMN_GAP;
+  const xOf = (col: number) =>
+    col === FORWARD ? WIDTH / 2 - 1.75 * COLUMN_GAP : WIDTH / 2 + col * COLUMN_GAP;
   const yOf = (row: number) => ROW_BASE + (maxRow - row) * ROW_GAP;
 
   return (
@@ -135,11 +138,11 @@ export function ShapeScene({ vessel, compact = false }: { vessel: VesselState; c
       <line x1="0" y1={BASELINE} x2={WIDTH} y2={BASELINE} stroke="#6b93ab" strokeWidth="1" />
 
       {/* A yard joining the outer columns, so side signals hang from something. */}
-      {columns.length > 1 && (
+      {yard.length > 1 && (
         <line
-          x1={xOf(columns[0]!)}
+          x1={xOf(yard[0]!)}
           y1={yOf(0) + SIZE * 0.75}
-          x2={xOf(columns[columns.length - 1]!)}
+          x2={xOf(yard[yard.length - 1]!)}
           y2={yOf(0) + SIZE * 0.75}
           stroke={INK}
           strokeWidth="2"

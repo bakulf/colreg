@@ -128,3 +128,21 @@ describe('Part C coverage', () => {
     expect(has((v) => v.kind === 'dredger' && v.obstructionSide !== undefined)).toBe(true);
   });
 });
+
+describe('vessels at anchor while at work', () => {
+  const whites = (v: Parameters<typeof lightsFor>[0]) =>
+    lightsFor(v).filter((l) => l.colour === 'white' && l.kind === 'all-round').length;
+
+  it('adds the anchor lights to a vessel restricted in her ability to manoeuvre, Rule 27(b)(iv)', () => {
+    const ram = VESSEL_POOL.find((v) => v.kind === 'ram' && v.atAnchor)!;
+    // The white of red-white-red plus two anchor lights at 70 metres.
+    expect(whites(ram)).toBe(3);
+    expect(shapesFor(ram).filter((s) => s.form === 'ball')).toHaveLength(3);
+  });
+
+  it('shows a dredger\'s working lights instead of the anchor lights, Rule 27(d)(iii)', () => {
+    const dredger = VESSEL_POOL.find((v) => v.kind === 'dredger' && v.atAnchor)!;
+    expect(whites(dredger)).toBe(1);
+    expect(ruleRefsFor(dredger)).toContain('Rule 27(d)(iii)');
+  });
+});

@@ -3,6 +3,7 @@ import type { QuizSession } from '../core/quiz.ts';
 import { currentItem, isAnswered, isCorrect, orderedChoices } from '../core/quiz.ts';
 import { TOPIC_LABELS } from '../core/types.ts';
 import { SceneView } from './SceneView.tsx';
+import { LinkedText, RefChips } from './RegText.tsx';
 
 interface Props {
   session: QuizSession;
@@ -92,30 +93,12 @@ export function QuizView({ session, onAnswer, onNext, onQuit }: Props) {
           <>
             <div className="feedback">
               <h3>{right ? 'Correct' : 'Not quite'}</h3>
-              <p>{question.explanation}</p>
+              <p>
+                <LinkedText text={question.explanation} />
+              </p>
             </div>
 
-            {question.teachingNote && (
-              <div className="feedback teaching">
-                <h3>Teaching it</h3>
-                <p>{question.teachingNote}</p>
-              </div>
-            )}
-
-            {question.misconception && (
-              <div className="feedback trap">
-                <h3>Where students go wrong</h3>
-                <p>{question.misconception}</p>
-              </div>
-            )}
-
-            <div className="refs">
-              {question.ruleRefs.map((ref) => (
-                <span className="ref" key={ref}>
-                  {ref}
-                </span>
-              ))}
-            </div>
+            <RefChips refs={question.ruleRefs} />
           </>
         )}
       </div>

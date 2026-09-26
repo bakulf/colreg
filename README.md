@@ -35,7 +35,8 @@ npm run preview    # serve dist/ on the LAN
 src/core/          pure TypeScript — no React, no DOM
   types.ts         Question, QuestionSource, Scene, Topic
   rng.ts           seeded RNG, so a session is reproducible from its seed
-  rules.ts         index of IRPCS Rules 1–38
+  rules.ts         index of IRPCS Rules 1–41
+  regs/            the full text of Rules 1–41 and Annexes I–IV, and citation parsing
   vessels.ts       every vessel configuration in Part C
   questions/       hand-written content, one file per topic
   lights/          Rule 21 arcs, vessel lights, projection, night drills
@@ -49,7 +50,7 @@ src/core/          pure TypeScript — no React, no DOM
   srs.ts           the spaced-repetition scheduler
   progress.ts      per-concept tally
 src/storage.ts     the only place that touches localStorage
-src/ui/            React views and the four SVG renderers
+src/ui/            React views, the SVG renderers and the Regulations reader
 ```
 
 The `core/` boundary is deliberate. Everything the learning engine does is
@@ -108,17 +109,33 @@ above them" — the head-on picture, and the only way a sailing vessel ever show
 two lights at once — would exist at exactly one bearing and could never be
 drawn.
 
+## The Regulations
+
+The Regulations tab carries the full text of Rules 1 to 41 and Annexes I to IV,
+with a search. Every citation in a question — the chips under the answer and
+any "Rule 17(a)(ii)" or "Annex IV" in the explanation — is a link. In a quiz it
+opens the rule over the question with the cited paragraph highlighted, so
+checking it does not lose your place; *Open in Regulations* takes you to the
+full reader. The reader keeps its position in the URL (`#/regs/r17-a-ii`), so
+the back button works and a paragraph can be linked to.
+
+The text lives in `src/core/regs/text/` in a small line format described in
+`src/core/regs/model.ts`: one paragraph per line, nesting by indentation,
+labels as printed. Anchors are built from the labels, and
+`src/core/regs/regs.test.ts` checks that every citation in the question bank
+resolves to the exact paragraph it names.
+
 ## Coverage
 
 `src/core/coverage.test.ts` generates every source, collects the rules each one
-cites, and fails if any of Rules 1 to 38 is left undrilled. There is no
+cites, and fails if any of Rules 1 to 41 is left undrilled. There is no
 exclusion list: the coverage claim is checked on every run rather than asserted
 in a README that drifts.
 
-Annex II (additional signals for fishing vessels in close proximity) and Annex
-IV (distress signals) are covered. Annexes I and III are construction and
-technical specifications — mounting heights, chromaticity, whistle
-frequencies — and carry nothing a drill can usefully ask.
+All four Annexes are cited. Annex II (fishing vessels in close proximity) and
+Annex IV (distress signals) are drilled in depth; Annexes I and III are
+construction specifications, so only the few points worth knowing — the
+sidelight cut-off, whistle frequencies — are asked.
 
 ## Roadmap
 
@@ -131,6 +148,7 @@ frequencies — and carry nothing a drill can usefully ask.
 - [x] **M7** — Rule 37 and Annex IV distress signals, Rule 36 attention signals, and the near-misses people mistake for them
 - [x] **M8** — Rule 9 and Rule 10 geometry: narrow channels and traffic lanes, where "shall not impede" displaces the steering rules
 - [x] **M9** — the rule index: what each of the 38 rules says, drilled by number, by subject and by wording
+- [x] **M10** — the full text of the Regulations, with every citation in a question linked to the paragraph it cites
 - [ ] **M6** — exam mode, audio for the sound signals, offline PWA
 
 ## Deploying
@@ -154,9 +172,11 @@ Local builds leave it unset and serve from `/`.
 
 ## Sources and licensing
 
-Rule text is taken from the Merchant Shipping (Distress Signals and Prevention of
-Collisions) Regulations 1996 (SI 1996/75), Schedule 1, published on
-legislation.gov.uk under the Open Government Licence v3.0, © Crown copyright.
+Rule text is the consolidated text of the Convention as amended, as given
+effect in the UK by MSN 1781 (M+F) under the Merchant Shipping (Distress
+Signals and Prevention of Collisions) Regulations 1996, published under the
+Open Government Licence v3.0, © Crown copyright. Annex IV follows IMO
+resolution A.1004(25) and Part F (Rules 39 to 41) resolution A.1085(28).
 
 No RYA course material and no Admiralty chart data is used. Teaching notes and
 question wording are original.

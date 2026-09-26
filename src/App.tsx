@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Topic } from './core/types.ts';
 import { TOPICS } from './core/types.ts';
 import type { QuizSession } from './core/quiz.ts';
@@ -17,14 +17,51 @@ import { clearAll, exportBackup, loadDeck, parseBackup, saveDeck } from './stora
 import { HomeView } from './ui/HomeView.tsx';
 import { QuizView } from './ui/QuizView.tsx';
 import { ResultsView } from './ui/ResultsView.tsx';
+import { RegsView } from './ui/RegsView.tsx';
+import { RegModal } from './ui/RegModal.tsx';
+import { OpenRefProvider } from './ui/RegText.tsx';
 
 export type Mode = 'practice' | 'review';
+
+/**
+ * Where you are, kept in the URL hash so the back button works on a phone and
+ * a rule can be linked to: '#/regs', '#/regs/r17-a-ii', or nothing for the
+ * quiz.
+ */
+type Route = { view: 'quiz' } | { view: 'regs'; anchor: string | undefined };
+
+function readRoute(): Route {
+  const m = /^#\/regs(?:\/([a-z0-9-]+))?$/.exec(window.location.hash);
+  return m ? { view: 'regs', anchor: m[1] } : { view: 'quiz' };
+}
+
+function go(route: Route) {
+  const hash = route.view === 'regs' ? `#/regs${route.anchor ? `/${route.anchor}` : ''}` : '';
+  if (window.location.hash !== hash) {
+    window.history.pushState(null, '', hash || window.location.pathname + window.location.search);
+    window.dispatchEvent(new HashChangeEvent('hashchange'));
+  }
+}
 
 export function App() {
   const [topics, setTopics] = useState<Topic[]>([...TOPICS]);
   const [length, setLength] = useState(20);
   const [session, setSession] = useState<QuizSession | null>(null);
   const [deck, setDeck] = useState<Deck>(loadDeck);
+  const [route, setRoute] = useState<Route>(readRoute);
+  const [modal, setModal] = useState<string | null>(null);
+
+  useEffect(() => {
+    const onHash = () => setRoute(readRoute());
+    window.addEventListener('hashchange', onHash);
+    window.addEventListener('popstate', onHash);
+    return () => {
+      window.removeEventListener('hashchange', onHash);
+      window.removeEventListener('popstate', onHash);
+    };
+  }, []);
+
+  const closeModal = useCallback(() => setModal(null), []);
 
   const concepts = useMemo(
     () => [...new Set(sourcesForTopics(topics).map((s) => s.concept))],
@@ -121,38 +158,73 @@ export function App() {
     <div className="app">
       <header className="masthead">
         <h1>COLREG</h1>
-        <span className="sub">IRPCS · IALA A · RYA Shorebased</span>
+        <nav className="tabs">
+          <button
+            type="button"
+            aria-pressed={route.view === 'quiz'}
+            onClick={() => go({ view: 'quiz' })}
+          >
+            {session !== null && !showingResults ? 'Quiz ●' : 'Quiz'}
+          </button>
+          <button
+            type="button"
+            aria-pressed={route.view === 'regs'}
+            onClick={() => go({ view: 'regs', anchor: undefined })}
+          >
+            Regulations
+          </button>
+        </nav>
       </header>
 
-      {session === null && (
-        <HomeView
-          topics={topics}
-          onToggleTopic={toggleTopic}
-          length={length}
-          onSetLength={setLength}
-          deck={deck}
-          concepts={concepts}
-          onStart={start}
-          onReset={onReset}
-          onExport={onExport}
-          onImport={onImport}
-        />
+      {route.view === 'regs' && (
+        <RegsView anchor={route.anchor} onGo={(anchor) => go({ view: 'regs', anchor })} />
       )}
 
-      {session !== null && !showingResults && (
-        <QuizView
-          session={session}
-          onAnswer={onAnswer}
-          onNext={onNext}
-          onQuit={onQuit}
-        />
+      {route.view === 'quiz' && (
+        <OpenRefProvider value={setModal}>
+          {session === null && (
+            <HomeView
+              topics={topics}
+              onToggleTopic={toggleTopic}
+              length={length}
+              onSetLength={setLength}
+              deck={deck}
+              concepts={concepts}
+              onStart={start}
+              onReset={onReset}
+              onExport={onExport}
+              onImport={onImport}
+            />
+          )}
+
+          {session !== null && !showingResults && (
+            <QuizView
+              session={session}
+              onAnswer={onAnswer}
+              onNext={onNext}
+              onQuit={onQuit}
+            />
+          )}
+
+          {showingResults && (
+            <ResultsView
+              session={session}
+              onAgain={() => start('practice')}
+              onHome={() => setSession(null)}
+            />
+          )}
+        </OpenRefProvider>
       )}
 
-      {showingResults && (
-        <ResultsView
-          session={session}
-          onAgain={() => start('practice')}
-          onHome={() => setSession(null)}
+      {modal !== null && route.view === 'quiz' && (
+        <RegModal
+          anchor={modal}
+          onNavigate={setModal}
+          onOpenFull={(anchor) => {
+            setModal(null);
+            go({ view: 'regs', anchor });
+          }}
+          onClose={closeModal}
         />
       )}
     </div>

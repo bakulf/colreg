@@ -131,7 +131,6 @@ describe('buoyage drills', () => {
   it('explains what to do about the mark, not just what it is', () => {
     for (const drill of allBuoyDrills(createRng(6))) {
       expect(drill.question.explanation.length, drill.kind).toBeGreaterThan(60);
-      expect(drill.question.teachingNote, drill.kind).toBeTruthy();
     }
   });
 

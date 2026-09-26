@@ -24,8 +24,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 32(b)', 'Rule 32(c)'],
     explanation:
       'Rule 32(c): a prolonged blast is a blast of from four to six seconds duration. Rule 32(b): a short blast is about one second.',
-    teachingNote:
-      'Make the student actually count it out loud. Four to six seconds is much longer than anyone expects, and a two-second toot is heard as a short blast — which in a manoeuvring signal means something entirely different.',
   }),
   mcq({
     id: 'snd-manoeuvring-port',
@@ -42,8 +40,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 34(a)'],
     explanation:
       'Rule 34(a): one short blast, I am altering my course to starboard; two short, to port; three short, I am operating astern propulsion.',
-    misconception:
-      'These signals state what you are doing, not what you intend to do. The Rule says "when manoeuvring as authorized or required by these Rules" — you sound them as you act.',
   }),
   mcq({
     id: 'snd-three-short',
@@ -60,8 +56,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 34(a)'],
     explanation:
       'The signal is about the engines, not about movement. A large vessel sounding three short blasts may still be making several knots ahead — she has just put the engines astern and will carry her way for a long time yet.',
-    teachingNote:
-      'This distinction is worth labouring. Hearing three shorts and assuming the ship is now backing away from you is a good way to be run down.',
   }),
   mcq({
     id: 'snd-doubt',
@@ -78,8 +72,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 34(d)'],
     explanation:
       'Rule 34(d): at least five short and rapid blasts, which may be supplemented by a light signal of at least five short and rapid flashes. Note "at least" — five is the minimum, not the number.',
-    teachingNote:
-      'It is a mandatory signal ("shall"), not an optional expression of irritation, and Rule 34(d) applies to vessels in sight of one another.',
   }),
   mcq({
     id: 'snd-bend',
@@ -112,8 +104,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 34(c)(i)', 'Rule 34(c)(ii)', 'Rule 9(e)'],
     explanation:
       'Rule 34(c)(i): two prolonged then one short means I intend to overtake you on your starboard side; two prolonged then two short, on your port side. The vessel to be overtaken, if in agreement, sounds one prolonged, one short, one prolonged, one short — Rule 34(c)(ii).',
-    teachingNote:
-      'The short blasts follow the ordinary course-alteration convention: one short for starboard, two for port. Once the student sees that, only the two prolonged blasts as a prefix need to be remembered.',
   }),
   mcq({
     id: 'snd-rv-underway-stopped',
@@ -146,8 +136,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 35(c)'],
     explanation:
       'Rule 35(c) gives one prolonged plus two short to a whole group: not under command, restricted in ability to manoeuvre, constrained by draught, sailing, engaged in fishing, and towing or pushing. A power-driven vessel making way sounds one prolonged only.',
-    teachingNote:
-      'Six categories share this one signal, so it narrows down what she is and no further. It establishes no stand-on or give-way relationship: you are not in sight of one another, so Rules 11 to 18 do not apply and your conduct is governed by Rule 19 — both of you take avoiding action in ample time.',
   }),
   mcq({
     id: 'snd-rv-towed',
@@ -164,8 +152,6 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 35(e)'],
     explanation:
       'Rule 35(e), sounded at intervals of not more than two minutes and, where practicable, immediately after the signal made by the towing vessel.',
-    teachingNote:
-      'Hearing the pair — one long two short, then one long three short — tells you there is a tow and roughly how far the far end is. That is genuinely useful information in fog.',
   }),
   mcq({
     id: 'snd-anchored-bell',
@@ -182,23 +168,177 @@ export const SOUND_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 35(g)'],
     explanation:
       'Rule 35(g): rapid ringing of the bell for about five seconds at intervals of not more than one minute. The bell forward plus the gong aft applies to a vessel of 100 metres or more — at 60 metres, bell only. She may in addition sound one short, one prolonged and one short blast to warn an approaching vessel.',
-    misconception:
-      'The anchored interval is one minute, not two. Most other fog signals in Rule 35 are two minutes, which is why this one is asked.',
   }),
   mcq({
     id: 'snd-equipment-thresholds',
     topic: 'sound',
     concept: 'rule33:equipment',
     difficulty: 2,
-    prompt: 'A vessel of 12 metres or more in length shall be provided with:',
-    answer: 'A whistle and a bell',
+    prompt: 'A vessel of 15 metres in length shall be provided with:',
+    answer: 'A whistle',
     distractors: [
-      'A whistle only',
+      'A whistle and a bell',
       'A whistle, a bell and a gong',
-      'Some efficient sound signalling appliance of any kind',
+      'No appliance, only some other means of making an efficient sound signal',
     ],
     ruleRefs: ['Rule 33(a)', 'Rule 33(b)'],
     explanation:
-      'Rule 33(a): 12 metres or more, whistle and bell; 100 metres or more, additionally a gong whose tone cannot be confused with the bell. Rule 33(b): a vessel of less than 12 metres is not obliged to carry these appliances but shall be provided with some other means of making an efficient sound signal.',
+      'Rule 33(a): 12 metres or more, a whistle; 20 metres or more, a bell in addition; 100 metres or more, a gong as well, whose tone cannot be confused with the bell. Rule 33(b): a vessel of less than 12 metres is not obliged to carry these appliances but shall be provided with some other means of making an efficient sound signal. Older texts put the bell at 12 metres. The 2001 amendments moved it to 20 metres, which is also why Rule 35(i) lets a vessel of 12 to 20 metres make some other efficient sound signal instead of the bell signals.',
+  }),
+  mcq({
+    id: 'snd-whistle-definition',
+    topic: 'sound',
+    concept: 'rule32:whistle',
+    difficulty: 2,
+    prompt: 'The word "whistle" in the Rules means:',
+    answer: 'Any sound signalling appliance capable of producing the prescribed blasts and complying with Annex III',
+    distractors: [
+      'A steam or air whistle mounted on the funnel or foremast of a power-driven vessel',
+      'Any horn or siren audible at 2 miles or more, whatever its specification',
+      'Any sound signalling appliance except an electric horn or aerosol foghorn',
+    ],
+    ruleRefs: ['Rule 32(a)'],
+    explanation:
+      'Rule 32(a): any sound signalling appliance capable of producing the prescribed blasts and which complies with the specifications in Annex III. An electric horn that meets Annex III is a whistle for the purposes of the Rules.',
+  }),
+  mcq({
+    id: 'snd-light-signals',
+    topic: 'sound',
+    concept: 'rule34:light-signals',
+    difficulty: 3,
+    prompt: 'A power-driven vessel supplements her manoeuvring whistle signals with light signals under Rule 34(b). The flashes shall be:',
+    answer: 'About one second each, about one second apart, with not less than ten seconds between successive signals',
+    distractors: [
+      'About two seconds each, about one second apart, with not less than five seconds between successive signals',
+      'About half a second each, at the rate of a flashing light, with not less than one minute between signals',
+      'About one second each, about two seconds apart, with not less than two minutes between successive signals',
+    ],
+    ruleRefs: ['Rule 34(b)(ii)', 'Rule 34(b)(iii)', 'Rule 34(b)(i)'],
+    explanation:
+      'Rule 34(b)(ii). One flash means altering to starboard, two to port, three operating astern propulsion (Rule 34(b)(i)). Rule 34(b)(iii): the light, if fitted, is an all-round white light visible at a minimum range of 5 miles.',
+  }),
+  mcq({
+    id: 'snd-whistles-100m',
+    topic: 'sound',
+    concept: 'rule34:whistles-apart',
+    difficulty: 2,
+    prompt: 'A large vessel has whistles fitted more than 100 metres apart. For manoeuvring and warning signals:',
+    answer: 'One whistle only shall be used',
+    distractors: [
+      'Both whistles shall be sounded together',
+      'The whistles shall be sounded one after the other',
+      'The forward whistle shall be used by day and the after one by night',
+    ],
+    ruleRefs: ['Rule 34(f)'],
+    explanation:
+      'Rule 34(f). Two whistles far apart sounding the same signal would be heard at different times at a distance and could be taken as extra blasts, turning one signal into another. Annex III requires such whistles not to be sounded simultaneously.',
+  }),
+  mcq({
+    id: 'snd-fishing-at-anchor',
+    topic: 'sound',
+    concept: 'rule35:fishing-ram-at-anchor',
+    difficulty: 3,
+    prompt: 'In restricted visibility, a vessel engaged in fishing at anchor sounds:',
+    answer: 'One prolonged followed by two short blasts, at intervals of not more than 2 minutes',
+    distractors: [
+      'Rapid ringing of the bell for about 5 seconds, at intervals of not more than 1 minute',
+      'One short, one prolonged and one short blast, at intervals of not more than 1 minute',
+      'One prolonged followed by three short blasts, at intervals of not more than 2 minutes',
+    ],
+    ruleRefs: ['Rule 35(d)', 'Rule 35(c)'],
+    explanation:
+      'Rule 35(d): a vessel engaged in fishing at anchor, and a vessel restricted in her ability to manoeuvre carrying out her work at anchor, sound the Rule 35(c) signal instead of the anchor bell of Rule 35(g).',
+  }),
+  mcq({
+    id: 'snd-composite-unit',
+    topic: 'sound',
+    concept: 'rule35:composite-unit',
+    difficulty: 2,
+    prompt: 'A pusher and the barge ahead of her are rigidly connected in a composite unit. Making way in fog, they sound:',
+    answer: 'One prolonged blast at intervals of not more than 2 minutes',
+    distractors: [
+      'One prolonged followed by two short blasts at intervals of not more than 2 minutes',
+      'One prolonged followed by three short blasts at intervals of not more than 2 minutes',
+      'Two prolonged blasts at intervals of not more than 2 minutes',
+    ],
+    ruleRefs: ['Rule 35(f)', 'Rule 24(b)'],
+    explanation:
+      'Rule 35(f): a composite unit is regarded as a power-driven vessel and gives the signals of Rule 35(a) or (b). It also shows the lights of a power-driven vessel, Rule 24(b). A pusher not rigidly connected sounds one prolonged and two short, Rule 35(c).',
+  }),
+  mcq({
+    id: 'snd-12-to-20-bell',
+    topic: 'sound',
+    concept: 'rule35:12-to-20m',
+    difficulty: 2,
+    prompt: 'A vessel of 16 metres at anchor in fog does not give the bell signal. She shall instead:',
+    answer: 'Make some other efficient sound signal at intervals of not more than 2 minutes',
+    distractors: [
+      'Sound one prolonged blast at intervals of not more than 1 minute',
+      'Make no sound signal, since she is under 20 metres',
+      'Sound one short, one prolonged and one short blast every minute',
+    ],
+    ruleRefs: ['Rule 35(i)'],
+    explanation:
+      'Rule 35(i): a vessel of 12 metres or more but less than 20 metres is not obliged to give the bell signals of Rule 35(g) and (h), but if she does not, she shall make some other efficient sound signal at intervals of not more than 2 minutes.',
+  }),
+  mcq({
+    id: 'snd-under-12',
+    topic: 'sound',
+    concept: 'rule35:under-12m',
+    difficulty: 1,
+    prompt: 'A motor boat of 9 metres is underway in fog. Under Rule 35(j) she:',
+    answer: 'Need not give the Rule 35 signals, but if she does not, shall make some other efficient sound signal every 2 minutes or less',
+    distractors: [
+      'Must sound one prolonged blast every 2 minutes or less, like any power-driven vessel making way',
+      'Need make no sound signal of any kind, being under 12 metres and not obliged to carry a whistle',
+      'Must ring a bell rapidly for about five seconds every minute or less, instead of using a whistle',
+    ],
+    ruleRefs: ['Rule 35(j)', 'Rule 33(b)'],
+    explanation:
+      'Rule 35(j): a vessel of less than 12 metres is not obliged to give the Rule 35 signals, but if she does not, she shall make some other efficient sound signal at intervals of not more than 2 minutes. Rule 33(b) likewise requires her to have some means of making an efficient sound signal.',
+  }),
+  mcq({
+    id: 'snd-pilot-identity',
+    topic: 'sound',
+    concept: 'rule35:pilot-identity',
+    difficulty: 2,
+    prompt: 'In restricted visibility, a pilot vessel on pilotage duty may, in addition to her normal fog signals, sound:',
+    answer: 'An identity signal of four short blasts',
+    distractors: [
+      'An identity signal of one short, one prolonged and one short blast',
+      'An identity signal of two prolonged and two short blasts',
+      'An identity signal of five short and rapid blasts',
+    ],
+    ruleRefs: ['Rule 35(k)'],
+    explanation:
+      'Rule 35(k): in addition to the signals of Rule 35(a), (b) or (g). One short, one prolonged, one short is the warning a vessel at anchor may give, Rule 35(g); five short and rapid blasts is the doubt signal, Rule 34(d).',
+  }),
+  mcq({
+    id: 'snd-aground',
+    topic: 'sound',
+    concept: 'rule35:aground',
+    difficulty: 3,
+    prompt: 'A vessel of 120 metres is aground in fog. Her signal includes:',
+    answer: 'Three separate strokes on the bell before and after the rapid ringing of the bell, and the gong aft',
+    distractors: [
+      'Rapid ringing of the bell forward and the gong aft only, exactly as for a vessel at anchor',
+      'Three separate strokes on the gong before and after the rapid ringing of the bell forward',
+      'Three separate strokes on the bell before and after the rapid ringing, but no gong',
+    ],
+    ruleRefs: ['Rule 35(h)', 'Rule 35(g)'],
+    explanation:
+      'Rule 35(h): a vessel aground gives the bell signal and, if required, the gong signal of Rule 35(g) (bell forward then gong aft for a vessel of 100 metres or more), plus three separate and distinct strokes on the bell immediately before and after the rapid ringing of the bell. She may also sound an appropriate whistle signal.',
+  }),
+  mcq({
+    id: 'snd-whistle-frequency',
+    topic: 'sound',
+    concept: 'annex3:whistle-frequency',
+    difficulty: 3,
+    prompt: 'The fundamental frequency of the whistle of a vessel 250 metres in length shall lie between:',
+    answer: '70 and 200 Hz',
+    distractors: ['130 and 350 Hz', '250 and 700 Hz', '180 and 2100 Hz'],
+    ruleRefs: ['Annex III, 1(b)'],
+    explanation:
+      'Annex III, 1(b): 70-200 Hz for a vessel of 200 metres or more; 130-350 Hz for 75 metres but less than 200 metres; 250-700 Hz for less than 75 metres. The larger the vessel, the deeper the note.',
   }),
 ];

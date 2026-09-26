@@ -193,12 +193,8 @@ export function composeLightDrill(vessel: VesselState, rng: Rng): LightDrill {
     ruleRefs: [...new Set(group.flatMap(ruleRefsFor))],
     explanation:
       `${describeAspect(aspectDeg)}, so what reaches you is ${colourTally(vessel, aspectDeg)}. ` +
-      `${describeVessel(vessel)} carries ${describeLights(vessel)}.`,
-    teachingNote:
-      'Read the picture in one order every time: count the lights, name the colours, ' +
-      'then read the vertical order. Only then look at the horizontal spread, which is ' +
-      'the aspect — and aspect is what tells you whether she is a problem.',
-    misconception: sharedNote(group) ?? ambiguityNote(vessel),
+      `${describeVessel(vessel)} carries ${describeLights(vessel)}.` +
+      (sharedNote(group) ?? ambiguityNote(vessel) ? ` ${sharedNote(group) ?? ambiguityNote(vessel)}` : ''),
     difficulty: group.length > 1 ? 3 : 2,
     scene: { type: 'lights', vessel, aspectDeg },
   };

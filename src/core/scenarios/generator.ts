@@ -32,6 +32,12 @@ const OPTIONS = {
   'standon-12-leeward': 'Stand on: you are the leeward vessel — Rule 12(a)(ii)',
   'notimpede-18d':
     'Neither give way nor stand on: avoid impeding her safe passage — Rule 18(d)',
+  'cbd-own':
+    'Navigate with particular caution: others must avoid impeding you, but this gives you no right of way — Rule 18(d)',
+  'keepclear-18e':
+    'Keep well clear of all vessels and avoid impeding their navigation — Rule 18(e)',
+  'keepclear-18f':
+    'Keep well clear of all other vessels and avoid impeding their navigation — Rule 18(f)',
   'notimpede-9':
     'Do not impede her: keep clear of the channel, or cross well clear, taking early action — Rule 9',
   'notimpede-10':
@@ -67,7 +73,10 @@ export function correctOption(s: Scenario): OptionKey {
     case 'traffic-lane':
       return 'notimpede-10';
     case 'constrained-by-draught':
-      return v.role === 'not-impede' ? 'notimpede-18d' : 'standon-18';
+      return v.role === 'not-impede' ? 'notimpede-18d' : 'cbd-own';
+    case 'seaplane-wig':
+      if (v.role === 'stand-on') return 'standon-18';
+      return v.rule === 'Rule 18(e)' ? 'keepclear-18e' : 'keepclear-18f';
     case 'precedence':
       return v.role === 'give-way' ? 'giveway-18' : 'standon-18';
     case 'crossing':
@@ -89,7 +98,8 @@ const TRAPS: Record<Situation, OptionKey[]> = {
     'giveway-15',
   ],
   precedence: ['giveway-18', 'standon-18', 'giveway-15', 'standon-17', 'notimpede-18d'],
-  'constrained-by-draught': ['giveway-18', 'standon-17', 'giveway-15', 'standon-18'],
+  'constrained-by-draught': ['giveway-18', 'standon-17', 'giveway-15', 'standon-18', 'notimpede-18d', 'cbd-own'],
+  'seaplane-wig': ['standon-18', 'giveway-15', 'standon-17', 'keepclear-18e', 'keepclear-18f', 'notimpede-18d'],
   'narrow-channel': ['giveway-15', 'standon-9', 'standon-17', 'notimpede-10', 'notimpede-18d'],
   'traffic-lane': ['giveway-15', 'notimpede-9', 'standon-17', 'headon-14'],
   'restricted-visibility': ['rv-19-port', 'standon-17', 'giveway-15', 'standon-sound'],
@@ -122,6 +132,19 @@ export interface ScenarioSpec {
 }
 
 const isRole = (s: Scenario, role: string) => resolve(s).role === role;
+
+function pickCategory(rng: Rng, from: readonly Category[]): Category {
+  return from[Math.floor(rng.next() * from.length)] as Category;
+}
+
+/**
+ * Rule 13(a) applies "notwithstanding anything contained in the Rules of Part
+ * B, Sections I and II", so a sailing or fishing vessel coming up from astern
+ * keeps clear of a power-driven vessel. Mixing categories into the overtaking
+ * drills is what tests that; sailing vessels carry no tack here, because the
+ * geometry already decides it.
+ */
+const OVERTAKING_CATEGORIES: readonly Category[] = ['power', 'power', 'sailing', 'fishing'];
 
 export const SPECS: readonly ScenarioSpec[] = [
   {
@@ -207,10 +230,10 @@ export const SPECS: readonly ScenarioSpec[] = [
       const rel = rng.next() < 0.5 ? pickRange(rng, 0, 20) : pickRange(rng, 340, 359);
       return {
         ownHeading: own,
-        own: 'power',
+        own: pickCategory(rng, OVERTAKING_CATEGORIES),
         bearing: (own + rel) % 360,
         herHeading: (own + pickRange(rng, -25, 25)) % 360,
-        her: 'power',
+        her: pickCategory(rng, OVERTAKING_CATEGORIES),
         restrictedVisibility: false,
       };
     },
@@ -232,10 +255,10 @@ export const SPECS: readonly ScenarioSpec[] = [
       const rel = pickRange(rng, 150, 210);
       return {
         ownHeading: own,
-        own: 'power',
+        own: pickCategory(rng, OVERTAKING_CATEGORIES),
         bearing: (own + rel) % 360,
         herHeading: (own + pickRange(rng, -25, 25)) % 360,
-        her: 'power',
+        her: pickCategory(rng, OVERTAKING_CATEGORIES),
         restrictedVisibility: false,
       };
     },
@@ -322,7 +345,11 @@ export const SPECS: readonly ScenarioSpec[] = [
         ['power', 'nuc'],
         ['sailing', 'fishing'],
         ['sailing', 'nuc'],
+        ['sailing', 'ram'],
         ['fishing', 'ram'],
+        ['fishing', 'nuc'],
+        ['cbd', 'nuc'],
+        ['cbd', 'ram'],
       ];
       const [own_, her] = pairs[Math.floor(rng.next() * pairs.length)] as [Category, Category];
       return {
@@ -357,6 +384,10 @@ export const SPECS: readonly ScenarioSpec[] = [
         ['nuc', 'power'],
         ['fishing', 'sailing'],
         ['ram', 'fishing'],
+        ['nuc', 'fishing'],
+        ['nuc', 'sailing'],
+        ['ram', 'sailing'],
+        ['nuc', 'cbd'],
       ];
       const [own_, her] = pairs[Math.floor(rng.next() * pairs.length)] as [Category, Category];
       return {
@@ -386,7 +417,7 @@ export const SPECS: readonly ScenarioSpec[] = [
       const rel = pickRange(rng, 25, 335);
       return {
         ownHeading: own,
-        own: 'power',
+        own: pickCategory(rng, ['power', 'sailing', 'fishing']),
         bearing: (own + rel) % 360,
         herHeading: (own + rel + 180 + pickRange(rng, -60, 60)) % 360,
         her: 'cbd',
@@ -400,6 +431,81 @@ export const SPECS: readonly ScenarioSpec[] = [
       bearing: 300,
       herHeading: 120,
       her: 'cbd',
+      restrictedVisibility: false,
+    },
+  },
+  {
+    concept: 'scenario:cbd-own',
+    label: 'you are constrained by your draught',
+    build: (rng) => {
+      const own = pickRange(rng, 0, 359);
+      const rel = pickRange(rng, 25, 335);
+      return {
+        ownHeading: own,
+        own: 'cbd',
+        bearing: (own + rel) % 360,
+        herHeading: (own + rel + 180 + pickRange(rng, -60, 60)) % 360,
+        her: pickCategory(rng, ['power', 'sailing', 'fishing']),
+        restrictedVisibility: false,
+      };
+    },
+    expect: (s) => classify(s) === 'constrained-by-draught' && s.own === 'cbd',
+    fallback: {
+      ownHeading: 0,
+      own: 'cbd',
+      bearing: 60,
+      herHeading: 240,
+      her: 'sailing',
+      restrictedVisibility: false,
+    },
+  },
+  {
+    concept: 'scenario:seaplane',
+    label: 'you are a seaplane on the water',
+    build: (rng) => {
+      const own = pickRange(rng, 0, 359);
+      const rel = pickRange(rng, 25, 335);
+      return {
+        ownHeading: own,
+        own: 'seaplane',
+        bearing: (own + rel) % 360,
+        herHeading: (own + rel + 180 + pickRange(rng, -60, 60)) % 360,
+        her: pickCategory(rng, ['power', 'sailing', 'fishing']),
+        restrictedVisibility: false,
+      };
+    },
+    expect: (s) => classify(s) === 'seaplane-wig',
+    fallback: {
+      ownHeading: 0,
+      own: 'seaplane',
+      bearing: 300,
+      herHeading: 120,
+      her: 'power',
+      restrictedVisibility: false,
+    },
+  },
+  {
+    concept: 'scenario:wig',
+    label: 'you are a WIG craft in flight near the surface',
+    build: (rng) => {
+      const own = pickRange(rng, 0, 359);
+      const rel = pickRange(rng, 25, 335);
+      return {
+        ownHeading: own,
+        own: 'wig',
+        bearing: (own + rel) % 360,
+        herHeading: (own + rel + 180 + pickRange(rng, -60, 60)) % 360,
+        her: pickCategory(rng, ['power', 'sailing', 'fishing']),
+        restrictedVisibility: false,
+      };
+    },
+    expect: (s) => classify(s) === 'seaplane-wig',
+    fallback: {
+      ownHeading: 0,
+      own: 'wig',
+      bearing: 60,
+      herHeading: 240,
+      her: 'power',
       restrictedVisibility: false,
     },
   },
@@ -557,12 +663,6 @@ export function composeScenarioDrill(spec: ScenarioSpec, rng: Rng): ScenarioDril
     correct: 'a',
     ruleRefs: [verdict.rule],
     explanation: `${verdict.reasoning} ${verdict.action}`,
-    teachingNote:
-      'Work it in the same order every time: are we in sight of one another, is either of us overtaking, are we different categories under Rule 18, and only then head-on or crossing. Answering out of order is how a crossing rule gets applied to an overtaking situation.',
-    misconception:
-      verdict.role === 'stand-on'
-        ? 'Stand on does not mean do nothing until it is too late. Rule 17(a)(ii) lets you act as soon as it is apparent she is not keeping clear, and Rule 17(b) requires it once collision cannot be avoided by her alone.'
-        : undefined,
     difficulty: 3,
     scene: { type: 'scenario', scenario },
   };

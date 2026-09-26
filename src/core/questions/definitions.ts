@@ -18,10 +18,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(i)'],
     explanation:
       'Rule 3(i): "underway" means that a vessel is not at anchor, or made fast to the shore, or aground. It says nothing about movement — a vessel drifting with her engine off is underway but not making way.',
-    teachingNote:
-      'Underway and making way are two independent facts. Drill the four-box grid: underway + making way, underway + not making way, at anchor, aground. Each box has its own lights and its own fog signal.',
-    misconception:
-      'Students equate underway with moving. The distinction matters immediately in Rule 35: one prolonged blast if making way, two prolonged if underway but stopped.',
   }),
   mcq({
     id: 'def-nuc',
@@ -39,10 +35,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(f)'],
     explanation:
       'Rule 3(f). The defining feature is an exceptional circumstance — a breakdown — that removes the ability to comply. A vessel restricted by the nature of her work is a different category: restricted in ability to manoeuvre, Rule 3(g).',
-    teachingNote:
-      'NUC = something broke. RAM = something is being done. That one line separates the two categories reliably.',
-    misconception:
-      'Students file dredgers and cable layers under NUC. They are RAM: their limitation comes from the work, not from a failure.',
   }),
   mcq({
     id: 'def-ram-list',
@@ -59,8 +51,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(g)', 'Rule 3(d)'],
     explanation:
       'Rule 3(g) lists: laying, servicing or picking up a navigation mark, submarine cable or pipeline; dredging, surveying or underwater operations; replenishment or transferring persons, provisions or cargo while underway; launching or recovery of aircraft; mine clearance; and a towing operation such as severely restricts the towing vessel and her tow in their ability to deviate. Trolling lines are explicitly excluded even from "engaged in fishing" by Rule 3(d).',
-    misconception:
-      'Trolling is the trap. Rule 3(d) says fishing apparatus must restrict manoeuvrability, and it expressly does not include trolling lines — so a sportfisher dragging lures is just a power-driven vessel.',
   }),
   mcq({
     id: 'def-cbd',
@@ -78,10 +68,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(h)', 'Rule 28'],
     explanation:
       'Rule 3(h). Two conditions the examiner is looking for: the vessel must be power-driven, and the restriction must relate draught to both depth and width of the available water.',
-    teachingNote:
-      'Note that CBD does not appear in the Rule 18 pecking order proper. Rule 18(d) only says other vessels shall, if circumstances admit, avoid impeding her — a weaker obligation than "keep out of the way".',
-    misconception:
-      'Students promote CBD to somewhere near RAM. It is not in the hierarchy; "avoid impeding" is not the same as "give way".',
   }),
   mcq({
     id: 'def-restricted-visibility',
@@ -98,8 +84,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(l)'],
     explanation:
       'Rule 3(l) gives the list and leaves it open with "or any other similar causes". Note what is absent: darkness. Night is not restricted visibility.',
-    misconception:
-      'Students add darkness to the list. At night in clear weather vessels are still in sight of one another, so Section II applies, not Rule 19.',
   }),
   mcq({
     id: 'def-in-sight',
@@ -116,10 +100,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(k)', 'Rule 11'],
     explanation:
       'Rule 3(k): vessels shall be deemed to be in sight of one another only when one can be observed visually from the other. Radar contact does not count.',
-    teachingNote:
-      'This definition is the switch that selects which section of Part B you are in. Visual contact opens Section II (Rules 11 to 18); without it you are in Rule 19.',
-    misconception:
-      'The classic error is applying crossing rules to a radar target in fog. Rule 19 has no stand-on vessel — the whole give-way/stand-on vocabulary is unavailable to you.',
   }),
   mcq({
     id: 'def-rule2-departure',
@@ -136,10 +116,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 2(b)'],
     explanation:
       'Rule 2(b) requires due regard to all dangers of navigation and collision and to any special circumstances, including the limitations of the vessels involved, which may make a departure from these Rules necessary to avoid immediate danger.',
-    teachingNote:
-      'Pair 2(a) and 2(b) as a hinge: 2(a) says obeying the letter is not a defence if good seamanship demanded more; 2(b) says the letter yields when only a departure avoids immediate danger.',
-    misconception:
-      'Students read Rule 2 as a general escape clause. The threshold is "immediate danger", not inconvenience.',
   }),
   mcq({
     id: 'def-application-waters',
@@ -172,9 +148,149 @@ export const DEFINITION_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 3(b)', 'Rule 3(c)', 'Rule 25(e)'],
     explanation:
       'Rule 3(c): a sailing vessel is one under sail provided that propelling machinery, if fitted, is not being used. With the engine engaged she is power-driven under Rule 3(b), and Rule 25(e) requires her to exhibit forward, where it can best be seen, a conical shape apex downwards.',
-    teachingNote:
-      'Worth making the point that the cone is required of every motorsailing yacht by day, and that almost nobody flies it. As an instructor you will be asked why; the honest answer is that widespread non-compliance does not change the requirement.',
-    misconception:
-      'Students think having sails up is what counts. It is the engine that decides.',
+  }),
+  mcq({
+    id: 'def-special-rules',
+    topic: 'definitions',
+    concept: 'rule1:special-rules',
+    difficulty: 1,
+    prompt: 'A harbour authority has made special rules for navigation within its harbour. Under Rule 1(b), such special rules:',
+    answer: 'Operate within the harbour, and shall conform as closely as possible to the Collision Regulations',
+    distractors: [
+      'Are void wherever they differ in any respect from the Collision Regulations',
+      'Apply only to vessels of less than 20 metres navigating within the harbour',
+      'Apply only to vessels flying the flag of the State that made them',
+    ],
+    ruleRefs: ['Rule 1(b)'],
+    explanation:
+      'Rule 1(b): nothing in the Rules shall interfere with special rules made by an appropriate authority for roadsteads, harbours, rivers, lakes or inland waterways connected with the high seas and navigable by seagoing vessels. Such special rules shall conform as closely as possible to the Rules.',
+  }),
+  mcq({
+    id: 'def-additional-signals',
+    topic: 'definitions',
+    concept: 'rule1:additional-signals',
+    difficulty: 2,
+    prompt: 'Rule 1(c) allows a Government to make special rules for additional station or signal lights, shapes or whistle signals for:',
+    answer: 'Ships of war and vessels proceeding under convoy, and (lights or shapes only) fishing vessels fishing as a fleet',
+    distractors: [
+      'Any vessel of 100 metres or more in length, and vessels carrying dangerous cargoes',
+      'Pilot vessels and vessels engaged in hydrographic survey, and vessels under oars',
+      'Yachts racing under the rules of a national sailing authority, and their escort boats',
+    ],
+    ruleRefs: ['Rule 1(c)'],
+    explanation:
+      'Rule 1(c) names ships of war and vessels proceeding under convoy (lights, shapes or whistle signals), and fishing vessels engaged in fishing as a fleet (lights or shapes). Such signals shall, so far as possible, be such that they cannot be mistaken for any light, shape or signal authorised elsewhere in the Rules.',
+  }),
+  mcq({
+    id: 'def-special-construction',
+    topic: 'definitions',
+    concept: 'rule1:special-construction',
+    difficulty: 2,
+    prompt: 'Her Government has determined that a vessel of special construction or purpose cannot comply fully with the Rules on the number, position, range or arc of visibility of her lights. She shall:',
+    answer: 'Comply with such other provisions as her Government has determined to be the closest possible compliance',
+    distractors: [
+      'Be exempt from exhibiting navigation lights, provided she keeps a proper look-out',
+      'Exhibit the lights of a vessel restricted in her ability to manoeuvre instead',
+      'Remain in port between sunset and sunrise and in restricted visibility',
+    ],
+    ruleRefs: ['Rule 1(e)'],
+    explanation:
+      'Rule 1(e): such a vessel shall comply with such other provisions in regard to the number, position, range or arc of visibility of lights or shapes, and the disposition and characteristics of sound-signalling appliances, as her Government shall have determined to be the closest possible compliance with the Rules.',
+  }),
+  mcq({
+    id: 'def-vessel',
+    topic: 'definitions',
+    concept: 'definition:vessel',
+    difficulty: 1,
+    prompt: 'Under Rule 3(a), the word "vessel" includes:',
+    answer: 'Every description of water craft, including non-displacement craft, WIG craft and seaplanes, used or capable of being used for transport on water',
+    distractors: [
+      'Displacement craft only; hovercraft and seaplanes are governed by aviation rules instead',
+      'Every description of water craft of 7 metres or more in length, excluding seaplanes and WIG craft',
+      'Ships and boats including hovercraft, but not WIG craft or seaplanes, which are aircraft',
+    ],
+    ruleRefs: ['Rule 3(a)'],
+    explanation:
+      'Rule 3(a): "vessel" includes every description of water craft, including non-displacement craft, WIG craft and seaplanes, used or capable of being used as a means of transportation on water. There is no minimum size.',
+  }),
+  mcq({
+    id: 'def-trolling',
+    topic: 'definitions',
+    concept: 'definition:engaged-in-fishing',
+    difficulty: 2,
+    prompt: 'A motor boat is underway trailing trolling lines astern. Under the Rules she is:',
+    answer: 'A power-driven vessel, not a vessel engaged in fishing',
+    distractors: [
+      'A vessel engaged in fishing, since she has lines in the water',
+      'A vessel restricted in her ability to manoeuvre',
+      'A vessel engaged in fishing only while a fish is being played',
+    ],
+    ruleRefs: ['Rule 3(d)', 'Rule 3(b)'],
+    explanation:
+      'Rule 3(d): a vessel engaged in fishing is one fishing with nets, lines, trawls or other apparatus which restrict manoeuvrability, but not a vessel fishing with trolling lines or other apparatus which do not restrict manoeuvrability. Propelled by machinery, she is a power-driven vessel under Rule 3(b).',
+  }),
+  mcq({
+    id: 'def-seaplane',
+    topic: 'definitions',
+    concept: 'definition:seaplane',
+    difficulty: 1,
+    prompt: 'The word "seaplane" in the Rules includes:',
+    answer: 'Any aircraft designed to manoeuvre on the water',
+    distractors: [
+      'Any aircraft flying at low altitude over the sea',
+      'Only floatplanes while moored or at anchor',
+      'Any craft which flies close to the surface using surface effect',
+    ],
+    ruleRefs: ['Rule 3(e)'],
+    explanation:
+      'Rule 3(e): the word "seaplane" includes any aircraft designed to manoeuvre on the water. A craft flying close to the surface using surface-effect action is a WIG craft, defined separately in Rule 3(m).',
+  }),
+  mcq({
+    id: 'def-wig',
+    topic: 'definitions',
+    concept: 'definition:wig-craft',
+    difficulty: 2,
+    prompt: 'A Wing-in-Ground (WIG) craft is defined as:',
+    answer: 'A multimodal craft which, in its main operational mode, flies in close proximity to the surface by utilising surface-effect action',
+    distractors: [
+      'A craft supported on a cushion of air generated by fans, operating in the non-displacement mode',
+      'Any aircraft designed to take off from, land on and manoeuvre on the surface of the water',
+      'A high-speed craft lifted clear of the water on underwater foils once above a certain speed',
+    ],
+    ruleRefs: ['Rule 3(m)'],
+    explanation:
+      'Rule 3(m). The distractors describe an air-cushion vessel (a non-displacement craft, lit under Rule 23(b)), a seaplane (Rule 3(e)) and a hydrofoil, which is simply a power-driven vessel.',
+  }),
+  mcq({
+    id: 'def-rule38-exemptions',
+    topic: 'definitions',
+    concept: 'rule38:exemptions',
+    difficulty: 3,
+    prompt: 'The exemptions in Rule 38 are available to:',
+    answer: 'Vessels complying with the 1960 Collision Regulations whose keels were laid before the 1972 Regulations entered into force',
+    distractors: [
+      'Vessels of special construction or purpose whose Government has determined they cannot comply fully',
+      'Vessels of less than 12 metres, which are exempt from the Annex I positioning requirements',
+      'Vessels navigating only in waters for which special rules have been made by a local authority',
+    ],
+    ruleRefs: ['Rule 38'],
+    explanation:
+      'Rule 38 applies to any vessel complying with the 1960 Regulations, the keel of which was laid (or at a corresponding stage of construction) before the entry into force of the 1972 Regulations. Most exemptions were time-limited; some, such as repositioning lights on conversion from Imperial to metric units, are permanent. Special-construction vessels are dealt with by Rule 1(e).',
+  }),
+  mcq({
+    id: 'def-part-f',
+    topic: 'definitions',
+    concept: 'rule41:verification',
+    difficulty: 2,
+    prompt: 'What is Part F of the Regulations (Rules 39 to 41) concerned with?',
+    answer: 'Periodic audits by IMO of each Contracting Party to verify its compliance with and implementation of the Convention',
+    distractors: [
+      'Inspection of individual ships\' lights and sound appliances by port State control officers',
+      'Certification of each watchkeeping officer\'s knowledge of the Rules by the flag State',
+      'Exemptions for vessels whose keels were laid before the Regulations entered into force',
+    ],
+    ruleRefs: ['Rule 41(a)', 'Rule 39(b)'],
+    explanation:
+      'Part F, added in 2013, is titled "Verification of compliance". Rule 41(a): every Contracting Party shall be subject to periodic audits by the Organization in accordance with the audit standard (the III Code, Rule 39) to verify compliance with and implementation of the Convention. It places no duties on ships.',
   }),
 ];

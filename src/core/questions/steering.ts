@@ -18,8 +18,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 5'],
     explanation:
       '"All available means" is the phrase that does the work: it pulls in radar, AIS, VHF and the echo sounder when they are appropriate, and it is the hook on which most collision inquiries hang their findings.',
-    teachingNote:
-      'Ask the student what "appropriate in the prevailing circumstances" excludes. In clear weather in open water, not running the radar may be fine; in fog it never is.',
   }),
   mcq({
     id: 'str-safe-speed-factors',
@@ -36,8 +34,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 6(a)'],
     explanation:
       'Rule 6(a) lists six factors for all vessels: visibility, traffic density, manoeuvrability (stopping distance and turning ability), background light at night, state of wind sea and current and proximity of navigational hazards, and draught in relation to available depth. Rule 6(b) adds a further six for vessels with operational radar.',
-    teachingNote:
-      'Six and six is a clean memory hook. Candidates are regularly asked to produce several of them cold.',
   }),
   mcq({
     id: 'str-risk-doubt',
@@ -54,8 +50,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 7(a)'],
     explanation:
       'Rule 7(a): if there is any doubt such risk shall be deemed to exist. The Rules resolve uncertainty against you throughout — compare Rule 13(c) on overtaking.',
-    teachingNote:
-      'Collect the "if in doubt" clauses as a set: Rule 7(a) risk of collision, Rule 13(c) overtaking, Rule 12(a)(iii) the port-tack yacht that cannot determine the other tack. All three resolve towards the more cautious duty.',
   }),
   mcq({
     id: 'str-risk-steady-bearing',
@@ -72,8 +66,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 7(d)(ii)'],
     explanation:
       'Rule 7(d)(i) gives the steady-bearing test; 7(d)(ii) immediately qualifies it. A 300 metre ship has a bearing spread of her own — the bow may be drawing left while the stern draws right and you are still going to be hit.',
-    misconception:
-      'Students treat a changing bearing as proof of safety. At half a mile from a container ship it proves nothing.',
   }),
   mcq({
     id: 'str-action-apparent',
@@ -90,8 +82,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 8(b)'],
     explanation:
       'Rule 8(b). The Rules give no numbers; the test is perceptibility to the other vessel, including on her radar, where a small alteration may take several minutes of plotting to detect at all.',
-    teachingNote:
-      'A practical figure to teach alongside the rule: 30 degrees or more, or a visible change in aspect. Be explicit that this is seamanship guidance, not the wording of the rule.',
   }),
   mcq({
     id: 'str-narrow-channel-side',
@@ -124,10 +114,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 9(b)', 'Rule 9(c)', 'Rule 9(d)'],
     explanation:
       'Rule 9(b) names vessels under 20 metres and sailing vessels. Rule 9(c) adds vessels engaged in fishing, and Rule 9(d) says a vessel shall not cross a narrow channel if such crossing impedes a vessel which can safely navigate only within it.',
-    teachingNote:
-      'Twenty metres recurs: Rule 9(b), Rule 10(j) and Rule 20-something visibility bands. Worth a dedicated card on "what changes at 20m, 12m, 7m and 50m".',
-    misconception:
-      '"Shall not impede" is not the same as "give way". Rule 8(f) explains it: the vessel required not to impede must take early action to allow sufficient sea room, and remains fully bound by the steering rules if risk of collision then develops.',
   }),
   mcq({
     id: 'str-tss-crossing',
@@ -144,8 +130,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 10(c)'],
     explanation:
       'Rule 10(c) says heading, not course made good, and IMO has confirmed the point: you do not crab across to hold a 090 track. A heading at right angles gets you out of the lane fastest and makes your aspect unambiguous to traffic in the lane.',
-    misconception:
-      'Students set a course to steer that corrects for tide, so as to make good a perpendicular track. That is exactly what the rule does not want.',
   }),
   mcq({
     id: 'str-sailing-different-tacks',
@@ -162,8 +146,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 12(a)(i)'],
     explanation:
       'Rule 12(a)(i). Tack is decided by the side the wind is on, and Rule 12(b) defines the windward side as the side opposite to that on which the mainsail is carried.',
-    teachingNote:
-      'Racing sailors arrive knowing this one and then over-apply their racing rules, which differ in several places. Flag the difference early.',
   }),
   mcq({
     id: 'str-sailing-same-tack',
@@ -212,10 +194,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 13(b)'],
     explanation:
       'Rule 13(b): in such a position that at night she would be able to see only the sternlight of the vessel she is overtaking and neither of her sidelights. The sternlight arc is 135 degrees, which is 67.5 degrees each side of right astern — that is, 22.5 degrees abaft the beam.',
-    teachingNote:
-      'Teach the sector from the lights, not from the number. If you can see only her sternlight, you are overtaking. The geometry then falls out on its own.',
-    misconception:
-      'The bearing is taken from the overtaken vessel, not from the overtaking one. Students routinely measure it from the wrong ship.',
   }),
   mcq({
     id: 'str-overtaking-persists',
@@ -232,8 +210,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 13(a)', 'Rule 13(d)'],
     explanation:
       'Rule 13(d): any subsequent alteration of the bearing between the two vessels shall not make the overtaking vessel a crossing vessel within the meaning of these Rules or relieve her of the duty of keeping clear until she is finally past and clear. Rule 13(a) also gives Rule 13 precedence over anything in Section II.',
-    teachingNote:
-      'This is a favourite examination question because it tests whether the candidate understands that the character of a situation is fixed at the outset.',
   }),
   mcq({
     id: 'str-head-on-test',
@@ -250,8 +226,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 14(b)', 'Rule 14(c)'],
     explanation:
       'Rule 14(b). Rule 14(c) adds that when a vessel is in any doubt whether such a situation exists she shall assume that it does and act accordingly — another of the doubt clauses.',
-    teachingNote:
-      'Two masthead lights in line is the strongest aspect cue at sea: the pair opens and closes long before the sidelights tell you anything. Be careful with the inference about size, though. Rule 23(a)(ii) requires the second light at 50 metres and over but expressly permits a shorter vessel to show it, so two masthead lights do not prove she is 50 metres or more.',
   }),
   mcq({
     id: 'str-crossing-avoid-ahead',
@@ -268,8 +242,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 15'],
     explanation:
       'Rule 15. Combined with Rule 16, the standard answer is a substantial alteration to starboard, taken early, passing under the other vessel\'s stern.',
-    teachingNote:
-      'Give the student the reason, not just the instruction: passing astern means that if the other vessel does something unexpected, your alteration still opens the range. Crossing ahead bets on her holding course.',
   }),
   mcq({
     id: 'str-standon-may-act',
@@ -286,10 +258,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 17(a)(ii)', 'Rule 17(b)'],
     explanation:
       'Rule 17(a)(ii) is permissive — "may" — and is triggered by the give-way vessel\'s apparent failure to act. Rule 17(b) is mandatory — "shall" — and is triggered when the vessels are so close that collision cannot be avoided by the give-way vessel alone.',
-    teachingNote:
-      'Three stages, and candidates must be able to name all three: 17(a)(i) keep course and speed; 17(a)(ii) may act; 17(b) shall act. Losing marks here is usually about missing the middle stage.',
-    misconception:
-      'Students think stand-on means "do nothing until it is too late". It means hold course and speed so the other vessel can solve the problem — and then act while the problem is still solvable.',
   }),
   mcq({
     id: 'str-standon-not-to-port',
@@ -306,8 +274,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 17(c)'],
     explanation:
       'Rule 17(c). The vessel on your port side is the give-way vessel; she should be turning to starboard, which carries her across your bow from left to right. If you also turn to port you turn into her.',
-    teachingNote:
-      'Draw it. The prohibition is obvious on paper and almost impossible to recover from memory alone under exam pressure.',
   }),
   mcq({
     id: 'str-rule18-order',
@@ -324,8 +290,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 18(b)'],
     explanation:
       'Rule 18(b): a sailing vessel underway shall keep out of the way of a vessel not under command, a vessel restricted in her ability to manoeuvre, and a vessel engaged in fishing.',
-    teachingNote:
-      'The ladder in 18(a) to (c) runs: not under command, restricted in ability to manoeuvre, engaged in fishing, sailing, power-driven. Teach it as a ladder with conditions, not as a ranking of ships. Rule 18 opens "except where Rules 9, 10 and 13 otherwise require", so a narrow channel, a traffic scheme or an overtaking situation overrides it; and a vessel constrained by her draught is not on the ladder at all — Rule 18(d) only asks others to avoid impeding her.',
   }),
   mcq({
     id: 'str-rv-avoid-port',
@@ -342,8 +306,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 19(d)(i)', 'Rule 19(d)(ii)'],
     explanation:
       'Rule 19(d) gives two prohibitions: an alteration to port for a vessel forward of the beam other than for a vessel being overtaken, and an alteration of course towards a vessel abeam or abaft the beam.',
-    teachingNote:
-      'Resist turning this into geometry. For a contact fine on your starboard bow a turn to port opens the bearing, and it is still forbidden. The reason is that you are both manoeuvring blind and independently: if each of you keeps to starboard for anything forward of the beam, your alterations add up instead of cancelling, and neither of you turns across the other. A port turn is also the one she has least reason to expect.',
   }),
   mcq({
     id: 'str-rv-fog-signal-forward',
@@ -360,8 +322,6 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 19(e)'],
     explanation:
       'Rule 19(e) applies unless you have determined that risk of collision does not exist. The same duty applies if you cannot avoid a close-quarters situation with a vessel forward of the beam.',
-    misconception:
-      'Candidates reach for a course alteration. Rule 19(e) is about speed: slow to steerage way, be ready to stop.',
   }),
   mcq({
     id: 'str-rv-no-standon',
@@ -378,7 +338,437 @@ export const STEERING_QUESTIONS: Question[] = [
     ruleRefs: ['Rule 19(a)', 'Rule 19(b)', 'Rule 11'],
     explanation:
       'Rule 19 applies to vessels not in sight of one another. Rules 11 to 18, which contain the whole give-way and stand-on scheme, apply only to vessels in sight of one another. In fog both vessels have an independent duty to take avoiding action in ample time.',
-    teachingNote:
-      'This is the single most important idea in Section III and the one most often got wrong. There is no right of way in fog.',
+  }),
+  mcq({
+    id: 'str-safe-speed-radar',
+    topic: 'steering',
+    concept: 'rule6:radar-factors',
+    difficulty: 2,
+    prompt: 'Which of these is one of the additional safe-speed factors that Rule 6(b) lists for vessels with operational radar?',
+    answer: 'The possibility that small vessels, ice and other floating objects may not be detected by radar at an adequate range',
+    distractors: [
+      'The freedom radar gives to maintain full sea speed in fog when the screen shows no targets',
+      'Whether an ARPA or AIS is fitted, since either removes the need for systematic plotting',
+      'The number of officers on board holding a radar observer certificate',
+    ],
+    ruleRefs: ['Rule 6(b)'],
+    explanation:
+      'Rule 6(b) adds: the characteristics, efficiency and limitations of the radar; the range scale in use; the effect of sea state, weather and interference; the possibility that small vessels, ice and other floating objects may not be detected at an adequate range; the number, location and movement of vessels detected; and the more exact assessment of visibility that radar ranges can give.',
+  }),
+  mcq({
+    id: 'str-radar-proper-use',
+    topic: 'steering',
+    concept: 'rule7:radar-use',
+    difficulty: 2,
+    prompt: 'Rule 7(b) requires proper use of radar equipment, if fitted and operational, including:',
+    answer: 'Long-range scanning to obtain early warning of risk of collision, and radar plotting or equivalent systematic observation',
+    distractors: [
+      'Keeping the radar on the shortest range scale so that close targets are seen as early as possible',
+      'Switching the radar on whenever visibility is restricted, and keeping it on standby otherwise',
+      'Monitoring AIS targets on the display in place of plotting or systematic observation',
+    ],
+    ruleRefs: ['Rule 7(b)'],
+    explanation:
+      'Rule 7(b): proper use shall be made of radar equipment if fitted and operational, including long-range scanning to obtain early warning of risk of collision and radar plotting or equivalent systematic observation of detected objects. The duty applies in any visibility, since Rule 7 is in Section I.',
+  }),
+  mcq({
+    id: 'str-scanty-information',
+    topic: 'steering',
+    concept: 'rule7:scanty-information',
+    difficulty: 2,
+    prompt: 'In poor visibility you have taken a single radar range and bearing of an echo fine on your starboard bow. Rule 7(c) says:',
+    answer: 'Assumptions shall not be made on the basis of scanty information, especially scanty radar information',
+    distractors: [
+      'You may assume she is on a parallel course until a later observation shows otherwise',
+      'You may assume that no risk of collision exists until her bearing can be checked',
+      'You may rely on a single observation if the echo is more than 6 miles away',
+    ],
+    ruleRefs: ['Rule 7(c)'],
+    explanation:
+      'Rule 7(c). One observation gives a position, not a course or speed. Only a series of observations (plotting or equivalent systematic observation, Rule 7(b)) shows whether the bearing is changing and how close she will pass.',
+  }),
+  mcq({
+    id: 'str-course-alone',
+    topic: 'steering',
+    concept: 'rule8:course-alone',
+    difficulty: 2,
+    prompt: 'Rule 8(c) says that, if there is sufficient sea-room, alteration of course alone may be the most effective action to avoid a close-quarters situation, provided that it is:',
+    answer: 'Made in good time, substantial, and does not result in another close-quarters situation',
+    distractors: [
+      'Made to starboard, of at least 60 degrees, and signalled by one short blast',
+      'Accompanied by a reduction to half speed, and made only in daylight',
+      'Made only after the intentions of the other vessel have been agreed by VHF',
+    ],
+    ruleRefs: ['Rule 8(c)'],
+    explanation:
+      'Rule 8(c) gives three conditions: good time, substantial, and no new close-quarters situation with another vessel. The Rules set no minimum angle; the alteration must also be readily apparent under Rule 8(b).',
+  }),
+  mcq({
+    id: 'str-safe-distance',
+    topic: 'steering',
+    concept: 'rule8:safe-distance',
+    difficulty: 1,
+    prompt: 'Action taken to avoid collision shall be such as to result in passing at a safe distance. Rule 8(d) also requires that:',
+    answer: 'Its effectiveness be carefully checked until the other vessel is finally past and clear',
+    distractors: [
+      'The original course be resumed as soon as the other vessel\'s bearing begins to change',
+      'The passing distance be at least one nautical mile in open water',
+      'The other vessel be told of the action by VHF before it is taken',
+    ],
+    ruleRefs: ['Rule 8(d)'],
+    explanation:
+      'Rule 8(d): action taken to avoid collision shall result in passing at a safe distance, and its effectiveness shall be carefully checked until the other vessel is finally past and clear. The Rules give no fixed distance; what is safe depends on the circumstances.',
+  }),
+  mcq({
+    id: 'str-slacken-speed',
+    topic: 'steering',
+    concept: 'rule8:slacken-speed',
+    difficulty: 2,
+    prompt: 'When does Rule 8(e) require a vessel to slacken her speed, or take all way off by stopping or reversing her means of propulsion?',
+    answer: 'If necessary to avoid collision or to allow more time to assess the situation',
+    distractors: [
+      'Only in restricted visibility, on hearing a fog signal forward of the beam',
+      'Only when she is the give-way vessel and has no room to alter course',
+      'Never, since a change of speed is not readily apparent to the other vessel',
+    ],
+    ruleRefs: ['Rule 8(e)'],
+    explanation:
+      'Rule 8(e) applies in any visibility. Slowing down buys time: it lets the situation develop more slowly while you assess it, and it may be the only safe action when there is no sea-room to alter course.',
+  }),
+  mcq({
+    id: 'str-not-impede',
+    topic: 'steering',
+    concept: 'rule8:not-impede',
+    difficulty: 3,
+    prompt: 'A yacht of 12 metres is required not to impede a large ship which can navigate only within a narrow channel, but the two are now approaching so as to involve risk of collision. Under Rule 8(f):',
+    answer: 'The yacht remains obliged not to impede, and both vessels must also comply fully with the steering rules',
+    distractors: [
+      'The yacht\'s obligation not to impede ends, and only the normal steering rules now apply',
+      'The ship, whose passage is not to be impeded, is relieved of any duty under the steering rules',
+      'The yacht becomes the stand-on vessel and the ship must keep out of her way',
+    ],
+    ruleRefs: ['Rule 8(f)(ii)', 'Rule 8(f)(iii)'],
+    explanation:
+      'Rule 8(f)(i): a vessel required not to impede shall take early action to allow sufficient sea-room. 8(f)(ii): she is not relieved of that obligation when risk of collision exists and must have full regard to the action the steering rules may require. 8(f)(iii): the vessel not to be impeded remains fully obliged to comply with the steering rules.',
+  }),
+  mcq({
+    id: 'str-channel-overtake',
+    topic: 'steering',
+    concept: 'rule9:overtaking',
+    difficulty: 3,
+    prompt: 'In a narrow channel you can overtake only if the vessel ahead takes action to let you pass. You signal your intention and she sounds her agreement. Which is true?',
+    answer: 'You remain the overtaking vessel under Rule 13 and must still keep out of her way',
+    distractors: [
+      'By agreeing, she has taken responsibility for the safety of the manoeuvre',
+      'Having agreed, she becomes the give-way vessel until you are past and clear',
+      'You may now pass at any distance, since the overtaking has been agreed',
+    ],
+    ruleRefs: ['Rule 9(e)(i)', 'Rule 9(e)(ii)', 'Rule 13'],
+    explanation:
+      'Rule 9(e)(i): the overtaking vessel signals under Rule 34(c)(i); the vessel to be overtaken, if in agreement, signals under Rule 34(c)(ii) and takes steps to permit safe passing, or sounds the doubt signal if in doubt. Rule 9(e)(ii): this does not relieve the overtaking vessel of her obligation under Rule 13.',
+  }),
+  mcq({
+    id: 'str-channel-anchoring',
+    topic: 'steering',
+    concept: 'rule9:anchoring',
+    difficulty: 1,
+    prompt: 'Rule 9(g) says that any vessel shall, if the circumstances of the case admit:',
+    answer: 'Avoid anchoring in a narrow channel',
+    distractors: [
+      'Avoid anchoring within one mile of a narrow channel',
+      'Anchor only on the starboard side of a narrow channel',
+      'Avoid anchoring in a narrow channel between sunset and sunrise',
+    ],
+    ruleRefs: ['Rule 9(g)'],
+    explanation:
+      'Rule 9(g). A vessel anchored in a channel obstructs vessels which can navigate only within it. The Rules give no fixed distance and no time of day; "if the circumstances of the case admit" covers an emergency.',
+  }),
+  mcq({
+    id: 'str-tss-joining',
+    topic: 'steering',
+    concept: 'rule10:joining-leaving',
+    difficulty: 2,
+    prompt: 'A vessel using a traffic separation scheme needs to join a traffic lane from the side rather than at its termination. She shall join:',
+    answer: 'At as small an angle to the general direction of traffic flow as practicable',
+    distractors: [
+      'On a heading as nearly as practicable at right angles to the traffic flow',
+      'Only at the termination of the lane, since joining from the side is prohibited',
+      'At an angle of about 45 degrees, so that her intention is clear to traffic in the lane',
+    ],
+    ruleRefs: ['Rule 10(b)(iii)', 'Rule 10(b)(i)'],
+    explanation:
+      'Rule 10(b): a vessel using a scheme shall proceed in the appropriate lane in the general direction of traffic flow, keep clear of separation lines and zones so far as practicable, and normally join or leave at the termination of the lane, but when joining or leaving from either side at as small an angle as practicable. Right angles is the rule for crossing, Rule 10(c).',
+  }),
+  mcq({
+    id: 'str-tss-inshore-zone',
+    topic: 'steering',
+    concept: 'rule10:inshore-zone',
+    difficulty: 2,
+    prompt: 'Which vessels may use an inshore traffic zone even when they could safely use the appropriate lane of the adjacent traffic separation scheme?',
+    answer: 'Vessels of less than 20 metres, sailing vessels and vessels engaged in fishing',
+    distractors: [
+      'Vessels of less than 12 metres, vessels under oars and pilot vessels',
+      'Any vessel, provided she keeps clear of vessels already using the zone',
+      'Power-driven vessels of less than 50 metres and sailing vessels',
+    ],
+    ruleRefs: ['Rule 10(d)(i)', 'Rule 10(d)(ii)'],
+    explanation:
+      'Rule 10(d)(i). Under 10(d)(ii) any vessel may also use the inshore traffic zone when en route to or from a port, offshore installation or structure, pilot station or other place within the zone, or to avoid immediate danger.',
+  }),
+  mcq({
+    id: 'str-tss-separation-zone',
+    topic: 'steering',
+    concept: 'rule10:separation-zone',
+    difficulty: 2,
+    prompt: 'Other than when crossing, joining or leaving a lane, a vessel shall not normally enter a separation zone or cross a separation line except:',
+    answer: 'In an emergency to avoid immediate danger, or to engage in fishing within the zone',
+    distractors: [
+      'To overtake a slower vessel in the lane, or to wait for a pilot',
+      'To anchor while awaiting orders, or to wait for a gap in crossing traffic',
+      'To reverse direction, or to let a faster vessel overtake her',
+    ],
+    ruleRefs: ['Rule 10(e)'],
+    explanation:
+      'Rule 10(e) gives exactly two exceptions: (i) in cases of emergency to avoid immediate danger; (ii) to engage in fishing within a separation zone.',
+  }),
+  mcq({
+    id: 'str-tss-terminations',
+    topic: 'steering',
+    concept: 'rule10:terminations',
+    difficulty: 1,
+    prompt: 'Rule 10(f) requires a vessel navigating in areas near the terminations of traffic separation schemes to:',
+    answer: 'Do so with particular caution',
+    distractors: [
+      'Reduce speed to 10 knots or less',
+      'Sound one prolonged blast on leaving the lane',
+      'Keep to the starboard side of the lane until clear',
+    ],
+    ruleRefs: ['Rule 10(f)'],
+    explanation:
+      'Rule 10(f). Traffic converges, joins, leaves and crosses near the ends of a scheme, so vessels are on many different headings. The Rule prescribes caution, not a speed limit or a signal.',
+  }),
+  mcq({
+    id: 'str-tss-anchoring',
+    topic: 'steering',
+    concept: 'rule10:anchoring',
+    difficulty: 2,
+    prompt: 'Where does Rule 10(g) say a vessel shall, so far as practicable, avoid anchoring?',
+    answer: 'In a traffic separation scheme or in areas near its terminations',
+    distractors: [
+      'In the traffic lanes only; the separation zone may be used freely',
+      'Within two miles of the outer boundary of the scheme',
+      'In the inshore traffic zone only',
+    ],
+    ruleRefs: ['Rule 10(g)'],
+    explanation:
+      'Rule 10(g): a vessel shall so far as practicable avoid anchoring in a traffic separation scheme or in areas near its terminations. The separation zone is part of the scheme and may be entered only as Rule 10(e) allows.',
+  }),
+  mcq({
+    id: 'str-tss-not-using',
+    topic: 'steering',
+    concept: 'rule10:not-using',
+    difficulty: 1,
+    prompt: 'A vessel not using a traffic separation scheme shall:',
+    answer: 'Avoid it by as wide a margin as is practicable',
+    distractors: [
+      'Keep at least two miles from its outer limits',
+      'Navigate in the separation zone to keep out of the lanes',
+      'Stay outside it only in restricted visibility',
+    ],
+    ruleRefs: ['Rule 10(h)'],
+    explanation:
+      'Rule 10(h). The Rule sets no fixed distance. The separation zone is not a route for through traffic; Rule 10(e) restricts entering it.',
+  }),
+  mcq({
+    id: 'str-tss-fishing',
+    topic: 'steering',
+    concept: 'rule10:fishing-in-lane',
+    difficulty: 2,
+    prompt: 'A vessel engaged in fishing in a traffic lane:',
+    answer: 'Shall not impede the passage of any vessel following the traffic lane',
+    distractors: [
+      'Shall not impede the passage of power-driven vessels following the lane, but has no duty to others',
+      'Is prohibited from fishing anywhere within a traffic separation scheme',
+      'May fish there only while heading in the general direction of traffic flow',
+    ],
+    ruleRefs: ['Rule 10(i)', 'Rule 10(j)'],
+    explanation:
+      'Rule 10(i): any vessel following the lane. Compare Rule 10(j), which says a vessel of less than 20 metres or a sailing vessel shall not impede the safe passage of a power-driven vessel following a lane.',
+  }),
+  mcq({
+    id: 'str-tss-ram-exemption',
+    topic: 'steering',
+    concept: 'rule10:ram-exemption',
+    difficulty: 3,
+    prompt: 'A vessel restricted in her ability to manoeuvre is exempted from Rule 10, to the extent necessary, when engaged within a traffic separation scheme in:',
+    answer: 'An operation for the maintenance of safety of navigation, or laying, servicing or picking up a submarine cable',
+    distractors: [
+      'Any dredging, surveying or underwater operation, or laying a pipeline',
+      'Replenishment at sea, or transferring persons, provisions or cargo while underway',
+      'Any towing operation that severely restricts her ability to deviate from her course',
+    ],
+    ruleRefs: ['Rule 10(k)', 'Rule 10(l)'],
+    explanation:
+      'Rule 10(k) covers operations for the maintenance of safety of navigation in the scheme, and Rule 10(l) covers laying, servicing or picking up a submarine cable. Other restricted vessels get no exemption from Rule 10.',
+  }),
+  mcq({
+    id: 'str-windward-side',
+    topic: 'steering',
+    concept: 'rule12:windward',
+    difficulty: 2,
+    prompt: 'For the purposes of Rule 12, the windward side of a fore-and-aft rigged sailing vessel is deemed to be:',
+    answer: 'The side opposite to that on which the mainsail is carried',
+    distractors: [
+      'The side on which the mainsail is carried',
+      'The side opposite to that on which the headsail is carried',
+      'The starboard side whenever the wind is right aft',
+    ],
+    ruleRefs: ['Rule 12(b)'],
+    explanation:
+      'Rule 12(b): the side opposite to that on which the mainsail is carried or, in a square-rigged vessel, the side opposite to that on which the largest fore-and-aft sail is carried. This settles the tack of a vessel running dead before the wind.',
+  }),
+  mcq({
+    id: 'str-overtaking-doubt',
+    topic: 'steering',
+    concept: 'rule13:doubt',
+    difficulty: 2,
+    prompt: 'At dusk you are coming up on another vessel from roughly 22.5 degrees abaft her beam, and you cannot tell whether you are overtaking or crossing. Rule 13(c) requires you to:',
+    answer: 'Assume that you are overtaking and keep out of her way',
+    distractors: [
+      'Assume a crossing situation and apply Rule 15',
+      'Hold your course and speed until you can see her sidelights',
+      'Sound five short and rapid blasts and wait for her to act',
+    ],
+    ruleRefs: ['Rule 13(c)'],
+    explanation:
+      'Rule 13(c): when a vessel is in any doubt as to whether she is overtaking another, she shall assume that this is the case and act accordingly. Under Rule 13(d) she then stays the give-way vessel until finally past and clear.',
+  }),
+  mcq({
+    id: 'str-head-on-doubt',
+    topic: 'steering',
+    concept: 'rule14:doubt',
+    difficulty: 2,
+    prompt: 'A power-driven vessel is nearly ahead and you cannot decide whether this is a head-on situation or a fine crossing. Rule 14(c) requires you to:',
+    answer: 'Assume it is a head-on situation and alter course to starboard',
+    distractors: [
+      'Assume it is a crossing situation, standing on if she is on your port bow',
+      'Alter course to port to open the passing distance quickly',
+      'Keep your course and speed until her aspect is certain',
+    ],
+    ruleRefs: ['Rule 14(c)', 'Rule 14(a)'],
+    explanation:
+      'Rule 14(c): when a vessel is in any doubt as to whether a head-on situation exists she shall assume that it does and act accordingly, which under Rule 14(a) means altering course to starboard so as to pass port to port.',
+  }),
+  mcq({
+    id: 'str-give-way-action',
+    topic: 'steering',
+    concept: 'rule16:give-way-action',
+    difficulty: 1,
+    prompt: 'Rule 16 requires every vessel which is directed to keep out of the way of another vessel to:',
+    answer: 'Take early and substantial action to keep well clear, so far as possible',
+    distractors: [
+      'Take the smallest action that will pass clear, so as not to confuse the other',
+      'Wait for the stand-on vessel to signal before taking any action',
+      'Keep her course and speed until the range has closed to two miles',
+    ],
+    ruleRefs: ['Rule 16'],
+    explanation:
+      'Rule 16: early, substantial, well clear. Rule 8 adds that the action should be readily apparent to the other vessel and a succession of small alterations should be avoided.',
+  }),
+  mcq({
+    id: 'str-standon-must-act',
+    topic: 'steering',
+    concept: 'rule17:must-act',
+    difficulty: 2,
+    prompt: 'When, from any cause, the stand-on vessel finds herself so close that collision cannot be avoided by the action of the give-way vessel alone, she:',
+    answer: 'Shall take such action as will best aid to avoid collision',
+    distractors: [
+      'May take action, but is not obliged to do so',
+      'Shall keep her course and speed, as the stand-on vessel',
+      'Shall stop her engines and sound three short blasts',
+    ],
+    ruleRefs: ['Rule 17(b)'],
+    explanation:
+      'Rule 17(b) is mandatory ("shall"), unlike the permissive Rule 17(a)(ii) ("may"). It does not prescribe the action: she does whatever will best aid to avoid collision.',
+  }),
+  mcq({
+    id: 'str-giveway-not-relieved',
+    topic: 'steering',
+    concept: 'rule17:giveway-not-relieved',
+    difficulty: 2,
+    prompt: 'The stand-on vessel alters course under Rule 17(a)(ii) because the give-way vessel appears to be taking no action. The give-way vessel:',
+    answer: 'Is still obliged to keep out of the way',
+    distractors: [
+      'Becomes the stand-on vessel and must keep her course and speed',
+      'Is relieved of her duty, since the other vessel has taken action',
+      'Must now stop and wait for the other vessel to pass',
+    ],
+    ruleRefs: ['Rule 17(d)'],
+    explanation:
+      'Rule 17(d): this Rule does not relieve the give-way vessel of her obligation to keep out of the way. Action by the stand-on vessel does not change their roles.',
+  }),
+  mcq({
+    id: 'str-seaplane',
+    topic: 'steering',
+    concept: 'rule18:seaplane',
+    difficulty: 2,
+    prompt: 'A seaplane on the water shall, in general:',
+    answer: 'Keep well clear of all vessels and avoid impeding them, but comply with Part B when risk of collision exists',
+    distractors: [
+      'Be treated as a vessel restricted in her ability to manoeuvre, and be kept clear of by others',
+      'Stand on for all power-driven vessels, since she cannot go astern',
+      'Ignore the Rules entirely, being an aircraft subject to aviation law',
+    ],
+    ruleRefs: ['Rule 18(e)'],
+    explanation:
+      'Rule 18(e): a seaplane on the water shall, in general, keep well clear of all vessels and avoid impeding their navigation. Where risk of collision exists, however, she shall comply with the Rules of Part B.',
+  }),
+  mcq({
+    id: 'str-wig-surface',
+    topic: 'steering',
+    concept: 'rule18:wig-craft',
+    difficulty: 2,
+    prompt: 'A WIG craft operating on the water surface, not taking off, landing or flying, shall comply with the steering and sailing rules as:',
+    answer: 'A power-driven vessel',
+    distractors: [
+      'A seaplane',
+      'A vessel restricted in her ability to manoeuvre',
+      'An aircraft, outside the Rules',
+    ],
+    ruleRefs: ['Rule 18(f)(ii)', 'Rule 18(f)(i)'],
+    explanation:
+      'Rule 18(f)(ii). When taking off, landing and in flight near the surface, Rule 18(f)(i) requires her to keep well clear of all other vessels and avoid impeding their navigation.',
+  }),
+  mcq({
+    id: 'str-rv-engines-ready',
+    topic: 'steering',
+    concept: 'rule19:engines-ready',
+    difficulty: 1,
+    prompt: 'In or near an area of restricted visibility, Rule 19(b) requires a power-driven vessel to:',
+    answer: 'Proceed at a safe speed adapted to the conditions, with her engines ready for immediate manoeuvre',
+    distractors: [
+      'Proceed at no more than half her full sea speed, with her engines on standby',
+      'Proceed at a speed at which she can stop within half the range of her radar',
+      'Stop her engines whenever visibility falls below one mile',
+    ],
+    ruleRefs: ['Rule 19(b)'],
+    explanation:
+      'Rule 19(b): every vessel shall proceed at a safe speed adapted to the prevailing circumstances and conditions of restricted visibility, and a power-driven vessel shall have her engines ready for immediate manoeuvre. The Rules set no numerical speed.',
+  }),
+  mcq({
+    id: 'str-rv-section-one',
+    topic: 'steering',
+    concept: 'rule19:section-one',
+    difficulty: 3,
+    prompt: 'In restricted visibility, when complying with Rules 4 to 10 (Part B, Section I), Rule 19(c) requires every vessel to:',
+    answer: 'Have due regard to the prevailing circumstances and conditions of restricted visibility',
+    distractors: [
+      'Treat those Rules as suspended until the other vessel is in sight',
+      'Apply them only to vessels which have been detected by radar',
+      'Apply them only after sounding the fog signals of Rule 35',
+    ],
+    ruleRefs: ['Rule 19(c)'],
+    explanation:
+      'Rule 19(c). Section I applies in any condition of visibility (Rule 4), so look-out, safe speed, risk of collision, action to avoid collision, narrow channels and traffic separation schemes all still apply in fog, taking account of the restricted visibility.',
   }),
 ];

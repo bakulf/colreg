@@ -17,7 +17,9 @@ export type Category =
   | 'fishing'
   | 'ram'
   | 'nuc'
-  | 'cbd';
+  | 'cbd'
+  | 'seaplane'
+  | 'wig';
 
 export const CATEGORY_LABELS: Record<Category, string> = {
   power: 'a power-driven vessel',
@@ -26,17 +28,33 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   ram: 'a vessel restricted in her ability to manoeuvre',
   nuc: 'a vessel not under command',
   cbd: 'a vessel constrained by her draught',
+  seaplane: 'a seaplane on the water',
+  wig: 'a WIG craft taking off, landing or in flight near the surface',
 };
 
-/** Rule 18's ladder, lowest number keeps clear of everything above it. */
+/**
+ * Rule 18's ladder, lowest number keeps clear of everything above it.
+ *
+ * Not under command and restricted in ability to manoeuvre share the top
+ * rung: Rule 18 tells everyone else to keep out of the way of both, and says
+ * nothing about the two of them meeting each other. Seaplanes and WIG craft
+ * sit outside the ladder altogether and are handled before it is consulted.
+ */
 const PRECEDENCE: Record<Category, number> = {
-  nuc: 5,
+  nuc: 4,
   ram: 4,
   fishing: 3,
   sailing: 2,
   cbd: 1,
   power: 1,
+  seaplane: 0,
+  wig: 0,
 };
+
+/** Rule 18(e) and 18(f)(i): keep well clear of all vessels. */
+function keepsClearOfAll(c: Category): boolean {
+  return c === 'seaplane' || c === 'wig';
+}
 
 export type Tack = 'port' | 'starboard';
 
@@ -87,6 +105,7 @@ export type Situation =
   | 'sailing'
   | 'precedence'
   | 'constrained-by-draught'
+  | 'seaplane-wig'
   | 'narrow-channel'
   | 'traffic-lane'
   | 'restricted-visibility';
@@ -145,15 +164,20 @@ export function classify(s: Scenario): Situation {
   if (s.setting === 'narrow-channel' && mustNotImpede(s)) return 'narrow-channel';
   if (s.setting === 'traffic-lane' && mustNotImpede(s)) return 'traffic-lane';
 
+  // Rules 18(e) and 18(f)(i): a seaplane on the water, or a WIG craft taking
+  // off, landing or flying near the surface, keeps well clear of everyone.
+  if (keepsClearOfAll(s.own) !== keepsClearOfAll(s.her)) return 'seaplane-wig';
+
   if (s.own === 'sailing' && s.her === 'sailing') return 'sailing';
 
-  // Rule 18(d) sits outside the ladder: a vessel constrained by her draught is
-  // a power-driven vessel, so against anything that outranks a power-driven
-  // vessel she simply gives way. It is only against another power-driven
-  // vessel — equal precedence — that the weaker "avoid impeding" duty applies.
+  // Rule 18(d)(i) asks every vessel other than one not under command or
+  // restricted in her ability to manoeuvre to avoid impeding a vessel
+  // constrained by her draught — sailing and fishing vessels included. Against
+  // those two she remains the vessel that gives way.
   const cbdInvolved = (s.own === 'cbd') !== (s.her === 'cbd');
-  if (cbdInvolved && PRECEDENCE[s.own] === PRECEDENCE[s.her]) {
-    return 'constrained-by-draught';
+  if (cbdInvolved) {
+    const other = s.own === 'cbd' ? s.her : s.own;
+    if (other !== 'nuc' && other !== 'ram') return 'constrained-by-draught';
   }
 
   if (PRECEDENCE[s.own] !== PRECEDENCE[s.her]) return 'precedence';
@@ -298,26 +322,60 @@ export function resolve(s: Scenario): Verdict {
           'Rule 10(j): a vessel of less than 20 metres in length, a sailing vessel, or a vessel engaged in fishing shall not impede the safe passage of a power-driven vessel following a traffic lane. Rule 10(c) governs how you cross.',
       };
 
-    case 'constrained-by-draught':
-      return s.her === 'cbd'
-        ? {
-            situation,
-            role: 'not-impede',
-            rule: 'Rule 18(d)',
-            action:
-              'Take early action to allow her sufficient sea room. This is not the same as giving way, and if risk of collision develops you are still bound by the steering rules.',
-            reasoning:
-              'A vessel constrained by her draught does not sit in the Rule 18 order of precedence. Rule 18(d) only requires any vessel other than one not under command or restricted in her ability to manoeuvre to avoid impeding her safe passage, if the circumstances of the case admit.',
-          }
-        : {
-            situation,
-            role: 'stand-on',
-            rule: 'Rule 18(d)',
-            action:
-              'She is required to avoid impeding you, but do not rely on it as a right of way: if risk of collision develops, the ordinary steering rules bind you both and you may still be the give-way vessel.',
-            reasoning:
-              'You are constrained by your draught. Rule 18(d) asks other vessels to avoid impeding your safe passage; it does not put you in the order of precedence, and it does not make you a stand-on vessel within the meaning of Rule 17.',
-          };
+    case 'constrained-by-draught': {
+      if (s.her === 'cbd') {
+        const outranks = s.own === 'sailing' || s.own === 'fishing';
+        return {
+          situation,
+          role: 'not-impede',
+          rule: 'Rule 18(d)',
+          action:
+            'Take early action to allow her sufficient sea room. This is not the same as giving way, and if risk of collision develops you are still bound by the steering rules.',
+          reasoning:
+            'A vessel constrained by her draught does not sit in the Rule 18 order of precedence. Rule 18(d)(i) requires any vessel other than one not under command or restricted in her ability to manoeuvre to avoid impeding her safe passage, if the circumstances of the case admit.' +
+            (outranks
+              ? ` That includes you as ${CATEGORY_LABELS[s.own]}: she is a power-driven vessel and would give way to you if risk of collision developed, but the duty not to impede comes first and is yours.`
+              : ''),
+        };
+      }
+      const outranked = s.her === 'sailing' || s.her === 'fishing';
+      return {
+        situation,
+        role: 'stand-on',
+        rule: 'Rule 18(d)',
+        action: outranked
+          ? `Navigate with particular caution. She should avoid impeding you, but if risk of collision develops you, a power-driven vessel, keep out of the way of ${CATEGORY_LABELS[s.her]}.`
+          : 'Navigate with particular caution. She is required to avoid impeding you, but do not rely on it as a right of way: if risk of collision develops, the ordinary steering rules bind you both and you may still be the give-way vessel.',
+        reasoning:
+          'You are constrained by your draught. Rule 18(d)(i) asks other vessels to avoid impeding your safe passage and Rule 18(d)(ii) tells you to navigate with particular caution; neither puts you in the order of precedence or makes you a stand-on vessel within the meaning of Rule 17. Rule 8(f)(iii) keeps you fully bound by the steering rules once risk of collision exists.',
+      };
+    }
+
+    case 'seaplane-wig': {
+      if (keepsClearOfAll(s.own)) {
+        const rule = s.own === 'seaplane' ? 'Rule 18(e)' : 'Rule 18(f)';
+        return {
+          situation,
+          role: 'give-way',
+          rule,
+          action:
+            'Keep well clear of her and avoid impeding her navigation, acting early. If risk of collision none the less exists, the steering and sailing rules apply to you like anyone else.',
+          reasoning:
+            s.own === 'seaplane'
+              ? 'Rule 18(e): a seaplane on the water shall, in general, keep well clear of all vessels and avoid impeding their navigation. In circumstances where risk of collision exists she shall comply with the Rules of Part B.'
+              : 'Rule 18(f)(i): a WIG craft, when taking off, landing and in flight near the surface, shall keep well clear of all other vessels and avoid impeding their navigation. On the water surface, Rule 18(f)(ii) makes her a power-driven vessel.',
+        };
+      }
+      const rule = s.her === 'seaplane' ? 'Rule 18(e)' : 'Rule 18(f)';
+      return {
+        situation,
+        role: 'stand-on',
+        rule,
+        action:
+          'Hold your course and speed: she is required to keep well clear of all vessels. Watch her closely, because if risk of collision exists the steering and sailing rules apply to both of you.',
+        reasoning: `${rule} requires ${CATEGORY_LABELS[s.her]} to keep well clear of all vessels and avoid impeding their navigation.`,
+      };
+    }
 
     case 'precedence': {
       const youYield = PRECEDENCE[s.own] < PRECEDENCE[s.her];
@@ -329,7 +387,7 @@ export function resolve(s: Scenario): Verdict {
           ? 'Keep out of her way, taking early and substantial action to keep well clear under Rule 16.'
           : 'Hold your course and speed under Rule 17(a)(i), and be ready to act if she does not.',
         reasoning: youYield
-          ? `Rule 18 puts ${CATEGORY_LABELS[s.her]} above ${CATEGORY_LABELS[s.own]}: not under command, then restricted in ability to manoeuvre, then engaged in fishing, then sailing, then power-driven.`
+          ? `Rule 18 puts ${CATEGORY_LABELS[s.her]} above ${CATEGORY_LABELS[s.own]}: not under command or restricted in ability to manoeuvre, then engaged in fishing, then sailing, then power-driven.`
           : `Rule 18 puts ${CATEGORY_LABELS[s.own]} above ${CATEGORY_LABELS[s.her]}, so she keeps out of your way.`,
       };
     }

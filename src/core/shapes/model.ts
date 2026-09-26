@@ -21,11 +21,17 @@ export type ShapeForm =
 
 export interface Shape {
   form: ShapeForm;
-  /** -1 port side, 0 centreline, +1 starboard side. */
+  /**
+   * -1 port side, 0 centreline, +1 starboard side. FORWARD is a separate
+   * signal in the fore part of the vessel, such as the anchor ball a vessel
+   * restricted in her ability to manoeuvre adds when she anchors.
+   */
   column: number;
   /** 0 is lowest in its column. */
   row: number;
 }
+
+export const FORWARD = -2;
 
 function column(forms: readonly ShapeForm[], col = 0): Shape[] {
   // Listed top first, to read the way the Rules describe them.
@@ -91,10 +97,14 @@ export function shapesFor(v: VesselState): Shape[] {
       // Rule 27(a)(ii): two balls.
       return column(['ball', 'ball']);
 
-    case 'ram':
+    case 'ram': {
       // Rule 27(b)(ii): ball, diamond, ball — the shapes mirror the lights,
-      // with the diamond where the white light sits.
-      return column(['ball', 'diamond', 'ball']);
+      // with the diamond where the white light sits. Rule 27(b)(iv): at
+      // anchor, the anchor ball as well.
+      const out = column(['ball', 'diamond', 'ball']);
+      if (v.atAnchor) out.push({ form: 'ball', column: FORWARD, row: 0 });
+      return out;
+    }
 
     case 'restricted-towing': {
       const out = column(['ball', 'diamond', 'ball']);
@@ -190,9 +200,13 @@ export function describeVesselByDay(v: VesselState): string {
     case 'nuc':
       return 'A vessel not under command';
     case 'ram':
-      return 'A vessel restricted in her ability to manoeuvre';
+      return v.atAnchor
+        ? 'A vessel restricted in her ability to manoeuvre, at anchor'
+        : 'A vessel restricted in her ability to manoeuvre';
     case 'restricted-towing':
-      return 'A vessel engaged in a towing operation which severely restricts her ability to deviate';
+      return (v.towLengthM ?? 0) > 200
+        ? 'A vessel engaged in a towing operation which severely restricts her ability to deviate, the tow exceeding 200 metres'
+        : 'A vessel engaged in a towing operation which severely restricts her ability to deviate';
     case 'dredger':
       return 'A vessel engaged in dredging or underwater operations, with an obstruction on one side';
     case 'diving':
@@ -235,11 +249,15 @@ export function describeShapes(v: VesselState): string {
     case 'nuc':
       return 'two balls in a vertical line';
     case 'ram':
-      return 'three shapes in a vertical line: ball, diamond, ball';
+      return v.atAnchor
+        ? 'three shapes in a vertical line, ball, diamond, ball, and in addition the anchor ball forward'
+        : 'three shapes in a vertical line: ball, diamond, ball';
     case 'restricted-towing':
       return 'ball, diamond, ball, together with the diamond of Rule 24 when the tow exceeds 200 metres';
     case 'dredger':
-      return 'ball, diamond, ball, plus two balls on the side where the obstruction is and two diamonds on the side a vessel may pass';
+      return v.atAnchor
+        ? 'ball, diamond, ball, plus two balls on the side where the obstruction is and two diamonds on the side a vessel may pass — shown instead of the anchor ball'
+        : 'ball, diamond, ball, plus two balls on the side where the obstruction is and two diamonds on the side a vessel may pass';
     case 'diving':
       return 'a rigid replica of the International Code flag A, not less than one metre in height';
     case 'mineclearance':
@@ -303,11 +321,11 @@ export function shapeRuleRefs(v: VesselState): string[] {
     case 'nuc':
       return ['Rule 27(a)(ii)'];
     case 'ram':
-      return ['Rule 27(b)(ii)'];
+      return v.atAnchor ? ['Rule 27(b)(ii)', 'Rule 27(b)(iv)'] : ['Rule 27(b)(ii)'];
     case 'restricted-towing':
       return ['Rule 27(c)', 'Rule 24(a)(v)'];
     case 'dredger':
-      return ['Rule 27(d)'];
+      return v.atAnchor ? ['Rule 27(d)(iii)'] : ['Rule 27(d)'];
     case 'diving':
       return ['Rule 27(e)(ii)'];
     case 'mineclearance':
@@ -336,6 +354,10 @@ export function shapeConceptFor(v: VesselState): string {
     case 'anchored':
     case 'pilot':
       return 'shapes:anchor-ball';
+    case 'ram':
+      return v.atAnchor ? 'shapes:ram-anchored' : 'shapes:ram';
+    case 'restricted-towing':
+      return (v.towLengthM ?? 0) > 200 ? 'shapes:restricted-towing' : 'shapes:restricted-towing-under-200';
     default:
       return `shapes:${v.kind}`;
   }
