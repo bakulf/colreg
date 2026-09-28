@@ -54,8 +54,45 @@ npm run dev        # http://localhost:5173 and on the LAN
 from a phone or tablet on the same Wi-Fi. No build step, no app store, no
 account — progress is kept in `localStorage` on the device.
 
-To install it as an app on a phone, open the Network URL and use *Add to Home
-Screen*. Full offline support arrives with the service worker in M6.
+## Offline and on a phone
+
+The built site is a Progressive Web App. Open it once and it works with no
+network from then on — cold start included — and *Add to Home Screen* (iOS)
+or *Install app* (Android, desktop Chrome and Edge) installs it with its own
+icon, full screen.
+
+- `public/manifest.webmanifest` and `public/icons/` make it installable. The
+  icons are drawn in `icon.svg` and `icon-maskable.svg`; the PNGs are rendered
+  from them.
+- `pwa/sw.js` is the service worker, and `pwa/plugin.ts` the Vite plugin that
+  fills in, at build time, the exact list of files the build emitted and a
+  version hashed from their contents and the worker's own code. Everything is
+  precached at install and served cache-first; Vite's file names are
+  content-hashed, so a cached file is never stale, and each deploy is a new
+  worker with a new cache.
+- A new version waits instead of taking over. The app shows *A new version is
+  ready — Reload*, so an update never swaps the code under a quiz in progress.
+- Installed to the home screen, it asks the browser to keep its storage
+  persistent, so progress is not evicted under storage pressure. Export is
+  still the only real backup.
+
+The worker is registered only in a production build, so `npm run dev` behaves
+as before. To try the offline behaviour locally, `npm run build && npm run
+preview`, load the page once, stop the server and reload.
+
+Service workers need a secure context: HTTPS, or `localhost`. GitHub Pages is
+HTTPS, so the published site installs and works offline. The LAN address
+`npm run dev` and `npm run preview` print is plain HTTP, so from a phone it
+runs but neither installs nor works offline — *Add to Home Screen* makes only
+a bookmark. To test the real thing on an Android phone before publishing,
+connect it by USB and forward the port so the phone sees it as `localhost`:
+
+```sh
+npm run build && npm run preview     # port 4173
+adb reverse tcp:4173 tcp:4173        # then open http://localhost:4173 on the phone
+```
+
+`chrome://inspect` → *Port forwarding* does the same from desktop Chrome.
 
 Progress lives in `localStorage` and nowhere else, so clearing site data loses
 it. **Export** writes a JSON backup; **Import** reads one back, ignoring
@@ -91,6 +128,8 @@ src/core/          pure TypeScript — no React, no DOM
   srs.ts           the spaced-repetition scheduler
   progress.ts      per-concept tally
 src/storage.ts     the only place that touches localStorage
+src/pwa.ts         service worker registration and the update prompt
+pwa/               the service worker template and the Vite plugin that fills it in
 src/ui/            React views, the SVG renderers and the Regulations reader
 ```
 
@@ -192,7 +231,8 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M10** — the full text of the Regulations, with every citation in a question linked to the paragraph it cites
 - [x] **M11** — COLREG and IALA as separate sections, COLREG topics by Part and Section of the Convention, light theme
 - [x] **M12** — lights ashore: R0110 characters flashed at true rate, chart notation and sectors, R0202 luminous range and rising/dipping distances
-- [ ] **M6** — exam mode, audio for the sound signals, offline PWA
+- [x] **M6a** — offline PWA: installable, precached, update prompt
+- [ ] **M6** — exam mode, audio for the sound signals
 
 ## Deploying
 

@@ -20,6 +20,7 @@ import { ResultsView } from './ui/ResultsView.tsx';
 import { RegsView } from './ui/RegsView.tsx';
 import { RegModal } from './ui/RegModal.tsx';
 import { OpenRefProvider } from './ui/RegText.tsx';
+import { subscribeToUpdate } from './pwa.ts';
 
 export type Mode = 'practice' | 'review';
 
@@ -63,6 +64,9 @@ export function App() {
   const [deck, setDeck] = useState<Deck>(loadDeck);
   const [route, setRoute] = useState<Route>(readRoute);
   const [modal, setModal] = useState<string | null>(null);
+  const [update, setUpdate] = useState<{ apply: () => void } | null>(null);
+
+  useEffect(() => subscribeToUpdate((apply) => setUpdate(apply ? { apply } : null)), []);
 
   const domain: Domain | null = route.view === 'regs' ? null : route.view;
   const session = domain ? sessions[domain] : null;
@@ -279,6 +283,18 @@ export function App() {
           </OpenRefProvider>
         )}
       </main>
+
+      {update && (
+        <div className="update" role="status">
+          <span>A new version is ready.</span>
+          <button type="button" onClick={update.apply}>
+            Reload
+          </button>
+          <button type="button" className="later" aria-label="Later" onClick={() => setUpdate(null)}>
+            ×
+          </button>
+        </div>
+      )}
 
       {modal !== null && domain && (
         <RegModal

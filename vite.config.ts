@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { precache } from './pwa/plugin.ts';
 
 /**
  * GitHub Pages serves a project site from /<repo>/, not from the root, so the
@@ -8,5 +9,5 @@ import react from '@vitejs/plugin-react';
  */
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
-  plugins: [react()],
+  plugins: [react(), precache()],
 });
