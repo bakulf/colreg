@@ -42,6 +42,8 @@ describe('topics', () => {
       coastal: (ref) => /^IALA R0(110|202)$|^Chart notation$|^Horizon geometry$/.test(ref),
       compass: (ref) => ref === 'Compass',
       tidal: (ref) => ref === 'Tidal streams',
+      tides: (ref) => ref === 'Tidal heights',
+      weather: (ref) => ref === 'Meteorology',
     };
     for (const { source, question } of samples) {
       const domain = TOPIC_INFO[source.topic].domain;

@@ -150,6 +150,8 @@ describe('tidal drills give the answer the vectors give', () => {
       const t = num(/today's range is (\d\.\d)/, q.prompt);
       const rate = np + ((sp - np) * (t - mn)) / (ms - mn);
       expect(Math.abs(num(/(\d+\.\d) kn/, answerOf(q)) - rate), q.prompt).toBeLessThanOrEqual(0.051);
+      // Done in the head: no rounding needed, the sum comes out in tenths.
+      expect(Math.abs(rate * 10 - Math.round(rate * 10)), q.prompt).toBeLessThan(1e-9);
     }
   });
 
@@ -228,7 +230,9 @@ describe('tidal drills give the answer the vectors give', () => {
     for (const q of sample(epFromDrDrill)) {
       const rate = num(/at (\d\.\d) kn\. Where/, q.prompt);
       const set = num(/averages (\d{3})°/, q.prompt);
-      const hours = /for an hour/.test(q.prompt) ? 1 : num(/for ([\d.]+) hours/, q.prompt);
+      const hours = /for an hour/.test(q.prompt) ? 1 : /for half an hour/.test(q.prompt) ? 0.5 : num(/for ([\d.]+) hours/, q.prompt);
+      // A product for the head: whole hours, or a rate that halves to a tenth.
+      expect(Number.isInteger(hours) || (rate * 10) % 2 === 0, q.prompt).toBe(true);
       expect(answerOf(q), q.prompt).toBe(
         `${(Math.round(rate * hours * 10) / 10).toFixed(1)} M towards ${String(set).padStart(3, '0')}° from the DR`,
       );

@@ -2,17 +2,32 @@
 
 A drill app for the collision regulations, built to prepare for the RYA
 Yachtmaster Shorebased instructor exam. Covers IRPCS (COLREGs), IALA buoyage in
-Regions A and B, lights ashore, the magnetic compass, and tidal streams.
+Regions A and B, lights ashore, the magnetic compass, tides, tidal streams, and
+the weather.
 
 ## Separate sections, never mixed
 
 The home page has one tile per subject — COLREG, IALA buoyage, lights ashore,
-the magnetic compass, tidal streams — each showing how much of it you would recall now and
+the magnetic compass, tides, tidal streams, weather — each showing how much of it you would recall now and
 what is due. Each subject is its own section with its own topics, its own
 session and its own progress summary, and a paper is drawn from one of them
 only. The list lives in `src/ui/subjects.tsx`; adding a subject there adds its
 tile and its route (`#/colreg`, `#/iala`, `#/lights`, `#/compass`,
-`#/streams`).
+`#/tides`, `#/streams`, `#/weather`).
+
+### Every sum in the head
+
+The app is meant to be used on a phone, walking. So every generated
+calculation is built to be nearly trivial, and the tests hold it to that, not
+just to being right: streams straight across the track at rates that make the
+one-in-sixty rule give whole degrees; spring and neap rates a round knot or two
+apart; drifts that are a rate times whole or half hours; heights to a tenth,
+added or subtracted; tidal ranges that divide by twelve; secondary port values
+on, or half way between, the tabulated ones; compass roses that come up to date
+in whole degrees; lights on perfect-square heights, so the geographic range is
+"a shade over 2 × (√H + √h)"; and the luminous range read off a diagram drawn
+in the question, not computed. After answering, the app draws the exact
+solution.
 
 COLREG is divided the way the Convention divides itself: Part A (General),
 Part B in its three Sections — I, any condition of visibility; II, vessels in
@@ -90,6 +105,36 @@ degree.
 
 Diamonds, ports and passages are invented.
 
+### Weather
+
+Divided by the items of section 12: basic terms and the Beaufort scale; air
+masses; cloud types; pressure and frontal systems; sources and interpretation
+of forecasts, weatherfax and satellite pictures; land and sea breezes; sea fog;
+the barometer. Forecast terms — timing, visibility, sea state, pressure
+tendency, speed of movement, gale warnings — are the Met Office's own
+definitions from its marine glossary.
+
+Clouds are recognised from photographs, two of each genus, so it is the cloud
+that is learnt and not the picture. A depression's passage is drilled as a
+sequence — which cloud comes next, where you are from the sky, barometer and
+wind, what changes at each front — and after answering the whole sequence is
+shown with your stage picked out. Winds round lows and highs are read off a
+sketch chart. Northern hemisphere throughout.
+
+### Tides
+
+Divided by the items of section 3: causes of tide, springs and neaps; tide
+tables and the rule of twelfths; tidal levels and datum; standard and
+secondary ports; and the anomalies, asked as ideas rather than geography —
+what a double high water is, what to use where the rule of twelfths fails, and
+why such curves are entered from low water. Places such as the Solent appear
+only as examples. Drills: depth over a sounding and over a drying
+height, clearance under a bridge (above HAT, as current Admiralty editions
+chart it), the height needed to cross a bar, depth at low water when anchored
+at high water, height and time by twelfths, and secondary port times and
+heights. After answering, a cross-section of the water or the tidal curve is
+drawn with the figures on it.
+
 The IALA recommendations are published at
 [github.com/IALAPublications/Recommendations](https://github.com/IALAPublications/Recommendations).
 They are cited and paraphrased here, not reproduced.
@@ -165,6 +210,8 @@ src/core/          pure TypeScript — no React, no DOM
   coastal/         lights ashore: R0110 characters, R0202 and geographic range, drills
   compass/         variation, deviation cards, conversions, and their drills
   tidal/           diamonds, rates, the vector triangle, CTS and EP, and their drills
+  tides/           levels and datums, twelfths, secondary ports, and their drills
+  weather/         Beaufort, forecast terms, clouds and their photo credits, fronts
   rng.ts           seeded RNG, so a session is reproducible from its seed
   rules.ts         index of IRPCS Rules 1–41
   regs/            the full text of Rules 1–41 and Annexes I–IV, and citation parsing
@@ -289,8 +336,8 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M14** — home page with a tile per subject
 - [x] **M15** — the magnetic compass: variation, deviation card, checks, types
 - [x] **M16** — tidal streams: diamonds, rates by range, course to steer by one in sixty, leeway, EP, triangles
-- [ ] Tides: heights, secondary ports, clearances
-- [ ] Meteorology
+- [x] **M17** — tides: datums, clearances, twelfths, secondary ports, Solent anomalies
+- [x] **M18** — weather: Beaufort, Met Office terms, cloud photographs, a depression's passage, winds round lows and highs, breezes, fog, barometer
 
 Sound signals stay as timelines, without audio, by choice. There is no exam mode.
 
@@ -323,3 +370,9 @@ resolution A.1004(25) and Part F (Rules 39 to 41) resolution A.1085(28).
 
 No RYA course material and no Admiralty chart data is used. Teaching notes and
 question wording are original.
+
+Cloud photographs are from Wikimedia Commons, under CC BY-SA 4.0, CC BY 3.0 and
+CC0. Each is cropped to 4:3 and resized, and the adapted files in
+`public/clouds/` are shared under the same licence as the original. The
+photographer, licence and a link to the original are shown under every photo
+and listed in `src/core/weather/photos.ts`.

@@ -199,3 +199,45 @@ describe('tidal renderers', () => {
     expect(pick.match(/<svg/g)).toHaveLength(4);
   });
 });
+
+describe('tide renderers', () => {
+  it('draws the levels and the twelfths curve with the question’s figures', async () => {
+    const { TideLevelsScene, TideCurveScene } = await import('./TideScenes.tsx');
+    const levels = renderToStaticMarkup(<TideLevelsScene levels={{ heightOfTide: 3.1, chartedDepth: 2.4 }} />);
+    expect(levels).toContain('5.5 m depth');
+    const bridge = renderToStaticMarkup(<TideLevelsScene levels={{ heightOfTide: 3.1, hat: 5.6, clearance: 18 }} />);
+    expect(bridge).toContain('20.5 m now');
+    const curve = renderToStaticMarkup(
+      <TideCurveScene curve={{ lw: 0.6, hw: 5.4, rising: true, markHours: 3, startClock: 480 }} />,
+    );
+    expect(curve).toContain('3.0 m');
+    expect(curve).toContain('1100');
+  });
+});
+
+describe('weather renderers', () => {
+  it('shows two credited photos of each cloud, a chart and the strip', async () => {
+    const { CloudScene } = await import('./CloudScene.tsx');
+    const { SynopticScene, FrontStripScene } = await import('./WeatherScenes.tsx');
+    const { CLOUDS } = await import('../core/weather/model.ts');
+    const { CLOUD_PHOTOS } = await import('../core/weather/photos.ts');
+    const { existsSync } = await import('node:fs');
+    const seen = new Set<string>();
+    for (const g of Object.keys(CLOUDS) as (keyof typeof CLOUDS)[]) {
+      expect(CLOUD_PHOTOS[g].length, g).toBeGreaterThanOrEqual(2);
+      for (let i = 0; i < CLOUD_PHOTOS[g].length; i++) {
+        const markup = renderToStaticMarkup(<CloudScene genus={g} photo={i} />);
+        const src = /src="\/([^"]+)"/.exec(markup)?.[1] ?? '';
+        // The photo exists, is credited, and nothing visible names the cloud.
+        expect(existsSync(`public/${src}`), src).toBe(true);
+        expect(markup).toContain(CLOUD_PHOTOS[g][i]!.artist);
+        const visible = markup.replace(/<[^>]*>/g, ' ').toLowerCase();
+        expect(visible, `${g} ${i}`).not.toContain(g);
+        seen.add(src);
+      }
+    }
+    expect(seen.size).toBe(20);
+    expect(renderToStaticMarkup(<SynopticScene system="low" boatAt={180} tight={undefined} />)).toContain('>L<');
+    expect(renderToStaticMarkup(<FrontStripScene highlight={2} />)).toContain('Altostratus');
+  });
+});

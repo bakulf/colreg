@@ -32,6 +32,7 @@ function mcq(
   explanation: string,
   difficulty: Question['difficulty'],
   scene?: Question['scene'],
+  afterScene?: Question['scene'],
 ): Question {
   return {
     id,
@@ -47,6 +48,7 @@ function mcq(
     explanation,
     difficulty,
     scene,
+    afterScene,
   };
 }
 
@@ -397,8 +399,19 @@ function spread(answer: number, candidates: number[], gap = 0.12): number[] {
   return chosen;
 }
 
-const ELEVATIONS = [12, 16, 18, 23, 28, 36, 41, 49, 56, 64, 72];
-const EYES = [1.5, 2, 2.5, 3, 4];
+/**
+ * Perfect squares, so the square roots are exact and the sum is one for the
+ * head: 2.08 × (√36 + √4) is "a shade over 2 × 8". Real almanacs tabulate it;
+ * these let you do it without one.
+ */
+const ELEVATIONS = [9, 16, 25, 36, 49, 64, 81];
+const EYES = [1, 2.25, 4];
+
+/** 2.08 × (√H + √h), shown as the sum a navigator would do. */
+function geoWorking(H: number, h: number): string {
+  const s = Math.sqrt(H) + Math.sqrt(h);
+  return `${GEO_K} × (√${H} + √${h}) = ${GEO_K} × (${Math.sqrt(H)} + ${Math.sqrt(h)}) = ${GEO_K} × ${s} = ${fmt(GEO_K * s)} — call it "a shade over 2 × ${s}"`;
+}
 
 function risingDrill(rng: Rng): Question {
   for (;;) {
@@ -422,7 +435,7 @@ function risingDrill(rng: Rng): Question {
       fmt(geo),
       wrong.map(fmt),
       ['Horizon geometry', 'IALA R0202'],
-      `Geographic range = ${GEO_K} × (√${H} + √${h}) = ${GEO_K} × (${Math.sqrt(H).toFixed(2)} + ${Math.sqrt(h).toFixed(2)}) = ${fmt(geo)}. Both horizons count: the light's own and yours. The luminous range tonight is about the nominal ${nominal} M, since the visibility is the 10 miles nominal range is defined for, and that is further than the horizon — so the light really does rise, and at that moment the distance off is known. Almanacs tabulate this; some use ${GEO_K_ALT} instead of ${GEO_K}, which gives ${fmt(geographicRangeNm(H, h, GEO_K_ALT))} here.`,
+      `Geographic range = ${geoWorking(H, h)}. Both horizons count: the light's own and yours. The luminous range tonight is about the nominal ${nominal} M, since the visibility is the 10 miles nominal range is defined for, and that is further than the horizon — so the light really does rise, and at that moment the distance off is known. Almanacs tabulate this; some use ${GEO_K_ALT} instead of ${GEO_K}, which gives ${fmt(geographicRangeNm(H, h, GEO_K_ALT))} here.`,
       3,
     );
   }
@@ -430,7 +443,7 @@ function risingDrill(rng: Rng): Question {
 
 function noRiseDrill(rng: Rng): Question {
   for (;;) {
-    const H = pick(ELEVATIONS.filter((e) => e >= 28), rng);
+    const H = pick(ELEVATIONS.filter((e) => e >= 25), rng);
     const h = pick(EYES, rng);
     const geo = geographicRangeNm(H, h);
     const nominal = Math.floor(geo) - pick([4, 6, 8], rng);
@@ -448,7 +461,7 @@ function noRiseDrill(rng: Rng): Question {
         `It rises at ${nominal} M, since that is its charted range`,
       ],
       ['Horizon geometry', 'IALA R0202'],
-      `Its geographic range is ${GEO_K} × (√${H} + √${h}) = ${fmt(geo)}, but it is not bright enough to carry that far: in 10 miles visibility its luminous range is its nominal ${nominal} M. The weaker limit wins, so you first see it well inside the horizon, simply switching on. A rising or dipping distance only works as a range when the luminous range is the greater.`,
+      `Its geographic range is ${geoWorking(H, h)}, but it is not bright enough to carry that far: in 10 miles visibility its luminous range is its nominal ${nominal} M. The weaker limit wins, so you first see it well inside the horizon, simply switching on. A rising or dipping distance only works as a range when the luminous range is the greater.`,
       3,
     );
   }
@@ -483,6 +496,8 @@ function luminousDrill(rng: Rng): Question {
         vis < NOMINAL_VISIBILITY_NM ? 'in thicker weather the light carries less far' : 'in clearer weather it carries further'
       } — but not in proportion: the light is attenuated exponentially by the atmosphere and falls off with the square of distance, which is Allard's law, the calculation IALA R0202 prescribes and the diagram in every list of lights plots.`,
       3,
+      { type: 'luminous-diagram', mark: undefined },
+      { type: 'luminous-diagram', mark: { nominal, visibility: vis } },
     );
   }
 }
@@ -508,12 +523,14 @@ function firstSightDrill(rng: Rng): Question {
       fmt(first),
       wrong.map(fmt),
       ['Horizon geometry', 'IALA R0202'],
-      `Two limits, and the nearer one applies. Geographic range: ${GEO_K} × (√${H} + √${h}) = ${fmt(geo)}. Luminous range from the diagram, nominal ${nominal} M in ${vis} miles visibility: about ${fmt(lum)}. ${
+      `Two limits, and the nearer one applies. Geographic range: ${geoWorking(H, h)}. Luminous range from the diagram, nominal ${nominal} M in ${vis} miles visibility: about ${fmt(lum)}. ${
         lumWins
           ? 'The light runs out of brightness before the horizon hides it, so it appears inside its geographic range — and does not rise.'
           : 'It is bright enough to carry beyond the horizon, so the horizon decides: it rises at its geographic range.'
       }`,
       3,
+      { type: 'luminous-diagram', mark: undefined },
+      { type: 'luminous-diagram', mark: { nominal, visibility: vis } },
     );
   }
 }

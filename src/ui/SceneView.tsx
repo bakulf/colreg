@@ -9,6 +9,10 @@ import { CoastalLightScene } from './CoastalLightScene.tsx';
 import { CompassRoseScene } from './CompassRoseScene.tsx';
 import { DeviationCardScene } from './DeviationCardScene.tsx';
 import { TidalDiamondScene, TidalPickScene, TidalTriangleScene } from './TidalScenes.tsx';
+import { TideCurveScene, TideLevelsScene } from './TideScenes.tsx';
+import { LuminousDiagramScene } from './LuminousDiagramScene.tsx';
+import { CloudScene } from './CloudScene.tsx';
+import { FrontStripScene, SynopticScene } from './WeatherScenes.tsx';
 
 /** Maps a scene, which is plain data from `core`, to the component that draws it. */
 export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean }) {
@@ -39,5 +43,17 @@ export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean 
       return <TidalTriangleScene diagram={scene.diagram} compact={compact} />;
     case 'tidal-pick':
       return <TidalPickScene diagrams={scene.diagrams} />;
+    case 'cloud':
+      return <CloudScene genus={scene.genus} photo={scene.photo} compact={compact} />;
+    case 'front-strip':
+      return <FrontStripScene highlight={scene.highlight} />;
+    case 'synoptic':
+      return <SynopticScene system={scene.system} boatAt={scene.boatAt} tight={scene.tight} />;
+    case 'luminous-diagram':
+      return <LuminousDiagramScene mark={scene.mark} />;
+    case 'tide-levels':
+      return <TideLevelsScene levels={scene.levels} />;
+    case 'tide-curve':
+      return <TideCurveScene curve={scene.curve} />;
   }
 }

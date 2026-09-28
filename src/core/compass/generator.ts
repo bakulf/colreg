@@ -140,10 +140,30 @@ function magneticToTrueDrill(rng: Rng): Question {
 
 function annualChangeDrill(rng: Rng): Question {
   for (;;) {
-    const minutes = (rng.next() < 0.75 ? -1 : 1) * (15 + Math.floor(rng.next() * 46) * 5);
-    const annual = (rng.next() < 0.8 ? 1 : -1) * Math.sign(-minutes || 1) * pick([5, 6, 7, 8, 9, 10, 12], rng);
-    const year = 2004 + Math.floor(rng.next() * 16);
-    const target = year + 5 + Math.floor(rng.next() * 16);
+    // A sum for the head: the rose on a whole or half degree, and years × the
+    // annual change coming to a whole number of degrees or a half — 10' for 6
+    // years is 1°, 5' for 6 years is ½°.
+    const minutes = (rng.next() < 0.75 ? -1 : 1) * pick([30, 60, 90, 120, 150, 180, 210, 240, 270], rng);
+    const [perYear, years] = pick<[number, number]>(
+      [
+        [5, 6],
+        [5, 12],
+        [6, 10],
+        [10, 3],
+        [10, 6],
+        [10, 9],
+        [10, 12],
+        [12, 5],
+        [12, 10],
+        [6, 5],
+        [8, 15],
+        [9, 10],
+      ],
+      rng,
+    );
+    const annual = (rng.next() < 0.8 ? 1 : -1) * Math.sign(-minutes || 1) * perYear;
+    const year = 2004 + Math.floor(rng.next() * 10);
+    const target = year + years;
     const rose: RoseVariation = { minutes, year, annualMinutes: annual };
 
     const now = variationMinutesIn(rose, target);

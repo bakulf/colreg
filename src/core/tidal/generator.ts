@@ -114,11 +114,12 @@ function hourName(h: number): string {
 function diamondRowDrill(rng: Rng): Question {
   for (;;) {
     const diamond = someDiamond(rng);
-    const hw = 6 * 60 + Math.floor(rng.next() * 144) * 5;
+    const hw = 6 * 60 + Math.floor(rng.next() * 72) * 10;
     // Keep clear of the half-hour boundaries between rows, where two rows are
     // equally right.
-    const offset = Math.round((rng.next() * 11 - 5.5) * 60);
-    if (Math.abs((Math.abs(offset) % 60) - 30) < 8) continue;
+    // Ten-minute steps, and never on the half hour between two rows.
+    const offset = Math.round((rng.next() * 11 - 5.5) * 6) * 10;
+    if (Math.abs(offset) % 60 === 30) continue;
     const row = rowFor(offset);
     const at = (h: number) => diamond.hours.find((x) => x.hour === h);
     const right = at(row);
@@ -158,29 +159,52 @@ function interpolateDrill(rng: Rng): Question {
   for (;;) {
     const diamond = someDiamond(rng);
     const row = pick([-4, -3, -2, 2, 3, 4], rng);
-    const h = diamond.hours.find((x) => x.hour === row);
-    if (!h || h.spring < 1.6) continue;
-    // Round ranges and a simple fraction, so the interpolation is mental:
-    // neap range half the spring, today a fifth of the way along, or two fifths…
-    const [meanSpring, meanNeap] = pick<[number, number]>([[4, 2], [5, 2.5], [6, 3]], rng);
-    const f = pick([0.2, 0.4, 0.5, 0.6, 0.8, 1.2], rng);
+    const h0 = diamond.hours.find((x) => x.hour === row);
+    if (!h0) continue;
+    // The multiplication has to vanish: the spring rate is the neap plus a
+    // round 1.0 kn, so the fraction of the way *is* the extra rate — or plus
+    // 2.0 kn with a half or a quarter. Ranges are round, so the fraction is
+    // plain to see.
+    const [meanSpring, meanNeap, f, diff] = pick<[number, number, number, number]>(
+      [
+        [4, 2, 0.2, 1],
+        [4, 2, 0.4, 1],
+        [4, 2, 0.6, 1],
+        [4, 2, 0.8, 1],
+        [4, 2, 0.25, 2],
+        [4, 2, 0.5, 2],
+        [4, 2, 0.75, 2],
+        [5, 2.5, 0.2, 1],
+        [5, 2.5, 0.4, 1],
+        [5, 2.5, 0.6, 1],
+        [5, 2.5, 0.8, 1],
+        [6, 3, 0.5, 1],
+        [6, 3, 0.5, 2],
+        [4, 2, 1.2, 1],
+      ],
+      rng,
+    );
+    const neap = pick(diff === 1 ? [0.8, 1.0, 1.2, 1.5] : [1.0, 1.2, 1.5], rng);
+    const h = { ...h0, neap, spring: r1(neap + diff) };
     const today = r1(meanNeap + (meanSpring - meanNeap) * f);
     const ranges: Ranges = { meanSpring, meanNeap, today };
     const answer = r1(rateFor(h, ranges));
     const wrong = wrongNumbers(
       answer,
-      [h.spring, h.neap, r1((h.spring + h.neap) / 2), r1((h.spring * today) / meanSpring), r1(answer + 0.5)],
+      [h.spring, h.neap, r1((h.spring + h.neap) / 2), r1(h.neap + (1 - f) * diff), r1(answer + 0.5)],
       0.2,
     );
     if (wrong.length < 3) continue;
+    const part =
+      f === 0.5 ? 'half way' : f === 0.25 ? 'a quarter of the way' : f === 0.75 ? 'three quarters of the way' : f > 1 ? `${f} times the whole span` : `${Math.round(f * 10)} tenths of the way`;
     return mcq(
-      `tid-interp-${row}-${h.spring}-${today}`,
+      `tid-interp-${row}-${neap}-${diff}-${today}`,
       'tidal-sources',
       'tidal:interpolate',
       `At ${hourName(row)} ${PORT}, diamond ◇${diamond.letter} gives ${bearing(h.set)}, ${h.spring.toFixed(1)} kn at springs and ${h.neap.toFixed(1)} kn at neaps. ${PORT}'s mean spring range is ${meanSpring.toFixed(1)} m and mean neap range ${meanNeap.toFixed(1)} m; today's range is ${today.toFixed(1)} m. What rate do you use?`,
       kn(answer),
       wrong.map(kn),
-      `Interpolate by range, as the almanac's computation of rates diagram does. From neaps to springs the range grows by ${(meanSpring - meanNeap).toFixed(1)} m; today is ${(today - meanNeap).toFixed(1)} m above neaps, ${f > 1 ? `${f} times the span` : f === 0.5 ? 'half way' : `${f * 10} tenths of the way`}. The rate grows by ${(h.spring - h.neap).toFixed(1)} kn over the same span, so ${h.neap.toFixed(1)} + ${f} × ${(h.spring - h.neap).toFixed(1)} ≈ ${kn(answer)}.${
+      `Interpolate by range, as the almanac's computation of rates diagram does. Today's ${today.toFixed(1)} m is ${part} from the neap range (${meanNeap.toFixed(1)}) to the spring range (${meanSpring.toFixed(1)}). The rate goes from ${h.neap.toFixed(1)} to ${h.spring.toFixed(1)} kn — ${diff.toFixed(1)} kn more — so take ${part} of that: ${h.neap.toFixed(1)} + ${(f * diff).toFixed(1)} = ${kn(answer)}.${
         f > 1 ? ' Today is bigger than a mean spring, so go beyond the spring rate — the diagram carries on past it.' : ''
       }`,
       2,
@@ -455,13 +479,30 @@ function epFromDrDrill(rng: Rng): Question {
     const heading = Math.floor(rng.next() * 72) * 5;
     const log = pick([4.2, 4.8, 5.3, 5.9, 6.4], rng);
     const set = Math.floor(rng.next() * 36) * 10;
-    const rate = pick([0.8, 1.2, 1.4, 1.6, 2.0], rng);
-    const hours = pick([1, 1.5, 2], rng);
+    // Rate × time must be a sum for the head: whole hours with any rate, and
+    // half hours only with rates that halve cleanly.
+    const [rate, hours] = pick<[number, number]>(
+      [
+        [1.0, 1],
+        [1.5, 1],
+        [2.0, 1],
+        [2.5, 1],
+        [1.0, 2],
+        [1.5, 2],
+        [2.0, 2],
+        [1.0, 3],
+        [1.0, 1.5],
+        [2.0, 1.5],
+        [2.0, 0.5],
+        [3.0, 0.5],
+      ],
+      rng,
+    );
     const drift = r1(rate * hours);
     const answer = `${drift.toFixed(1)} M towards ${bearing(set)} from the DR`;
     // With more than an hour, the slip is to lay one hour of stream; with
     // exactly one, to halve it.
-    const wrongDrift = hours === 1 ? r1(rate / 2) : rate;
+    const wrongDrift = hours === 1 ? r1(rate * 2) : rate;
     const options = [
       answer,
       `${drift.toFixed(1)} M towards ${bearing(set + 180)} from the DR`,
@@ -474,10 +515,10 @@ function epFromDrDrill(rng: Rng): Question {
       `tid-epdr-${heading}-${log}-${set}-${rate}-${hours}`,
       'tidal-ep',
       'tidal:ep-from-dr',
-      `From a fix you steer ${bearing(heading)}T for ${hours === 1 ? 'an hour' : `${hours} hours`}, and plot the DR from the log. There is no leeway. The stream over that time averages ${bearing(set)} at ${rate.toFixed(1)} kn. Where is the EP?`,
+      `From a fix you steer ${bearing(heading)}T for ${hours === 1 ? 'an hour' : hours === 0.5 ? 'half an hour' : `${hours} hours`}, and plot the DR from the log. There is no leeway. The stream over that time averages ${bearing(set)} at ${rate.toFixed(1)} kn. Where is the EP?`,
       options[0] as string,
       options.slice(1),
-      `The stream carries the water, and you with it, towards its set: ${rate.toFixed(1)} kn for ${hours} h is ${drift.toFixed(1)} M towards ${bearing(set)}. So from the DR, lay that vector — three arrows — and its end is the EP. The set is where the stream goes, never where it comes from.`,
+      `The stream carries the water, and you with it, towards its set: ${rate.toFixed(1)} kn for ${hours === 0.5 ? 'half an hour' : `${hours} h`} is ${drift.toFixed(1)} M towards ${bearing(set)}. So from the DR, lay that vector — three arrows — and its end is the EP. The set is where the stream goes, never where it comes from.`,
       2,
       undefined,
       { type: 'tidal-triangle', diagram: epDiagram(heading, r1(log * hours), stream) },

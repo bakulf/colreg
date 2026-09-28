@@ -47,6 +47,14 @@
   --accent: #0e7490;
 }
 
+.app[data-domain='tides'] {
+  --accent: #a21caf;
+}
+
+.app[data-domain='weather'] {
+  --accent: #4f46e5;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -1348,6 +1356,14 @@ kbd {
   --tint: #0e7490;
 }
 
+.subject[data-domain='tides'] {
+  --tint: #a21caf;
+}
+
+.subject[data-domain='weather'] {
+  --tint: #4f46e5;
+}
+
 .subject:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--tint) 40%, var(--border));
@@ -1528,4 +1544,104 @@ kbd {
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--muted);
+}
+
+/* --- tides --- */
+
+.scene.levels,
+.scene.curve,
+.scene.luminous {
+  max-width: 22rem;
+  margin-left: auto;
+  margin-right: auto;
+  background: #f7fafc;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+/* --- weather --- */
+
+.scene.synoptic {
+  max-width: 20rem;
+  margin-left: auto;
+  margin-right: auto;
+  background: #f7fafc;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.front-strip {
+  margin-bottom: 1rem;
+}
+
+.front-strip-row {
+  position: relative;
+  scroll-behavior: smooth;
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding-bottom: 0.3rem;
+}
+
+.front-stage {
+  flex: 0 0 7.2rem;
+  display: grid;
+  gap: 0.15rem;
+  align-content: start;
+  padding: 0.5rem 0.55rem;
+  border-radius: 0.6rem;
+  background: var(--surface-2);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.front-stage b {
+  font-size: 0.82rem;
+  color: var(--text);
+}
+
+.front-stage i {
+  font-style: normal;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+}
+
+.front-stage.lit {
+  background: color-mix(in srgb, var(--accent) 14%, #fff);
+  box-shadow: inset 0 0 0 1.5px var(--accent);
+}
+
+.front-where {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.front-strip-note {
+  margin: 0.3rem 0 0;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.cloud-photo {
+  margin: 0 0 1rem;
+}
+
+.cloud-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 0.75rem;
+  background: #dbe5ee;
+}
+
+.cloud-photo figcaption {
+  margin-top: 0.3rem;
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-align: right;
+}
+
+.cloud-photo figcaption a {
+  color: inherit;
 }

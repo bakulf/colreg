@@ -110,6 +110,8 @@ describe('compass drills give the answer the rules give', () => {
       const target = num(/apply in (\d{4})/, q.prompt);
       const minutes = variationMinutesIn(q.scene.rose, target);
       expect(answerOf(q), q.prompt).toBe(error(Math.round(minutes / 60)));
+      // Trivial to work: the result lands on a whole degree.
+      expect(Math.abs(minutes % 60), q.prompt).toBe(0);
       expect(q.prompt).toContain(roseText(q.scene.rose));
     }
   });

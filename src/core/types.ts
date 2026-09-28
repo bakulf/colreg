@@ -12,13 +12,34 @@ import type { Scenario } from './scenarios/model.ts';
 import type { Character } from './coastal/model.ts';
 import type { DeviationCard, RoseVariation } from './compass/model.ts';
 import type { Diamond, TriangleDiagram } from './tidal/model.ts';
+import type { Genus } from './weather/model.ts';
+
+/** A cross-section of the water column, drawn after a heights drill. */
+export interface TideLevels {
+  heightOfTide: number;
+  chartedDepth?: number;
+  dryingHeight?: number;
+  hat?: number;
+  clearance?: number;
+  draught?: number;
+}
+
+/** A rule-of-twelfths curve with the hour asked about marked. */
+export interface TideCurve {
+  lw: number;
+  hw: number;
+  rising: boolean;
+  markHours: number;
+  /** Clock time of the LW or HW the curve starts from, minutes. */
+  startClock: number;
+}
 
 /**
  * The bodies of rules the app drills, kept apart: a session is drawn from one
  * of them and never mixes them. They are different documents with different
  * authorities, and the syllabus treats them separately.
  */
-export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass' | 'tidal';
+export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass' | 'tidal' | 'tides' | 'weather';
 
 /**
  * COLREG topics follow the structure of the Convention itself — its Parts, with
@@ -29,7 +50,8 @@ export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass' | 'tidal';
  * rhythmic characters, R0202 for their range. The compass follows the items of
  * the RYA Coastal Skipper / Yachtmaster Offshore syllabus, section 2, and tidal
  * streams section 4 — with the estimated position of section 1, which is where
- * the stream is allowed for after the event.
+ * the stream is allowed for after the event — tides, section 3, and
+ * meteorology, section 12.
  */
 export type Topic =
   | 'colreg-a'
@@ -58,7 +80,20 @@ export type Topic =
   | 'tidal-sources'
   | 'tidal-cts'
   | 'tidal-ep'
-  | 'tidal-hazards';
+  | 'tidal-hazards'
+  | 'tides-causes'
+  | 'tides-heights'
+  | 'tides-levels'
+  | 'tides-secondary'
+  | 'tides-anomalies'
+  | 'weather-terms'
+  | 'weather-airmasses'
+  | 'weather-clouds'
+  | 'weather-systems'
+  | 'weather-forecasts'
+  | 'weather-breezes'
+  | 'weather-fog'
+  | 'weather-barometer';
 
 export interface TopicInfo {
   domain: Domain;
@@ -217,6 +252,84 @@ export const TOPIC_INFO: Record<Topic, TopicInfo> = {
     title: 'Races, overfalls and seeing the stream',
     span: 'Tide rips and races; tidal observation from buoys and beacons',
   },
+  'tides-causes': {
+    domain: 'tides',
+    code: 'Causes',
+    title: 'Causes of tide; springs and neaps',
+    span: 'Sun, moon, equinoxes, the daily lag, weather',
+  },
+  'tides-heights': {
+    domain: 'tides',
+    code: 'Tables',
+    title: 'Tide tables and heights',
+    span: 'Sources; the rule of twelfths, height and time',
+  },
+  'tides-levels': {
+    domain: 'tides',
+    code: 'Datum',
+    title: 'Tidal levels and datum',
+    span: 'Soundings, drying heights, clearances, depth at LW',
+  },
+  'tides-secondary': {
+    domain: 'tides',
+    code: '2ndary',
+    title: 'Standard and secondary ports',
+    span: 'Time and height differences, interpolated',
+  },
+  'tides-anomalies': {
+    domain: 'tides',
+    code: 'Solent',
+    title: 'Tidal anomalies',
+    span: 'Double high and low waters; LW-based curves',
+  },
+  'weather-terms': {
+    domain: 'weather',
+    code: 'Terms',
+    title: 'Basic terms and the Beaufort scale',
+    span: 'Forces, the sea at each, veering and backing',
+  },
+  'weather-airmasses': {
+    domain: 'weather',
+    code: 'Air',
+    title: 'Air masses',
+    span: 'Maritime and continental, polar and tropical',
+  },
+  'weather-clouds': {
+    domain: 'weather',
+    code: 'Clouds',
+    title: 'Cloud types',
+    span: 'Recognising them, and what they tell you',
+  },
+  'weather-systems': {
+    domain: 'weather',
+    code: 'Fronts',
+    title: 'Pressure and frontal systems',
+    span: 'A depression passing; winds round lows and highs',
+  },
+  'weather-forecasts': {
+    domain: 'weather',
+    code: 'Forecast',
+    title: 'Forecasts: sources and interpretation',
+    span: 'The Met Office’s terms, VHF, NAVTEX, weatherfax, satellite',
+  },
+  'weather-breezes': {
+    domain: 'weather',
+    code: 'Breeze',
+    title: 'Land and sea breezes',
+    span: 'When and which way',
+  },
+  'weather-fog': {
+    domain: 'weather',
+    code: 'Fog',
+    title: 'Sea fog',
+    span: 'Sea fog and radiation fog, and what clears them',
+  },
+  'weather-barometer': {
+    domain: 'weather',
+    code: 'Baro',
+    title: 'The barometer as a forecasting aid',
+    span: 'Tendency and what it warns of',
+  },
 };
 
 export const TOPICS: readonly Topic[] = Object.keys(TOPIC_INFO) as Topic[];
@@ -231,6 +344,8 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
   coastal: 'Lights',
   compass: 'Compass',
   tidal: 'Tidal streams',
+  tides: 'Tides',
+  weather: 'Weather',
 };
 
 /** 'Part B/III — Conduct of vessels in restricted visibility', 'Lateral marks'. */
@@ -317,6 +432,42 @@ export type Scene =
       /** Four triangles, labelled A to D, to choose between. */
       type: 'tidal-pick';
       diagrams: TriangleDiagram[];
+    }
+  | {
+      /**
+       * The luminous range diagram of a list of lights, drawn from Allard's
+       * law as R0202 prescribes; after answering, the reading marked.
+       */
+      type: 'luminous-diagram';
+      mark: { nominal: number; visibility: number } | undefined;
+    }
+  | {
+      /** A photograph of a cloud; `photo` picks one of those available. */
+      type: 'cloud';
+      genus: Genus;
+      photo: number;
+    }
+  | {
+      /** The stages of a passing depression, one picked out. */
+      type: 'front-strip';
+      highlight: number;
+    }
+  | {
+      /** A sketch chart: isobars round a low or high, and where you are. */
+      type: 'synoptic';
+      system: 'low' | 'high';
+      /** Your bearing from the centre, degrees; undefined for none. */
+      boatAt: number | undefined;
+      /** Which way the isobars close up, for the spacing drill. */
+      tight: number | undefined;
+    }
+  | {
+      type: 'tide-levels';
+      levels: TideLevels;
+    }
+  | {
+      type: 'tide-curve';
+      curve: TideCurve;
     };
 
 export interface Question {

@@ -57,6 +57,25 @@ const icons: Record<Domain, ReactNode> = {
       <path d="M11 35 l2 -4 M14 33 l2 -4" stroke={INK} strokeWidth="1.6" />
     </svg>
   ),
+  // A tidal curve over a sounding.
+  tides: (
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M4 30 C 12 30, 14 12, 24 12 C 34 12, 36 30, 44 30" stroke={INK} strokeWidth="2.6" fill="none" />
+      <line x1="4" y1="38" x2="44" y2="38" stroke={INK} strokeWidth="1.6" strokeDasharray="3 3" />
+      <line x1="24" y1="14" x2="24" y2="38" stroke="#ffc2f2" strokeWidth="2" />
+      <path d="M21 17 L24 13 L27 17 M21 35 L24 39 L27 35" stroke="#ffc2f2" strokeWidth="2" fill="none" />
+    </svg>
+  ),
+  // A cloud with rain.
+  weather: (
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="18" cy="22" r="8" fill={INK} />
+      <circle cx="28" cy="18" r="10" fill={INK} />
+      <circle cx="36" cy="24" r="6.5" fill={INK} />
+      <rect x="12" y="22" width="30" height="8" rx="4" fill={INK} />
+      <path d="M17 34 l-2 6 M25 34 l-2 6 M33 34 l-2 6" stroke="#bfe3ff" strokeWidth="2.2" strokeLinecap="round" />
+    </svg>
+  ),
   // A compass rose.
   compass: (
     <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -98,11 +117,25 @@ export const SUBJECTS: readonly Subject[] = [
     icon: icons.compass,
   },
   {
+    domain: 'tides',
+    hash: '#/tides',
+    title: 'Tides',
+    blurb: 'Datums, twelfths, secondary ports, the Solent',
+    icon: icons.tides,
+  },
+  {
     domain: 'tidal',
     hash: '#/streams',
     title: 'Tidal streams',
     blurb: 'Diamonds, course to steer, EP, races',
     icon: icons.tidal,
+  },
+  {
+    domain: 'weather',
+    hash: '#/weather',
+    title: 'Weather',
+    blurb: 'Clouds, fronts, forecasts, fog and breezes',
+    icon: icons.weather,
   },
 ];
 

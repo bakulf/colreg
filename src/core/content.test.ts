@@ -45,7 +45,7 @@ describe('question bank', () => {
         // check that Annex citations resolve. Rule refs must resolve here.
         if (n === undefined) {
           expect(ref, `${q.id} ref "${ref}"`).toMatch(
-            /^IALA( Region)? [AB]$|^IALA$|^IALA R0(110|202)$|^Chart notation$|^Horizon geometry$|^Compass$|^Tidal streams$|^Annex (IV|I{1,3})\b/,
+            /^IALA( Region)? [AB]$|^IALA$|^IALA R0(110|202)$|^Chart notation$|^Horizon geometry$|^Compass$|^Tidal streams$|^Tidal heights$|^Meteorology$|^Annex (IV|I{1,3})\b/,
           );
         } else {
           expect(getRule(n), `${q.id} cites nonexistent Rule ${n}`).toBeDefined();

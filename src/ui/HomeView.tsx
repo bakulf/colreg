@@ -32,6 +32,10 @@ const FOOTNOTES: Record<Domain, string> = {
   iala: 'Marks follow IALA Recommendation R1001, The IALA Maritime Buoyage System (Ed. 2.0, 2023). No Admiralty chart data is used.',
   coastal:
     'Characters follow IALA Recommendation R0110 (Ed. 5.0, 2021); ranges IALA R0202 (Ed. 2.1, 2017). Lights and positions are invented; no Admiralty data is used.',
+  weather:
+    'Topics follow section 12 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Forecast terms are the Met Office’s own definitions. Northern hemisphere throughout.',
+  tides:
+    'Topics follow section 3 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Ports and figures are invented for practice; use real tables for real passages.',
   tidal:
     'Topics follow sections 4 and 1 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Diamonds, ports and passages are invented for practice.',
   compass:
@@ -44,6 +48,8 @@ const HEADINGS: Record<Domain, string> = {
   coastal: 'Topics',
   compass: 'Syllabus items',
   tidal: 'Syllabus items',
+  tides: 'Syllabus items',
+  weather: 'Syllabus items',
 };
 
 const INTRO: Record<Domain, { title: string; sub: string }> = {
@@ -58,6 +64,14 @@ const INTRO: Record<Domain, { title: string; sub: string }> = {
   coastal: {
     title: 'Lights ashore',
     sub: 'Lighthouses, beacons and sector lights: their characters under IALA R0110, and how far they are seen under R0202.',
+  },
+  weather: {
+    title: 'Weather',
+    sub: 'Read the sky and the forecast: clouds by sight, a depression coming through, the Met Office’s words, fog and breezes.',
+  },
+  tides: {
+    title: 'Tides',
+    sub: 'How much water, and when: chart datum and drying heights, the rule of twelfths, secondary ports. Every sum can be done in your head.',
   },
   tidal: {
     title: 'Tidal streams',

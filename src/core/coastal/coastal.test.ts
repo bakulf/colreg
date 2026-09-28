@@ -149,6 +149,20 @@ describe('coastal drills', () => {
     }
   });
 
+  it('lets "a shade over 2 × (√H + √h)" land on the right rising range', () => {
+    for (const q of sample(risingDrill)) {
+      const [, H, h] = /-(\d+)-([\d.]+)-/.exec(q.id) ?? [];
+      const sH = Math.sqrt(Number(H));
+      const sh = Math.sqrt(Number(h));
+      expect(Number.isInteger(sH) && Number.isInteger(sh * 2), q.id).toBe(true);
+      const guess = 2 * (sH + sh);
+      const closest = q.choices
+        .map((c) => ({ c, d: Math.abs(numberIn(c.text) - guess) }))
+        .sort((a, b) => a.d - b.d)[0];
+      expect(closest?.c.id, q.id).toBe(q.correct);
+    }
+  });
+
   it('keeps the right answer to a rising range right with the other almanac constant', () => {
     for (const q of sample(risingDrill)) {
       const [, H, h] = /-(\d+)-([\d.]+)-/.exec(q.id) ?? [];
