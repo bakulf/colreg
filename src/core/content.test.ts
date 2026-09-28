@@ -40,10 +40,13 @@ describe('question bank', () => {
       expect(q.ruleRefs.length, `${q.id} cites no rule`).toBeGreaterThan(0);
       for (const ref of q.ruleRefs) {
         const n = ruleNumberOf(ref);
-        // Buoyage cites IALA and the Annexes have no rule number; the regs
-        // tests check that Annex citations resolve. Rule refs must resolve here.
+        // Buoyage cites IALA, lights ashore cite IALA recommendations and chart
+        // conventions, and the Annexes have no rule number; the regs tests
+        // check that Annex citations resolve. Rule refs must resolve here.
         if (n === undefined) {
-          expect(ref, `${q.id} ref "${ref}"`).toMatch(/IALA|^Annex (IV|I{1,3})\b/);
+          expect(ref, `${q.id} ref "${ref}"`).toMatch(
+            /^IALA( Region)? A$|^IALA$|^IALA R0(110|202)$|^Chart notation$|^Horizon geometry$|^Annex (IV|I{1,3})\b/,
+          );
         } else {
           expect(getRule(n), `${q.id} cites nonexistent Rule ${n}`).toBeDefined();
         }

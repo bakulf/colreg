@@ -1,5 +1,6 @@
 import type { Question, QuestionSource, Rng } from '../types.ts';
 import { shuffle } from '../rng.ts';
+import { topicForMark } from '../topics.ts';
 import type { MarkKind } from './model.ts';
 import {
   ALL_MARKS,
@@ -70,7 +71,7 @@ export function composeBuoyDrill(kind: MarkKind, mode: BuoyMode, rng: Rng): Buoy
 
   const question: Question = {
     id: `buo-gen-${mode}-${kind}`,
-    topic: 'buoyage',
+    topic: topicForMark(kind),
     concept: conceptFor(kind, mode),
     prompt:
       mode === 'night'
@@ -114,7 +115,7 @@ export function buoyageSources(): QuestionSource[] {
     for (const mode of ['day', 'night'] as const) {
       sources.push({
         id: `gen-${conceptFor(mark.kind, mode)}`,
-        topic: 'buoyage',
+        topic: topicForMark(mark.kind),
         concept: conceptFor(mark.kind, mode),
         difficulty: mode === 'night' ? 3 : 2,
         generated: true,

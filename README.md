@@ -4,6 +4,45 @@ A drill app for the collision regulations, built to prepare for the RYA
 Yachtmaster Shorebased instructor exam. Covers IRPCS (COLREGs) and IALA Region A
 buoyage.
 
+## Separate sections, never mixed
+
+COLREG, IALA buoyage and lights ashore are separate sections of the app, each
+with its own topics, its own session and its own progress summary. A paper is
+drawn from one of them only.
+
+COLREG is divided the way the Convention divides itself: Part A (General),
+Part B in its three Sections — I, any condition of visibility; II, vessels in
+sight of one another; III, restricted visibility — then Parts C, D, E and F, and
+the Annexes. A question belongs to the Part its first citation is in, and
+`src/core/topics.test.ts` holds every question to that, generated ones
+included. IALA is divided by mark category: lateral, cardinal, isolated
+danger, safe water, special, and emergency wreck marking.
+
+### Lights ashore
+
+Lighthouses, beacons and sector lights, divided by the IALA recommendations
+that govern them:
+
+- **Rhythmic characters** — IALA R0110 (Ed. 5.0, June 2021). Each character
+  is described by class, grouping, colour and period; its timeline is built
+  from the timings R0110 uses in its examples, and `violations()` checks it
+  against every limit R0110 sets (Table 1 maximum periods, eclipse ratios,
+  quick-light rates, group sizes). The tests run the whole catalogue through
+  it. Drills flash the light at true speed and ask for the chart notation;
+  distractors are recoloured to the answer's colour, so the rhythm is the
+  question.
+- **Reading the chart** — what `Fl(3)WRG.15s 21m 18-14M` says, and sector
+  limits as true bearings from seaward.
+- **Range** — IALA R0202 (E-200-2, Ed. 2.1, December 2017): nominal range is
+  the luminous range in 10 miles visibility, and luminous range for any other
+  visibility comes from Allard's law, as R0202 prescribes. Geographic range is
+  2.08 × (√H + √h); IHO S-12 uses 2.03, and the drills are checked to give the
+  same answer with either.
+
+The IALA recommendations are published at
+[github.com/IALAPublications/Recommendations](https://github.com/IALAPublications/Recommendations).
+They are cited and paraphrased here, not reproduced.
+
 ## Running it
 
 ```sh
@@ -33,7 +72,9 @@ npm run preview    # serve dist/ on the LAN
 
 ```
 src/core/          pure TypeScript — no React, no DOM
-  types.ts         Question, QuestionSource, Scene, Topic
+  types.ts         Question, QuestionSource, Scene, Domain, Topic
+  topics.ts        which Part a citation belongs to, which category a mark
+  coastal/         lights ashore: R0110 characters, R0202 and geographic range, drills
   rng.ts           seeded RNG, so a session is reproducible from its seed
   rules.ts         index of IRPCS Rules 1–41
   regs/            the full text of Rules 1–41 and Annexes I–IV, and citation parsing
@@ -111,11 +152,11 @@ drawn.
 
 ## The Regulations
 
-The Regulations tab carries the full text of Rules 1 to 41 and Annexes I to IV,
+The COLREG text tab carries the full text of Rules 1 to 41 and Annexes I to IV,
 with a search. Every citation in a question — the chips under the answer and
 any "Rule 17(a)(ii)" or "Annex IV" in the explanation — is a link. In a quiz it
 opens the rule over the question with the cited paragraph highlighted, so
-checking it does not lose your place; *Open in Regulations* takes you to the
+checking it does not lose your place; *Open in COLREG text* takes you to the
 full reader. The reader keeps its position in the URL (`#/regs/r17-a-ii`), so
 the back button works and a paragraph can be linked to.
 
@@ -149,6 +190,8 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M8** — Rule 9 and Rule 10 geometry: narrow channels and traffic lanes, where "shall not impede" displaces the steering rules
 - [x] **M9** — the rule index: what each of the 38 rules says, drilled by number, by subject and by wording
 - [x] **M10** — the full text of the Regulations, with every citation in a question linked to the paragraph it cites
+- [x] **M11** — COLREG and IALA as separate sections, COLREG topics by Part and Section of the Convention, light theme
+- [x] **M12** — lights ashore: R0110 characters flashed at true rate, chart notation and sectors, R0202 luminous range and rising/dipping distances
 - [ ] **M6** — exam mode, audio for the sound signals, offline PWA
 
 ## Deploying

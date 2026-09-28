@@ -5,7 +5,6 @@ import { mcq } from './helpers.ts';
 export const STEERING_QUESTIONS: Question[] = [
   mcq({
     id: 'str-lookout-means',
-    topic: 'steering',
     concept: 'rule5:lookout',
     difficulty: 1,
     prompt: 'Rule 5 requires a proper look-out to be kept:',
@@ -21,7 +20,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-safe-speed-factors',
-    topic: 'steering',
     concept: 'rule6:safe-speed-factors',
     difficulty: 2,
     prompt: 'Which of the following is NOT one of the factors Rule 6 lists as bearing on safe speed for all vessels?',
@@ -37,7 +35,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-risk-doubt',
-    topic: 'steering',
     concept: 'rule7:doubt',
     difficulty: 1,
     prompt: 'You are unsure whether risk of collision exists with a vessel you are watching. Rule 7 tells you to:',
@@ -53,7 +50,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-risk-steady-bearing',
-    topic: 'steering',
     concept: 'rule7:steady-bearing',
     difficulty: 2,
     prompt: 'A large vessel is closing you at short range and the compass bearing is changing appreciably. Rule 7(d) says:',
@@ -69,7 +65,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-action-apparent',
-    topic: 'steering',
     concept: 'rule8:substantial-action',
     difficulty: 2,
     prompt: 'Rule 8 requires that any alteration of course or speed to avoid collision shall be:',
@@ -85,7 +80,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-narrow-channel-side',
-    topic: 'steering',
     concept: 'rule9:keep-starboard',
     difficulty: 1,
     prompt: 'A vessel proceeding along a narrow channel or fairway shall keep:',
@@ -101,7 +95,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-narrow-channel-impede',
-    topic: 'steering',
     concept: 'rule9:not-impede',
     difficulty: 2,
     prompt: 'In a narrow channel, which vessels shall not impede the passage of a vessel which can safely navigate only within that channel?',
@@ -117,7 +110,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-crossing',
-    topic: 'steering',
     concept: 'rule10:crossing-angle',
     difficulty: 2,
     prompt: 'A vessel obliged to cross a traffic lane in a traffic separation scheme shall cross:',
@@ -133,7 +125,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-sailing-different-tacks',
-    topic: 'steering',
     concept: 'rule12:different-tacks',
     difficulty: 1,
     prompt: 'Two sailing vessels are approaching so as to involve risk of collision, one with the wind on her port side and the other with the wind on her starboard side. Which keeps out of the way?',
@@ -149,7 +140,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-sailing-same-tack',
-    topic: 'steering',
     concept: 'rule12:same-tack',
     difficulty: 1,
     prompt: 'Two sailing vessels have the wind on the same side. Which keeps out of the way?',
@@ -165,7 +155,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-sailing-doubt',
-    topic: 'steering',
     concept: 'rule12:doubt',
     difficulty: 2,
     prompt: 'A sailing vessel with the wind on her port side sees a sailing vessel to windward and cannot determine with certainty whether the other has the wind on her port or starboard side. She shall:',
@@ -181,7 +170,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-overtaking-sector',
-    topic: 'steering',
     concept: 'rule13:sector',
     difficulty: 2,
     prompt: 'A vessel is deemed to be overtaking when coming up with another from a direction:',
@@ -197,7 +185,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-overtaking-persists',
-    topic: 'steering',
     concept: 'rule13:persistence',
     difficulty: 3,
     prompt: 'You are overtaking a vessel. As you draw up, the bearing changes until she is broad on your starboard bow and you are on her port bow. What is now the position?',
@@ -213,7 +200,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-head-on-test',
-    topic: 'steering',
     concept: 'rule14:recognition',
     difficulty: 2,
     prompt: 'At night, a head-on situation shall be deemed to exist when a power-driven vessel sees another ahead or nearly ahead and:',
@@ -229,7 +215,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-crossing-avoid-ahead',
-    topic: 'steering',
     concept: 'rule15:give-way',
     difficulty: 1,
     prompt: 'Two power-driven vessels are crossing so as to involve risk of collision. The vessel which has the other on her own starboard side shall keep out of the way and shall, if the circumstances admit:',
@@ -245,7 +230,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-standon-may-act',
-    topic: 'steering',
     concept: 'rule17:may-act',
     difficulty: 3,
     prompt: 'You are the stand-on vessel. Under Rule 17(a)(ii), you MAY take action by your manoeuvre alone:',
@@ -261,7 +245,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-standon-not-to-port',
-    topic: 'steering',
     concept: 'rule17:not-to-port',
     difficulty: 3,
     prompt: 'A power-driven stand-on vessel takes action under Rule 17(a)(ii) in a crossing situation. She shall, if the circumstances admit:',
@@ -277,7 +260,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-rule18-order',
-    topic: 'steering',
     concept: 'rule18:hierarchy',
     difficulty: 2,
     prompt: 'A vessel engaged in fishing and a sailing vessel are in sight of one another and risk of collision exists. Which keeps out of the way?',
@@ -293,7 +275,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-rv-avoid-port',
-    topic: 'steering',
     concept: 'rule19:radar-alone',
     difficulty: 3,
     prompt: 'In restricted visibility you detect by radar alone a vessel forward of your beam, and a close-quarters situation is developing. Rule 19(d) says that so far as possible you shall avoid:',
@@ -309,7 +290,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-rv-fog-signal-forward',
-    topic: 'steering',
     concept: 'rule19:fog-signal-forward',
     difficulty: 3,
     prompt: 'In restricted visibility you hear, apparently forward of your beam, the fog signal of another vessel. Rule 19(e) requires you to:',
@@ -325,7 +305,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-rv-no-standon',
-    topic: 'steering',
     concept: 'rule19:no-standon',
     difficulty: 2,
     prompt: 'In restricted visibility, which vessel is the stand-on vessel?',
@@ -341,7 +320,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-safe-speed-radar',
-    topic: 'steering',
     concept: 'rule6:radar-factors',
     difficulty: 2,
     prompt: 'Which of these is one of the additional safe-speed factors that Rule 6(b) lists for vessels with operational radar?',
@@ -357,7 +335,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-radar-proper-use',
-    topic: 'steering',
     concept: 'rule7:radar-use',
     difficulty: 2,
     prompt: 'Rule 7(b) requires proper use of radar equipment, if fitted and operational, including:',
@@ -373,7 +350,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-scanty-information',
-    topic: 'steering',
     concept: 'rule7:scanty-information',
     difficulty: 2,
     prompt: 'In poor visibility you have taken a single radar range and bearing of an echo fine on your starboard bow. Rule 7(c) says:',
@@ -389,7 +365,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-course-alone',
-    topic: 'steering',
     concept: 'rule8:course-alone',
     difficulty: 2,
     prompt: 'Rule 8(c) says that, if there is sufficient sea-room, alteration of course alone may be the most effective action to avoid a close-quarters situation, provided that it is:',
@@ -405,7 +380,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-safe-distance',
-    topic: 'steering',
     concept: 'rule8:safe-distance',
     difficulty: 1,
     prompt: 'Action taken to avoid collision shall be such as to result in passing at a safe distance. Rule 8(d) also requires that:',
@@ -421,7 +395,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-slacken-speed',
-    topic: 'steering',
     concept: 'rule8:slacken-speed',
     difficulty: 2,
     prompt: 'When does Rule 8(e) require a vessel to slacken her speed, or take all way off by stopping or reversing her means of propulsion?',
@@ -437,7 +410,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-not-impede',
-    topic: 'steering',
     concept: 'rule8:not-impede',
     difficulty: 3,
     prompt: 'A yacht of 12 metres is required not to impede a large ship which can navigate only within a narrow channel, but the two are now approaching so as to involve risk of collision. Under Rule 8(f):',
@@ -453,7 +425,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-channel-overtake',
-    topic: 'steering',
     concept: 'rule9:overtaking',
     difficulty: 3,
     prompt: 'In a narrow channel you can overtake only if the vessel ahead takes action to let you pass. You signal your intention and she sounds her agreement. Which is true?',
@@ -469,7 +440,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-channel-anchoring',
-    topic: 'steering',
     concept: 'rule9:anchoring',
     difficulty: 1,
     prompt: 'Rule 9(g) says that any vessel shall, if the circumstances of the case admit:',
@@ -485,7 +455,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-joining',
-    topic: 'steering',
     concept: 'rule10:joining-leaving',
     difficulty: 2,
     prompt: 'A vessel using a traffic separation scheme needs to join a traffic lane from the side rather than at its termination. She shall join:',
@@ -501,7 +470,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-inshore-zone',
-    topic: 'steering',
     concept: 'rule10:inshore-zone',
     difficulty: 2,
     prompt: 'Which vessels may use an inshore traffic zone even when they could safely use the appropriate lane of the adjacent traffic separation scheme?',
@@ -517,7 +485,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-separation-zone',
-    topic: 'steering',
     concept: 'rule10:separation-zone',
     difficulty: 2,
     prompt: 'Other than when crossing, joining or leaving a lane, a vessel shall not normally enter a separation zone or cross a separation line except:',
@@ -533,7 +500,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-terminations',
-    topic: 'steering',
     concept: 'rule10:terminations',
     difficulty: 1,
     prompt: 'Rule 10(f) requires a vessel navigating in areas near the terminations of traffic separation schemes to:',
@@ -549,7 +515,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-anchoring',
-    topic: 'steering',
     concept: 'rule10:anchoring',
     difficulty: 2,
     prompt: 'Where does Rule 10(g) say a vessel shall, so far as practicable, avoid anchoring?',
@@ -565,7 +530,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-not-using',
-    topic: 'steering',
     concept: 'rule10:not-using',
     difficulty: 1,
     prompt: 'A vessel not using a traffic separation scheme shall:',
@@ -581,7 +545,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-fishing',
-    topic: 'steering',
     concept: 'rule10:fishing-in-lane',
     difficulty: 2,
     prompt: 'A vessel engaged in fishing in a traffic lane:',
@@ -597,7 +560,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-tss-ram-exemption',
-    topic: 'steering',
     concept: 'rule10:ram-exemption',
     difficulty: 3,
     prompt: 'A vessel restricted in her ability to manoeuvre is exempted from Rule 10, to the extent necessary, when engaged within a traffic separation scheme in:',
@@ -613,7 +575,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-windward-side',
-    topic: 'steering',
     concept: 'rule12:windward',
     difficulty: 2,
     prompt: 'For the purposes of Rule 12, the windward side of a fore-and-aft rigged sailing vessel is deemed to be:',
@@ -629,7 +590,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-overtaking-doubt',
-    topic: 'steering',
     concept: 'rule13:doubt',
     difficulty: 2,
     prompt: 'At dusk you are coming up on another vessel from roughly 22.5 degrees abaft her beam, and you cannot tell whether you are overtaking or crossing. Rule 13(c) requires you to:',
@@ -645,7 +605,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-head-on-doubt',
-    topic: 'steering',
     concept: 'rule14:doubt',
     difficulty: 2,
     prompt: 'A power-driven vessel is nearly ahead and you cannot decide whether this is a head-on situation or a fine crossing. Rule 14(c) requires you to:',
@@ -661,7 +620,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-give-way-action',
-    topic: 'steering',
     concept: 'rule16:give-way-action',
     difficulty: 1,
     prompt: 'Rule 16 requires every vessel which is directed to keep out of the way of another vessel to:',
@@ -677,7 +635,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-standon-must-act',
-    topic: 'steering',
     concept: 'rule17:must-act',
     difficulty: 2,
     prompt: 'When, from any cause, the stand-on vessel finds herself so close that collision cannot be avoided by the action of the give-way vessel alone, she:',
@@ -693,7 +650,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-giveway-not-relieved',
-    topic: 'steering',
     concept: 'rule17:giveway-not-relieved',
     difficulty: 2,
     prompt: 'The stand-on vessel alters course under Rule 17(a)(ii) because the give-way vessel appears to be taking no action. The give-way vessel:',
@@ -709,7 +665,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-seaplane',
-    topic: 'steering',
     concept: 'rule18:seaplane',
     difficulty: 2,
     prompt: 'A seaplane on the water shall, in general:',
@@ -725,7 +680,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-wig-surface',
-    topic: 'steering',
     concept: 'rule18:wig-craft',
     difficulty: 2,
     prompt: 'A WIG craft operating on the water surface, not taking off, landing or flying, shall comply with the steering and sailing rules as:',
@@ -741,7 +695,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-rv-engines-ready',
-    topic: 'steering',
     concept: 'rule19:engines-ready',
     difficulty: 1,
     prompt: 'In or near an area of restricted visibility, Rule 19(b) requires a power-driven vessel to:',
@@ -757,7 +710,6 @@ export const STEERING_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'str-rv-section-one',
-    topic: 'steering',
     concept: 'rule19:section-one',
     difficulty: 3,
     prompt: 'In restricted visibility, when complying with Rules 4 to 10 (Part B, Section I), Rule 19(c) requires every vessel to:',

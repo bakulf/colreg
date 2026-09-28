@@ -1,6 +1,7 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import { useId } from 'react';
 import type { BuoyColour, LightCharacter, MarkKind, Topmark } from '../core/buoyage/model.ts';
 import { markAt } from '../core/buoyage/model.ts';
+import { useFlash } from './useFlash.ts';
 
 /**
  * A buoy, by day as body and topmark, by night as its light alone — flashing at
@@ -41,44 +42,8 @@ const BODY_TOP = 150;
 const BODY_BOTTOM = WATERLINE;
 const BODY_HALF = 34;
 
-/**
- * Follows a light character in real time.
- *
- * Deliberately not CSS keyframes: the characters are irregular (six quick
- * flashes then a long one then eight seconds of nothing) and generating a
- * keyframe rule per mark would be harder to read than a clock.
- */
 function useFlashColour(character: LightCharacter): BuoyColour | null {
-  const [colour, setColour] = useState<BuoyColour | null>(null);
-  const current = useRef<BuoyColour | null>(null);
-
-  useEffect(() => {
-    let frame = 0;
-    const started = performance.now();
-
-    const tick = () => {
-      const t = (performance.now() - started) % character.periodMs;
-      let acc = 0;
-      let next: BuoyColour | null = null;
-      for (const segment of character.segments) {
-        acc += segment.ms;
-        if (t < acc) {
-          next = segment.colour;
-          break;
-        }
-      }
-      if (next !== current.current) {
-        current.current = next;
-        setColour(next);
-      }
-      frame = requestAnimationFrame(tick);
-    };
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [character]);
-
-  return colour;
+  return useFlash(character);
 }
 
 /**

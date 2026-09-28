@@ -93,7 +93,7 @@ export function composeShapeDrill(vessel: VesselState, rng: Rng): ShapeDrill {
 
   const question: Question = {
     id: `shp-gen-${shapeConceptFor(vessel)}`,
-    topic: 'lights',
+    topic: 'colreg-c',
     concept: shapeConceptFor(vessel),
     prompt: 'Daylight, good visibility. What are you looking at?',
     choices: texts.map((text, i) => ({ id: String.fromCharCode(97 + i), text })),
@@ -118,7 +118,7 @@ export function shapeSources(): QuestionSource[] {
 
   return [...byConcept.entries()].map(([concept, variants]) => ({
     id: `gen-${concept}`,
-    topic: 'lights' as const,
+    topic: 'colreg-c' as const,
     concept,
     difficulty: 2 as const,
     generated: true,

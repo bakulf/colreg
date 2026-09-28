@@ -1,4 +1,4 @@
-import type { Question, QuestionSource, Rng } from '../types.ts';
+import type { Question, QuestionSource, Rng, Topic } from '../types.ts';
 import { shuffle } from '../rng.ts';
 import type { Category, Scenario, Situation, Tack } from './model.ts';
 import { CATEGORY_LABELS, classify, relativeBearing, resolve } from './model.ts';
@@ -124,6 +124,8 @@ function pickRange(rng: Rng, lo: number, hi: number): number {
 
 export interface ScenarioSpec {
   concept: string;
+  /** The Part B Section whose rules decide it. */
+  topic: Topic;
   label: string;
   build(rng: Rng): Scenario;
   expect(s: Scenario): boolean;
@@ -149,6 +151,7 @@ const OVERTAKING_CATEGORIES: readonly Category[] = ['power', 'power', 'sailing',
 export const SPECS: readonly ScenarioSpec[] = [
   {
     concept: 'scenario:crossing-give-way',
+    topic: 'colreg-b2',
     label: 'crossing, she is on your starboard side',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -174,6 +177,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:crossing-stand-on',
+    topic: 'colreg-b2',
     label: 'crossing, she is on your port side',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -199,6 +203,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:head-on',
+    topic: 'colreg-b2',
     label: 'head-on',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -224,6 +229,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:overtaking',
+    topic: 'colreg-b2',
     label: 'you are overtaking her',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -249,6 +255,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:being-overtaken',
+    topic: 'colreg-b2',
     label: 'she is overtaking you',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -274,6 +281,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:sailing-different-tacks',
+    topic: 'colreg-b2',
     label: 'two sailing vessels on different tacks',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -304,6 +312,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:sailing-same-tack',
+    topic: 'colreg-b2',
     label: 'two sailing vessels on the same tack',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -334,6 +343,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:precedence-give-way',
+    topic: 'colreg-b2',
     label: 'she is higher in the Rule 18 order',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -373,6 +383,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:precedence-stand-on',
+    topic: 'colreg-b2',
     label: 'you are higher in the Rule 18 order',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -411,6 +422,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:cbd-not-impede',
+    topic: 'colreg-b2',
     label: 'a vessel constrained by her draught',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -436,6 +448,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:cbd-own',
+    topic: 'colreg-b2',
     label: 'you are constrained by your draught',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -461,6 +474,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:seaplane',
+    topic: 'colreg-b2',
     label: 'you are a seaplane on the water',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -486,6 +500,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:wig',
+    topic: 'colreg-b2',
     label: 'you are a WIG craft in flight near the surface',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -511,6 +526,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:narrow-channel',
+    topic: 'colreg-b1',
     label: 'a narrow channel',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -545,6 +561,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:traffic-lane',
+    topic: 'colreg-b1',
     label: 'a traffic separation scheme',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -579,6 +596,7 @@ export const SPECS: readonly ScenarioSpec[] = [
   },
   {
     concept: 'scenario:restricted-visibility',
+    topic: 'colreg-b3',
     label: 'a radar contact in fog',
     build: (rng) => {
       const own = pickRange(rng, 0, 359);
@@ -656,7 +674,7 @@ export function composeScenarioDrill(spec: ScenarioSpec, rng: Rng): ScenarioDril
 
   const question: Question = {
     id: `scn-gen-${spec.concept}-${scenario.ownHeading}-${scenario.bearing}`,
-    topic: 'steering',
+    topic: spec.topic,
     concept: spec.concept,
     prompt: `${describeSelf(scenario)}.${describeSetting(scenario)} ${describeHer(scenario)}, bearing ${String(rel).padStart(3, '0')}° relative, and the bearing is steady. What do you do?`,
     choices: keys.map((k, i) => ({ id: String.fromCharCode(97 + i), text: OPTIONS[k] })),
@@ -673,7 +691,7 @@ export function composeScenarioDrill(spec: ScenarioSpec, rng: Rng): ScenarioDril
 export function scenarioSources(): QuestionSource[] {
   return SPECS.map((spec) => ({
     id: `gen-${spec.concept}`,
-    topic: 'steering' as const,
+    topic: spec.topic,
     concept: spec.concept,
     difficulty: 3 as const,
     generated: true,

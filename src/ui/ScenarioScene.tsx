@@ -18,9 +18,9 @@ const SIZE = 340;
 const C = SIZE / 2;
 const R = 132;
 
-const FAINT = '#1d3d4f';
-const OWN = '#46b0d8';
-const HER = '#e8b13d';
+const FAINT = '#d3dee8';
+const OWN = '#1464c0';
+const HER = '#e07b12';
 
 function xy(relBearing: number, range: number): [number, number] {
   const t = (relBearing * Math.PI) / 180;
@@ -78,7 +78,7 @@ export function ScenarioScene({
       role="img"
       aria-label="Head-up plot of the encounter, your vessel at the centre"
     >
-      <rect width={SIZE} height={SIZE} fill={fog ? '#0a1219' : '#061520'} />
+      <rect width={SIZE} height={SIZE} fill={fog ? '#e9eef2' : '#f7fafc'} />
 
       {/* Range rings and the cardinal relative bearings. */}
       {[R, R * 0.66, R * 0.33].map((r) => (
@@ -101,7 +101,7 @@ export function ScenarioScene({
             y1={C}
             x2={x2}
             y2={y2}
-            stroke="#2a5e78"
+            stroke="#9fb4c6"
             strokeWidth={1}
             strokeDasharray="3 4"
           />
@@ -116,7 +116,7 @@ export function ScenarioScene({
             x={x}
             y={y + 4}
             textAnchor="middle"
-            fill="#5f89a1"
+            fill="#7890a5"
             fontSize="11"
             fontFamily="ui-monospace, monospace"
           >
@@ -130,13 +130,13 @@ export function ScenarioScene({
       {fog ? (
         <g>
           {/* A radar paint: position and nothing more. */}
-          <circle cx={hx} cy={hy} r={13} fill={HER} opacity={0.14} />
+          <circle cx={hx} cy={hy} r={13} fill={HER} opacity={0.2} />
           <circle cx={hx} cy={hy} r={5} fill={HER} />
           <text
             x={C}
             y={SIZE - 12}
             textAnchor="middle"
-            fill="#6f8ea1"
+            fill="#5e7489"
             fontSize="11"
             letterSpacing="0.1em"
           >

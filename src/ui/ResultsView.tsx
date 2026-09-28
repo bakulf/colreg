@@ -1,6 +1,6 @@
 import type { QuizSession } from '../core/quiz.ts';
 import { score } from '../core/quiz.ts';
-import { TOPIC_LABELS } from '../core/types.ts';
+import { topicLabel } from '../core/types.ts';
 import { SceneView } from './SceneView.tsx';
 import { LinkedText, RefChips } from './RegText.tsx';
 
@@ -39,7 +39,7 @@ export function ResultsView({ session, onAgain, onHome }: Props) {
         <div className="bars">
           {result.byTopic.map((t) => (
             <div className="bar" key={t.topic}>
-              <span>{TOPIC_LABELS[t.topic]}</span>
+              <span>{topicLabel(t.topic)}</span>
               <span className="num">
                 {t.correct}/{t.total}
               </span>

@@ -138,6 +138,6 @@ describe('buoyage drills', () => {
     const sources = buoyageSources();
     expect(sources).toHaveLength(ALL_MARKS.length * 2);
     expect(new Set(sources.map((s) => s.concept)).size).toBe(sources.length);
-    expect(sources.every((s) => s.topic === 'buoyage' && s.generated)).toBe(true);
+    expect(sources.every((s) => s.topic.startsWith('iala-') && s.generated)).toBe(true);
   });
 });

@@ -5,7 +5,6 @@ import { mcq } from './helpers.ts';
 export const DEFINITION_QUESTIONS: Question[] = [
   mcq({
     id: 'def-underway',
-    topic: 'definitions',
     concept: 'definition:underway',
     difficulty: 1,
     prompt: 'What does "underway" mean?',
@@ -21,7 +20,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-nuc',
-    topic: 'definitions',
     concept: 'definition:not-under-command',
     difficulty: 2,
     prompt: 'A vessel "not under command" is one which:',
@@ -38,7 +36,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-ram-list',
-    topic: 'definitions',
     concept: 'definition:ram-categories',
     difficulty: 3,
     prompt: 'Which of these is NOT listed in Rule 3(g) as a vessel restricted in her ability to manoeuvre?',
@@ -54,7 +51,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-cbd',
-    topic: 'definitions',
     concept: 'definition:constrained-by-draught',
     difficulty: 2,
     prompt: 'Which vessel may claim to be "constrained by her draught"?',
@@ -71,7 +67,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-restricted-visibility',
-    topic: 'definitions',
     concept: 'definition:restricted-visibility',
     difficulty: 1,
     prompt: 'Rule 3(l) defines restricted visibility as any condition in which visibility is restricted by:',
@@ -87,7 +82,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-in-sight',
-    topic: 'definitions',
     concept: 'definition:in-sight-of-one-another',
     difficulty: 2,
     prompt: 'Two vessels are "in sight of one another" when:',
@@ -103,7 +97,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-rule2-departure',
-    topic: 'definitions',
     concept: 'rule2:departure',
     difficulty: 3,
     prompt: 'Under Rule 2(b), a departure from the Rules is permitted:',
@@ -119,7 +112,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-application-waters',
-    topic: 'definitions',
     concept: 'rule1:application',
     difficulty: 1,
     prompt: 'Where do the Collision Regulations apply?',
@@ -135,7 +127,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-sailing-vessel',
-    topic: 'definitions',
     concept: 'definition:sailing-vessel',
     difficulty: 1,
     prompt: 'A yacht is motorsailing: engine engaged, mainsail and genoa drawing. Under the Rules she is:',
@@ -151,7 +142,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-special-rules',
-    topic: 'definitions',
     concept: 'rule1:special-rules',
     difficulty: 1,
     prompt: 'A harbour authority has made special rules for navigation within its harbour. Under Rule 1(b), such special rules:',
@@ -167,7 +157,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-additional-signals',
-    topic: 'definitions',
     concept: 'rule1:additional-signals',
     difficulty: 2,
     prompt: 'Rule 1(c) allows a Government to make special rules for additional station or signal lights, shapes or whistle signals for:',
@@ -183,7 +172,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-special-construction',
-    topic: 'definitions',
     concept: 'rule1:special-construction',
     difficulty: 2,
     prompt: 'Her Government has determined that a vessel of special construction or purpose cannot comply fully with the Rules on the number, position, range or arc of visibility of her lights. She shall:',
@@ -199,7 +187,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-vessel',
-    topic: 'definitions',
     concept: 'definition:vessel',
     difficulty: 1,
     prompt: 'Under Rule 3(a), the word "vessel" includes:',
@@ -215,7 +202,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-trolling',
-    topic: 'definitions',
     concept: 'definition:engaged-in-fishing',
     difficulty: 2,
     prompt: 'A motor boat is underway trailing trolling lines astern. Under the Rules she is:',
@@ -231,7 +217,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-seaplane',
-    topic: 'definitions',
     concept: 'definition:seaplane',
     difficulty: 1,
     prompt: 'The word "seaplane" in the Rules includes:',
@@ -247,7 +232,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-wig',
-    topic: 'definitions',
     concept: 'definition:wig-craft',
     difficulty: 2,
     prompt: 'A Wing-in-Ground (WIG) craft is defined as:',
@@ -263,7 +247,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-rule38-exemptions',
-    topic: 'definitions',
     concept: 'rule38:exemptions',
     difficulty: 3,
     prompt: 'The exemptions in Rule 38 are available to:',
@@ -279,7 +262,6 @@ export const DEFINITION_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'def-part-f',
-    topic: 'definitions',
     concept: 'rule41:verification',
     difficulty: 2,
     prompt: 'What is Part F of the Regulations (Rules 39 to 41) concerned with?',

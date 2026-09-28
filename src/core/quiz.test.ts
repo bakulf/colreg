@@ -9,9 +9,9 @@ import {
   score,
 } from './quiz.ts';
 import { ALL_SOURCES, sourcesForTopics } from './questions/index.ts';
-import type { Topic } from './types.ts';
+import { TOPICS } from './types.ts';
 
-const ALL_TOPICS: Topic[] = ['definitions', 'steering', 'lights', 'sound', 'buoyage'];
+const ALL_TOPICS = [...TOPICS];
 
 function clock(): () => number {
   let t = 1000;
@@ -39,13 +39,13 @@ describe('createSession', () => {
   });
 
   it('caps at the size of the bank rather than padding', () => {
-    const s = createSession({ topics: ['buoyage'], count: 1000, seed: 3 });
-    expect(s.items.length).toBe(sourcesForTopics(['buoyage']).length);
+    const s = createSession({ topics: ['iala-cardinal'], count: 1000, seed: 3 });
+    expect(s.items.length).toBe(sourcesForTopics(['iala-cardinal']).length);
   });
 
   it('draws only from the requested topics', () => {
-    const s = createSession({ topics: ['sound'], count: 50, seed: 5 });
-    expect(s.items.every((i) => i.question.topic === 'sound')).toBe(true);
+    const s = createSession({ topics: ['colreg-d'], count: 50, seed: 5 });
+    expect(s.items.every((i) => i.question.topic === 'colreg-d')).toBe(true);
   });
 
   it('presents every choice exactly once', () => {
@@ -103,12 +103,12 @@ describe('score', () => {
   });
 
   it('breaks the score down by topic', () => {
-    let s = createSession({ topics: ['buoyage'], count: 4, seed: 44 }, undefined, clock());
+    let s = createSession({ topics: ['iala-cardinal'], count: 4, seed: 44 }, undefined, clock());
     while (!isFinished(s)) {
       s = answer(s, currentItem(s)!.question.correct);
       s = advance(s, clock());
     }
     const result = score(s, clock());
-    expect(result.byTopic).toEqual([{ topic: 'buoyage', correct: 4, total: 4 }]);
+    expect(result.byTopic).toEqual([{ topic: 'iala-cardinal', correct: 4, total: 4 }]);
   });
 });

@@ -152,7 +152,7 @@ describe('signal drills', () => {
   it('exposes one source per signal', () => {
     const sources = signalSources();
     expect(sources).toHaveLength(ALL_SIGNALS.length);
-    expect(sources.every((s) => s.topic === 'sound' && s.generated)).toBe(true);
+    expect(sources.every((s) => s.topic === 'colreg-d' && s.generated)).toBe(true);
     expect(new Set(sources.map((s) => s.concept)).size).toBe(sources.length);
   });
 });

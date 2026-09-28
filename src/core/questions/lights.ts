@@ -12,7 +12,6 @@ import { mcq } from './helpers.ts';
 export const LIGHT_QUESTIONS: Question[] = [
   mcq({
     id: 'lgt-arcs-masthead',
-    topic: 'lights',
     concept: 'rule21:arcs',
     difficulty: 1,
     prompt: 'Over what arc of the horizon does a masthead light show?',
@@ -28,7 +27,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-arc-sternlight',
-    topic: 'lights',
     concept: 'rule21:sternlight',
     difficulty: 1,
     prompt: 'A sternlight is a white light showing over an arc of:',
@@ -44,7 +42,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-range-under-12',
-    topic: 'lights',
     concept: 'rule22:ranges',
     difficulty: 2,
     prompt: 'In a vessel of less than 12 metres in length, what is the minimum visibility range required of the sidelights?',
@@ -56,7 +53,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-second-masthead',
-    topic: 'lights',
     concept: 'rule23:second-masthead',
     difficulty: 2,
     prompt: 'A power-driven vessel underway must exhibit a second masthead light abaft of and higher than the forward one when she is:',
@@ -72,7 +68,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-tricolour-limit',
-    topic: 'lights',
     concept: 'rule25:tricolour',
     difficulty: 2,
     prompt: 'A sailing vessel may combine her sidelights and sternlight in one lantern carried at or near the top of the mast if she is:',
@@ -88,7 +83,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-sail-optional',
-    topic: 'lights',
     concept: 'rule25:optional-red-green',
     difficulty: 2,
     prompt: 'A sailing vessel underway may, in addition to her sidelights and sternlight, exhibit at or near the top of the mast:',
@@ -104,7 +98,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-trawler',
-    topic: 'lights',
     concept: 'rule26:trawling',
     difficulty: 2,
     prompt: 'A vessel engaged in trawling exhibits two all-round lights in a vertical line. What are they?',
@@ -116,7 +109,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-fishing-gear',
-    topic: 'lights',
     concept: 'rule26:outlying-gear',
     difficulty: 3,
     prompt: 'A vessel engaged in fishing other than trawling has gear extending more than 150 metres horizontally from the vessel. She shall exhibit:',
@@ -132,7 +124,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-nuc',
-    topic: 'lights',
     concept: 'rule27:nuc',
     difficulty: 1,
     prompt: 'A vessel not under command exhibits:',
@@ -148,7 +139,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-ram',
-    topic: 'lights',
     concept: 'rule27:ram',
     difficulty: 2,
     prompt: 'What shapes does a vessel restricted in her ability to manoeuvre exhibit by day?',
@@ -164,7 +154,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-dredger',
-    topic: 'lights',
     concept: 'rule27:dredging-obstruction',
     difficulty: 3,
     prompt: 'A dredger at work has an obstruction on her port side. In addition to her restricted-in-ability-to-manoeuvre lights she exhibits:',
@@ -180,7 +169,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-pilot',
-    topic: 'lights',
     concept: 'rule29:pilot',
     difficulty: 1,
     prompt: 'A pilot vessel on pilotage duty exhibits at or near the masthead:',
@@ -196,7 +184,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-aground',
-    topic: 'lights',
     concept: 'rule30:aground',
     difficulty: 2,
     prompt: 'A vessel aground exhibits:',
@@ -212,7 +199,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-anchor-under-7',
-    topic: 'lights',
     concept: 'rule30:small-vessel-anchored',
     difficulty: 3,
     prompt: 'A vessel of less than 7 metres at anchor is not required to show an anchor light provided she is:',
@@ -228,7 +214,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-tow-over-200',
-    topic: 'lights',
     concept: 'rule24:tow-length',
     difficulty: 2,
     prompt: 'A power-driven vessel towing astern shows three masthead lights in a vertical line. This tells you that:',
@@ -244,7 +229,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-when-exhibited',
-    topic: 'lights',
     concept: 'rule20:when-lights',
     difficulty: 1,
     prompt: 'Rule 20 requires the prescribed lights to be exhibited:',
@@ -260,7 +244,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-shapes-by-day',
-    topic: 'lights',
     concept: 'rule20:shapes-by-day',
     difficulty: 1,
     prompt: 'When must the shapes prescribed by the Rules be exhibited?',
@@ -276,7 +259,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-flashing-rate',
-    topic: 'lights',
     concept: 'rule21:flashing',
     difficulty: 2,
     prompt: 'A "flashing light" in the Rules is a light flashing at regular intervals at a frequency of:',
@@ -292,7 +274,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-range-50m-plus',
-    topic: 'lights',
     concept: 'rule22:ranges-50m',
     difficulty: 2,
     prompt: 'In a vessel of 50 metres or more in length, the minimum ranges of the masthead light and the sidelights are:',
@@ -308,7 +289,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-range-12-to-50',
-    topic: 'lights',
     concept: 'rule22:ranges-12-50m',
     difficulty: 3,
     prompt: 'What is the minimum range required of the masthead light of a power-driven vessel 15 metres in length?',
@@ -320,7 +300,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-air-cushion',
-    topic: 'lights',
     concept: 'rule23:air-cushion',
     difficulty: 2,
     prompt: 'An air-cushion vessel operating in the non-displacement mode exhibits, in addition to the lights of a power-driven vessel underway:',
@@ -336,7 +315,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-wig',
-    topic: 'lights',
     concept: 'rule23:wig',
     difficulty: 2,
     prompt: 'A WIG craft, only when taking off, landing and in flight near the surface, exhibits in addition to the lights of a power-driven vessel:',
@@ -352,7 +330,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-displaced-under-12',
-    topic: 'lights',
     concept: 'rule23:displaced-light',
     difficulty: 3,
     prompt: 'On a power-driven vessel of less than 12 metres, the masthead light or all-round white light may be displaced from the centreline if centreline fitting is not practicable, provided that:',
@@ -368,7 +345,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-tow-over-50',
-    topic: 'lights',
     concept: 'rule24:towing-vessel-50m',
     difficulty: 3,
     prompt: 'A power-driven vessel 60 metres long is towing astern; the tow is 150 metres long. Which masthead lights does she exhibit?',
@@ -384,7 +360,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-tow-diamond',
-    topic: 'lights',
     concept: 'rule24:tow-diamond',
     difficulty: 2,
     prompt: 'By day a tug is towing a barge astern; the length of the tow, from the tug\'s stern to the after end of the barge, is 250 metres. Which vessels exhibit a diamond shape?',
@@ -400,7 +375,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-submerged-tow',
-    topic: 'lights',
     concept: 'rule24:submerged-tow',
     difficulty: 3,
     prompt: 'An inconspicuous, partly submerged object 30 metres wide and 90 metres long is being towed. In addition to one all-round white light at or near each end, it exhibits:',
@@ -416,7 +390,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-tow-unlit',
-    topic: 'lights',
     concept: 'rule24:tow-cannot-be-lit',
     difficulty: 2,
     prompt: 'For some sufficient cause it is impracticable for a vessel being towed to exhibit her prescribed lights. Rule 24(h) requires:',
@@ -432,7 +405,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-assistance-tow',
-    topic: 'lights',
     concept: 'rule24:assistance-tow',
     difficulty: 3,
     prompt: 'A motor cruiser not normally engaged in towing takes a disabled yacht in tow at night and cannot exhibit towing lights. Under Rule 24(i):',
@@ -448,7 +420,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-small-sail-oars',
-    topic: 'lights',
     concept: 'rule25:small-sail-oars',
     difficulty: 1,
     prompt: 'A sailing dinghy of 5 metres underway at night is not exhibiting sidelights and a sternlight. She shall:',
@@ -464,7 +435,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-motorsailing-cone',
-    topic: 'lights',
     concept: 'rule25:motorsailing-cone',
     difficulty: 1,
     prompt: 'By day, a vessel proceeding under sail while also being propelled by machinery exhibits forward, where it can best be seen:',
@@ -480,7 +450,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-not-fishing',
-    topic: 'lights',
     concept: 'rule26:not-fishing',
     difficulty: 1,
     prompt: 'A trawler is steaming back to port at night with her gear stowed. She shall exhibit:',
@@ -496,7 +465,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-ram-anchored',
-    topic: 'lights',
     concept: 'rule27:ram-at-anchor',
     difficulty: 2,
     prompt: 'A vessel servicing a navigation mark is at anchor and restricted in her ability to manoeuvre. At night she exhibits:',
@@ -512,7 +480,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-dredger-anchored',
-    topic: 'lights',
     concept: 'rule27:dredger-at-anchor',
     difficulty: 3,
     prompt: 'A dredger at work at anchor, with an obstruction on one side, exhibits at night:',
@@ -528,7 +495,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-diving-flag',
-    topic: 'lights',
     concept: 'rule27:diving-flag',
     difficulty: 2,
     prompt: 'A small dive boat cannot exhibit all the lights and shapes of Rule 27(d). By day she shall exhibit:',
@@ -544,7 +510,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-mine-clearance',
-    topic: 'lights',
     concept: 'rule27:mine-clearance',
     difficulty: 2,
     prompt: 'Three all-round green lights, one near the foremast head and one at each end of the fore yard, indicate:',
@@ -560,7 +525,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-27-under-12',
-    topic: 'lights',
     concept: 'rule27:under-12-exemption',
     difficulty: 2,
     prompt: 'Vessels of less than 12 metres are not required to exhibit the lights and shapes of Rule 27, except those:',
@@ -576,7 +540,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-27-not-distress',
-    topic: 'lights',
     concept: 'rule27:not-distress',
     difficulty: 1,
     prompt: 'What does Rule 27(h) say about the signals of vessels not under command and restricted in their ability to manoeuvre?',
@@ -592,7 +555,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-cbd-optional',
-    topic: 'lights',
     concept: 'rule28:cbd-signals',
     difficulty: 2,
     prompt: 'Under Rule 28, a vessel constrained by her draught:',
@@ -608,7 +570,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-pilot-off-duty',
-    topic: 'lights',
     concept: 'rule29:off-duty',
     difficulty: 1,
     prompt: 'A pilot vessel not engaged on pilotage duty exhibits:',
@@ -624,7 +585,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-anchor-under-50',
-    topic: 'lights',
     concept: 'rule30:anchor-under-50',
     difficulty: 2,
     prompt: 'A vessel 40 metres long at anchor may exhibit:',
@@ -640,7 +600,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-deck-lights',
-    topic: 'lights',
     concept: 'rule30:deck-lights',
     difficulty: 2,
     prompt: 'Which vessels at anchor SHALL use their available working or equivalent lights to illuminate their decks?',
@@ -656,7 +615,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-aground-under-12',
-    topic: 'lights',
     concept: 'rule30:small-vessel-aground',
     difficulty: 3,
     prompt: 'A vessel of 10 metres runs aground at night. Under Rule 30(f) she is not required to exhibit:',
@@ -672,7 +630,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-seaplane',
-    topic: 'lights',
     concept: 'rule31:seaplanes',
     difficulty: 2,
     prompt: 'It is impracticable for a seaplane to exhibit lights of the characteristics or in the positions prescribed in Part C. Rule 31 requires her to:',
@@ -688,7 +645,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-pair-trawling',
-    topic: 'lights',
     concept: 'annex2:pair-trawling',
     difficulty: 3,
     prompt: 'By night, each vessel of 20 metres or more engaged in pair trawling shall exhibit:',
@@ -704,7 +660,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-trawl-hauling',
-    topic: 'lights',
     concept: 'annex2:trawler-signals',
     difficulty: 3,
     prompt: 'A trawler of 20 metres or more, fishing in close proximity to other fishing vessels, exhibits the additional signal of one white light over one red light in a vertical line. This means she is:',
@@ -720,7 +675,6 @@ export const LIGHT_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'lgt-sidelight-cutoff',
-    topic: 'lights',
     concept: 'annex1:horizontal-sectors',
     difficulty: 3,
     prompt: 'In the forward direction, the intensity of sidelights shall decrease to reach practical cut-off:',

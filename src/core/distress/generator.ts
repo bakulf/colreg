@@ -18,7 +18,7 @@ function recogniseDrill(signal: DistressSignal, rng: Rng): Question {
 
   return {
     id: `dst-is-${signal.id}`,
-    topic: 'sound',
+    topic: 'colreg-d',
     concept: `distress:is:${signal.id}`,
     prompt: 'Which of these is a distress signal under Annex IV?',
     choices: [signal.observation, ...wrong.map((w) => w.observation)].map((text, i) => ({
@@ -44,7 +44,7 @@ function exclusionDrill(impostor: NotDistress, rng: Rng): Question {
 
   return {
     id: `dst-not-${impostor.id}`,
-    topic: 'sound',
+    topic: 'colreg-d',
     concept: `distress:not:${impostor.id}`,
     prompt: 'Which of these is NOT a distress signal under Annex IV?',
     choices: [impostor.observation, ...real.map((r) => r.observation)].map((text, i) => ({
@@ -62,7 +62,7 @@ function exclusionDrill(impostor: NotDistress, rng: Rng): Question {
 function armsDrill(): Question {
   return {
     id: 'dst-arms-detail',
-    topic: 'sound',
+    topic: 'colreg-annexes',
     concept: 'distress:arms-detail',
     prompt: 'The Annex IV distress signal made with the arms is:',
     choices: [
@@ -83,7 +83,7 @@ function armsDrill(): Question {
 function attentionDrill(): Question {
   return {
     id: 'dst-rule36',
-    topic: 'sound',
+    topic: 'colreg-d',
     concept: 'rule36:attention',
     prompt:
       'Under Rule 36, a vessel wishing to attract the attention of another vessel may:',
@@ -111,7 +111,7 @@ function attentionDrill(): Question {
 function annexThreeDrill(): Question {
   return {
     id: 'dst-annex-iv-3',
-    topic: 'sound',
+    topic: 'colreg-annexes',
     concept: 'distress:annex-iv-3',
     prompt:
       'A piece of orange canvas bearing a black square and circle, and a dye marker in the water, are:',
@@ -138,7 +138,7 @@ export function distressSources(): QuestionSource[] {
   for (const signal of DISTRESS_SIGNALS) {
     sources.push({
       id: `gen-distress-is-${signal.id}`,
-      topic: 'sound',
+      topic: 'colreg-d',
       concept: `distress:is:${signal.id}`,
       difficulty: 2,
       generated: true,
@@ -149,7 +149,7 @@ export function distressSources(): QuestionSource[] {
   for (const impostor of NOT_DISTRESS) {
     sources.push({
       id: `gen-distress-not-${impostor.id}`,
-      topic: 'sound',
+      topic: 'colreg-d',
       concept: `distress:not:${impostor.id}`,
       difficulty: 3,
       generated: true,

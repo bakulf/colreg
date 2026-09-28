@@ -88,7 +88,7 @@ export function composeSignalDrill(signal: Signal, rng: Rng): SignalDrill {
 
   const question: Question = {
     id: `sig-gen-${signal.id}`,
-    topic: 'sound',
+    topic: 'colreg-d',
     concept: `signal:${signal.id}`,
     prompt: contextPrompt(signal),
     choices: texts.map((text, i) => ({ id: String.fromCharCode(97 + i), text })),
@@ -107,7 +107,7 @@ export function composeSignalDrill(signal: Signal, rng: Rng): SignalDrill {
 export function signalSources(): QuestionSource[] {
   return ALL_SIGNALS.map((signal) => ({
     id: `gen-signal-${signal.id}`,
-    topic: 'sound' as const,
+    topic: 'colreg-d' as const,
     concept: `signal:${signal.id}`,
     difficulty: 2 as const,
     generated: true,

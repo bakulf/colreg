@@ -9,29 +9,167 @@
 import type { VesselState } from './lights/model.ts';
 import type { MarkKind } from './buoyage/model.ts';
 import type { Scenario } from './scenarios/model.ts';
+import type { Character } from './coastal/model.ts';
 
+/**
+ * The bodies of rules the app drills, kept apart: a session is drawn from one
+ * of them and never mixes them. They are different documents with different
+ * authorities, and the syllabus treats them separately.
+ */
+export type Domain = 'colreg' | 'iala' | 'coastal';
+
+/**
+ * COLREG topics follow the structure of the Convention itself — its Parts, with
+ * Part B split into its three Sections, and the Annexes — so a topic is always
+ * "the rules in this Part", never a grouping of our own. IALA topics follow the
+ * categories of the IALA Maritime Buoyage System. Lights on aids to
+ * navigation follow the IALA recommendations that govern them: R0110 for their
+ * rhythmic characters, R0202 for their range.
+ */
 export type Topic =
-  | 'definitions'
-  | 'steering'
-  | 'lights'
-  | 'sound'
-  | 'buoyage';
+  | 'colreg-a'
+  | 'colreg-b1'
+  | 'colreg-b2'
+  | 'colreg-b3'
+  | 'colreg-c'
+  | 'colreg-d'
+  | 'colreg-e'
+  | 'colreg-f'
+  | 'colreg-annexes'
+  | 'iala-lateral'
+  | 'iala-cardinal'
+  | 'iala-isolated-danger'
+  | 'iala-safe-water'
+  | 'iala-special'
+  | 'iala-wreck'
+  | 'coastal-characters'
+  | 'coastal-notation'
+  | 'coastal-range';
 
-export const TOPICS: readonly Topic[] = [
-  'definitions',
-  'steering',
-  'lights',
-  'sound',
-  'buoyage',
-] as const;
+export interface TopicInfo {
+  domain: Domain;
+  /** Short tag as the source document numbers it: 'A', 'B/III', 'Annexes'. */
+  code: string;
+  title: string;
+  /** What it spans, e.g. 'Rules 4–10'. */
+  span: string;
+}
 
-export const TOPIC_LABELS: Record<Topic, string> = {
-  definitions: 'Definitions & general',
-  steering: 'Steering & sailing rules',
-  lights: 'Lights & shapes',
-  sound: 'Sound & light signals',
-  buoyage: 'IALA A buoyage',
+export const TOPIC_INFO: Record<Topic, TopicInfo> = {
+  'colreg-a': { domain: 'colreg', code: 'A', title: 'General', span: 'Rules 1–3' },
+  'colreg-b1': {
+    domain: 'colreg',
+    code: 'B/I',
+    title: 'Conduct of vessels in any condition of visibility',
+    span: 'Rules 4–10',
+  },
+  'colreg-b2': {
+    domain: 'colreg',
+    code: 'B/II',
+    title: 'Conduct of vessels in sight of one another',
+    span: 'Rules 11–18',
+  },
+  'colreg-b3': {
+    domain: 'colreg',
+    code: 'B/III',
+    title: 'Conduct of vessels in restricted visibility',
+    span: 'Rule 19',
+  },
+  'colreg-c': { domain: 'colreg', code: 'C', title: 'Lights and shapes', span: 'Rules 20–31' },
+  'colreg-d': {
+    domain: 'colreg',
+    code: 'D',
+    title: 'Sound and light signals',
+    span: 'Rules 32–37',
+  },
+  'colreg-e': { domain: 'colreg', code: 'E', title: 'Exemptions', span: 'Rule 38' },
+  'colreg-f': {
+    domain: 'colreg',
+    code: 'F',
+    title: 'Verification of compliance',
+    span: 'Rules 39–41',
+  },
+  'colreg-annexes': {
+    domain: 'colreg',
+    code: 'Annexes',
+    title: 'Technical annexes',
+    span: 'Annexes I–IV',
+  },
+  'iala-lateral': {
+    domain: 'iala',
+    code: 'Lateral',
+    title: 'Lateral marks',
+    span: 'Port, starboard, preferred channel',
+  },
+  'iala-cardinal': {
+    domain: 'iala',
+    code: 'Cardinal',
+    title: 'Cardinal marks',
+    span: 'North, east, south, west',
+  },
+  'iala-isolated-danger': {
+    domain: 'iala',
+    code: 'Isolated',
+    title: 'Isolated danger marks',
+    span: 'A danger with navigable water all round',
+  },
+  'iala-safe-water': {
+    domain: 'iala',
+    code: 'Safe water',
+    title: 'Safe water marks',
+    span: 'Mid-channel and landfall',
+  },
+  'iala-special': {
+    domain: 'iala',
+    code: 'Special',
+    title: 'Special marks',
+    span: 'Not primarily for navigation',
+  },
+  'iala-wreck': {
+    domain: 'iala',
+    code: 'Wreck',
+    title: 'Emergency wreck marking',
+    span: 'New dangers, before they are charted',
+  },
+  'coastal-characters': {
+    domain: 'coastal',
+    code: 'R0110',
+    title: 'Rhythmic characters',
+    span: 'Fixed, occulting, isophase, flashing, quick, Morse',
+  },
+  'coastal-notation': {
+    domain: 'coastal',
+    code: 'Chart',
+    title: 'Reading a light on the chart',
+    span: 'Character, colours, period, elevation, range, sectors',
+  },
+  'coastal-range': {
+    domain: 'coastal',
+    code: 'R0202',
+    title: 'Range',
+    span: 'Nominal, luminous and geographic; rising and dipping',
+  },
 };
+
+export const TOPICS: readonly Topic[] = Object.keys(TOPIC_INFO) as Topic[];
+
+export function topicsOf(domain: Domain): Topic[] {
+  return TOPICS.filter((t) => TOPIC_INFO[t].domain === domain);
+}
+
+export const DOMAIN_LABELS: Record<Domain, string> = {
+  colreg: 'COLREG',
+  iala: 'IALA A',
+  coastal: 'Lights',
+};
+
+/** 'Part B/III — Conduct of vessels in restricted visibility', 'Lateral marks'. */
+export function topicLabel(topic: Topic): string {
+  const info = TOPIC_INFO[topic];
+  if (info.domain !== 'colreg') return info.title;
+  if (topic === 'colreg-annexes') return `Annexes I–IV`;
+  return `Part ${info.code} — ${info.title}`;
+}
 
 /** 1 = recall, 2 = applied, 3 = the kind an examiner uses to separate candidates. */
 export type Difficulty = 1 | 2 | 3;
@@ -77,6 +215,11 @@ export type Scene =
       /** The two Annex IV distress signals that are things you look at. */
       type: 'distress';
       visual: 'flags-nc' | 'square-and-ball';
+    }
+  | {
+      /** A light ashore at night, showing its character in real time. */
+      type: 'coastal';
+      character: Character;
     };
 
 export interface Question {

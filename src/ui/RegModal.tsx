@@ -66,7 +66,7 @@ export function RegModal({ anchor, onNavigate, onOpenFull, onClose }: Props) {
         </div>
         <div className="modal-foot">
           <button type="button" className="secondary" onClick={() => onOpenFull(anchor)}>
-            Open in Regulations
+            Open in COLREG text
           </button>
           <button type="button" className="secondary" onClick={onClose}>
             Close

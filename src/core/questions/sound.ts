@@ -11,7 +11,6 @@ import { mcq } from './helpers.ts';
 export const SOUND_QUESTIONS: Question[] = [
   mcq({
     id: 'snd-blast-durations',
-    topic: 'sound',
     concept: 'rule32:durations',
     difficulty: 1,
     prompt: 'How long is a prolonged blast?',
@@ -27,7 +26,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-manoeuvring-port',
-    topic: 'sound',
     concept: 'rule34:manoeuvring',
     difficulty: 1,
     prompt: 'Two power-driven vessels are in sight of one another. Two short blasts means:',
@@ -43,7 +41,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-three-short',
-    topic: 'sound',
     concept: 'rule34:astern-propulsion',
     difficulty: 2,
     prompt: 'Three short blasts means:',
@@ -59,7 +56,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-doubt',
-    topic: 'sound',
     concept: 'rule34:doubt-signal',
     difficulty: 1,
     prompt: 'You doubt whether a vessel approaching you is taking sufficient action to avoid collision. You shall indicate that doubt by:',
@@ -75,7 +71,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-bend',
-    topic: 'sound',
     concept: 'rule34:blind-bend',
     difficulty: 2,
     prompt: 'You are approaching a bend in a channel where other vessels may be obscured by an intervening obstruction. You shall sound:',
@@ -91,7 +86,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-overtake-narrow',
-    topic: 'sound',
     concept: 'rule34:overtaking-signals',
     difficulty: 3,
     prompt: 'In a narrow channel, a vessel intending to overtake on the other vessel\'s starboard side sounds:',
@@ -107,7 +101,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-rv-underway-stopped',
-    topic: 'sound',
     concept: 'rule35:underway-stopped',
     difficulty: 2,
     prompt: 'In or near an area of restricted visibility, a power-driven vessel underway but stopped and making no way through the water shall sound:',
@@ -123,7 +116,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-rv-one-prolonged-two-short',
-    topic: 'sound',
     concept: 'rule35:one-prolonged-two-short',
     difficulty: 3,
     prompt: 'In restricted visibility you hear one prolonged blast followed by two short blasts, repeated at intervals of about two minutes. Which of these could it NOT be?',
@@ -139,7 +131,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-rv-towed',
-    topic: 'sound',
     concept: 'rule35:vessel-towed',
     difficulty: 3,
     prompt: 'A manned vessel being towed, or the last vessel of a tow if more than one is manned, shall sound in restricted visibility:',
@@ -155,7 +146,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-anchored-bell',
-    topic: 'sound',
     concept: 'rule35:anchored',
     difficulty: 2,
     prompt: 'A vessel of 60 metres at anchor in fog shall sound:',
@@ -171,7 +161,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-equipment-thresholds',
-    topic: 'sound',
     concept: 'rule33:equipment',
     difficulty: 2,
     prompt: 'A vessel of 15 metres in length shall be provided with:',
@@ -187,7 +176,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-whistle-definition',
-    topic: 'sound',
     concept: 'rule32:whistle',
     difficulty: 2,
     prompt: 'The word "whistle" in the Rules means:',
@@ -203,7 +191,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-light-signals',
-    topic: 'sound',
     concept: 'rule34:light-signals',
     difficulty: 3,
     prompt: 'A power-driven vessel supplements her manoeuvring whistle signals with light signals under Rule 34(b). The flashes shall be:',
@@ -219,7 +206,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-whistles-100m',
-    topic: 'sound',
     concept: 'rule34:whistles-apart',
     difficulty: 2,
     prompt: 'A large vessel has whistles fitted more than 100 metres apart. For manoeuvring and warning signals:',
@@ -235,7 +221,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-fishing-at-anchor',
-    topic: 'sound',
     concept: 'rule35:fishing-ram-at-anchor',
     difficulty: 3,
     prompt: 'In restricted visibility, a vessel engaged in fishing at anchor sounds:',
@@ -251,7 +236,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-composite-unit',
-    topic: 'sound',
     concept: 'rule35:composite-unit',
     difficulty: 2,
     prompt: 'A pusher and the barge ahead of her are rigidly connected in a composite unit. Making way in fog, they sound:',
@@ -267,7 +251,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-12-to-20-bell',
-    topic: 'sound',
     concept: 'rule35:12-to-20m',
     difficulty: 2,
     prompt: 'A vessel of 16 metres at anchor in fog does not give the bell signal. She shall instead:',
@@ -283,7 +266,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-under-12',
-    topic: 'sound',
     concept: 'rule35:under-12m',
     difficulty: 1,
     prompt: 'A motor boat of 9 metres is underway in fog. Under Rule 35(j) she:',
@@ -299,7 +281,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-pilot-identity',
-    topic: 'sound',
     concept: 'rule35:pilot-identity',
     difficulty: 2,
     prompt: 'In restricted visibility, a pilot vessel on pilotage duty may, in addition to her normal fog signals, sound:',
@@ -315,7 +296,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-aground',
-    topic: 'sound',
     concept: 'rule35:aground',
     difficulty: 3,
     prompt: 'A vessel of 120 metres is aground in fog. Her signal includes:',
@@ -331,7 +311,6 @@ export const SOUND_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'snd-whistle-frequency',
-    topic: 'sound',
     concept: 'annex3:whistle-frequency',
     difficulty: 3,
     prompt: 'The fundamental frequency of the whistle of a vessel 250 metres in length shall lie between:',

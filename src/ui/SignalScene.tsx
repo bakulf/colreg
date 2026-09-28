@@ -21,10 +21,10 @@ const TRACK_Y = 56;
 const TRACK_H = 26;
 
 const BLAST_FILL: Record<Blast['kind'], string> = {
-  short: '#46b0d8',
-  prolonged: '#46b0d8',
-  bell: '#e8b13d',
-  gong: '#c98a2e',
+  short: '#1464c0',
+  prolonged: '#1464c0',
+  bell: '#e2a019',
+  gong: '#b8741a',
 };
 
 function usePlayhead(totalMs: number): number {
@@ -75,7 +75,7 @@ export function SignalScene({ signalId, compact = false }: { signalId: string; c
       role="img"
       aria-label={`A sound signal: ${signal.notation}`}
     >
-      <rect width={WIDTH} height={HEIGHT} fill="#061520" />
+      <rect width={WIDTH} height={HEIGHT} fill="#f7fafc" />
 
       {/* Second marks, so the lengths can be read off rather than guessed. */}
       {Array.from({ length: Math.ceil(total / 1000) + 1 }, (_, i) => {
@@ -87,7 +87,7 @@ export function SignalScene({ signalId, compact = false }: { signalId: string; c
               y1={TRACK_Y - 8}
               x2={x}
               y2={TRACK_Y + TRACK_H + 8}
-              stroke="#173444"
+              stroke="#d3dee8"
               strokeWidth={1}
             />
             {i % 5 === 0 && (
@@ -95,7 +95,7 @@ export function SignalScene({ signalId, compact = false }: { signalId: string; c
                 x={x}
                 y={TRACK_Y + TRACK_H + 24}
                 textAnchor="middle"
-                fill="#4d7d9a"
+                fill="#7890a5"
                 fontSize="10"
               >
                 {i}s
@@ -110,7 +110,7 @@ export function SignalScene({ signalId, compact = false }: { signalId: string; c
         y1={TRACK_Y + TRACK_H / 2}
         x2={WIDTH - MARGIN}
         y2={TRACK_Y + TRACK_H / 2}
-        stroke="#173444"
+        stroke="#d3dee8"
         strokeWidth={1}
       />
 
@@ -123,7 +123,7 @@ export function SignalScene({ signalId, compact = false }: { signalId: string; c
           height={TRACK_H}
           rx={3}
           fill={BLAST_FILL[blast.kind]}
-          opacity={headX >= x && headX <= x + w ? 1 : 0.42}
+          opacity={headX >= x && headX <= x + w ? 1 : 0.35}
         />
       ))}
 
@@ -132,7 +132,7 @@ export function SignalScene({ signalId, compact = false }: { signalId: string; c
         y1={TRACK_Y - 14}
         x2={headX}
         y2={TRACK_Y + TRACK_H + 14}
-        stroke={sounding ? '#ffffff' : '#5f89a1'}
+        stroke={sounding ? '#d63a31' : '#7890a5'}
         strokeWidth={2}
       />
     </svg>

@@ -2,6 +2,7 @@ import type { Question, QuestionSource, Rng } from '../types.ts';
 import { shuffle } from '../rng.ts';
 import type { RuleEntry } from '../rules.ts';
 import { RULES } from '../rules.ts';
+import { topicForRule } from '../topics.ts';
 
 /**
  * Knowing the Rules by number.
@@ -56,7 +57,7 @@ function subjectDrill(rule: RuleEntry, rng: Rng): Question {
   const wrong = neighbours(rule, rng);
   return {
     id: `rix-subject-${rule.n}`,
-    topic: 'definitions',
+    topic: topicForRule(rule.n),
     concept: `rule-index:subject:${rule.n}`,
     prompt: `What is the subject of Rule ${rule.n}?`,
     choices: [subjectOf(rule), ...wrong.map(subjectOf)].map((text, i) => ({
@@ -77,7 +78,7 @@ function numberDrill(rule: RuleEntry, rng: Rng): Question {
   const wrong = neighbours(rule, rng);
   return {
     id: `rix-number-${rule.n}`,
-    topic: 'definitions',
+    topic: topicForRule(rule.n),
     concept: `rule-index:number:${rule.n}`,
     prompt: `Which rule covers ${lowerFirst(subjectOf(rule))}?`,
     choices: [label(rule), ...wrong.map(label)].map((text, i) => ({
@@ -96,7 +97,7 @@ function wordingDrill(rule: RuleEntry, rng: Rng): Question {
   const wrong = neighbours(rule, rng);
   return {
     id: `rix-wording-${rule.n}`,
-    topic: 'definitions',
+    topic: topicForRule(rule.n),
     concept: `rule-index:wording:${rule.n}`,
     prompt: `Which rule says this?\n\n“${rule.key as string}”`,
     choices: [label(rule), ...wrong.map(label)].map((text, i) => ({
@@ -120,7 +121,7 @@ export function ruleIndexSources(): QuestionSource[] {
   for (const rule of RULES) {
     sources.push({
       id: `gen-rule-subject-${rule.n}`,
-      topic: 'definitions',
+      topic: topicForRule(rule.n),
       concept: `rule-index:subject:${rule.n}`,
       difficulty: 2,
       generated: true,
@@ -128,7 +129,7 @@ export function ruleIndexSources(): QuestionSource[] {
     });
     sources.push({
       id: `gen-rule-number-${rule.n}`,
-      topic: 'definitions',
+      topic: topicForRule(rule.n),
       concept: `rule-index:number:${rule.n}`,
       difficulty: 2,
       generated: true,
@@ -137,7 +138,7 @@ export function ruleIndexSources(): QuestionSource[] {
     if (rule.key) {
       sources.push({
         id: `gen-rule-wording-${rule.n}`,
-        topic: 'definitions',
+        topic: topicForRule(rule.n),
         concept: `rule-index:wording:${rule.n}`,
         difficulty: 3,
         generated: true,

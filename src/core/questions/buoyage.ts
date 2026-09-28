@@ -12,7 +12,7 @@ import { mcq } from './helpers.ts';
 export const BUOYAGE_QUESTIONS: Question[] = [
   mcq({
     id: 'buo-lateral-port-a',
-    topic: 'buoyage',
+    topic: 'iala-lateral',
     concept: 'iala-a:port-hand',
     difficulty: 1,
     prompt: 'In IALA Region A, a port-hand lateral mark is:',
@@ -28,7 +28,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-preferred-channel',
-    topic: 'buoyage',
+    topic: 'iala-lateral',
     concept: 'iala-a:preferred-channel',
     difficulty: 3,
     prompt: 'In Region A you see a red can buoy with a single broad green horizontal band, showing Fl(2+1)R. What is it?',
@@ -44,7 +44,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-cardinal-south-topmark',
-    topic: 'buoyage',
+    topic: 'iala-cardinal',
     concept: 'iala:cardinal-topmarks',
     difficulty: 2,
     prompt: 'A cardinal mark carries two black cones in a vertical line, both points downwards. It is a:',
@@ -60,7 +60,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-cardinal-west',
-    topic: 'buoyage',
+    topic: 'iala-cardinal',
     concept: 'iala:cardinal-west',
     difficulty: 2,
     prompt: 'What are the topmark and body colours of a west cardinal mark?',
@@ -76,7 +76,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-cardinal-lights',
-    topic: 'buoyage',
+    topic: 'iala-cardinal',
     concept: 'iala:cardinal-lights',
     difficulty: 3,
     prompt: 'A white light shows Q(6) followed by one long flash, repeating every 15 seconds. It marks:',
@@ -92,7 +92,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-isolated-danger',
-    topic: 'buoyage',
+    topic: 'iala-isolated-danger',
     concept: 'iala:isolated-danger',
     difficulty: 2,
     prompt: 'A black buoy with one or more broad red horizontal bands, carrying two black spheres in a vertical line, is:',
@@ -108,7 +108,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-safe-water',
-    topic: 'buoyage',
+    topic: 'iala-safe-water',
     concept: 'iala:safe-water',
     difficulty: 2,
     prompt: 'A buoy with red and white vertical stripes and a single red sphere topmark indicates:',
@@ -124,7 +124,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-special-mark',
-    topic: 'buoyage',
+    topic: 'iala-special',
     concept: 'iala:special-mark',
     difficulty: 1,
     prompt: 'A yellow buoy with a yellow cross topmark and a yellow light is:',
@@ -140,7 +140,7 @@ export const BUOYAGE_QUESTIONS: Question[] = [
   }),
   mcq({
     id: 'buo-emergency-wreck',
-    topic: 'buoyage',
+    topic: 'iala-wreck',
     concept: 'iala:emergency-wreck',
     difficulty: 3,
     prompt: 'A buoy with blue and yellow vertical stripes, a yellow cross topmark, and an alternating blue and yellow light is:',

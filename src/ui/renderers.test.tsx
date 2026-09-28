@@ -152,3 +152,16 @@ describe('SignalScene', () => {
     }
   });
 });
+
+describe('CoastalLightScene', () => {
+  it('draws every character without naming it', async () => {
+    const { CoastalLightScene } = await import('./CoastalLightScene.tsx');
+    const { CATALOGUE, notation } = await import('../core/coastal/model.ts');
+    for (const c of CATALOGUE) {
+      const markup = renderToStaticMarkup(<CoastalLightScene character={c} />);
+      expect(markup, notation(c)).toContain('<svg');
+      expect(markup.includes(`>${notation(c)}<`), notation(c)).toBe(false);
+      expect(markup.includes(`"${notation(c)}"`), notation(c)).toBe(false);
+    }
+  });
+});

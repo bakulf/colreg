@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import type { QuizSession } from '../core/quiz.ts';
 import { currentItem, isAnswered, isCorrect, orderedChoices } from '../core/quiz.ts';
-import { TOPIC_LABELS } from '../core/types.ts';
+import { topicLabel } from '../core/types.ts';
 import { SceneView } from './SceneView.tsx';
 import { LinkedText, RefChips } from './RegText.tsx';
 
@@ -56,7 +56,7 @@ export function QuizView({ session, onAnswer, onNext, onQuit }: Props) {
         <span>
           Question {n} of {total}
         </span>
-        <span>{TOPIC_LABELS[question.topic]}</span>
+        <span className="meta-topic">{topicLabel(question.topic)}</span>
       </div>
 
       <div className="card">
@@ -91,7 +91,7 @@ export function QuizView({ session, onAnswer, onNext, onQuit }: Props) {
 
         {answered && (
           <>
-            <div className="feedback">
+            <div className={`feedback ${right ? 'good' : 'bad'}`}>
               <h3>{right ? 'Correct' : 'Not quite'}</h3>
               <p>
                 <LinkedText text={question.explanation} />

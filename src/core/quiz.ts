@@ -59,11 +59,15 @@ export function createSession(
   // Draw until the paper is full rather than taking a fixed slice, because two
   // different concepts can legitimately mint the same question: a vessel under
   // tow and a sailing vessel produce one identical picture with one identical
-  // combined answer. Asking it twice in a paper looks like a bug.
+  // combined answer. Asking it twice in a paper looks like a bug. The answer
+  // is part of the fingerprint because the converse also happens: the four
+  // night cardinals share a prompt and can share all four options, yet are
+  // four different questions.
   for (const source of ordered) {
     if (items.length >= wanted) break;
     const question = source.generate(rng);
-    const fingerprint = `${question.prompt}\u0000${question.choices
+    const answerText = question.choices.find((c) => c.id === question.correct)?.text;
+    const fingerprint = `${question.prompt}\u0000${answerText}\u0000${question.choices
       .map((c) => c.text)
       .sort()
       .join('\u0001')}`;

@@ -1,8 +1,13 @@
 import type { Choice, Difficulty, Question, Scene, Topic } from '../types.ts';
+import { topicForRef } from '../topics.ts';
 
 export interface QuestionSpec {
   id: string;
-  topic: Topic;
+  /**
+   * Omitted for COLREG questions: they belong to the Part their first
+   * citation is in. IALA questions cite no rule, so they name their topic.
+   */
+  topic?: Topic;
   concept: string;
   difficulty: Difficulty;
   prompt: string;
@@ -28,7 +33,7 @@ export function mcq(spec: QuestionSpec): Question {
   }));
   return {
     id: spec.id,
-    topic: spec.topic,
+    topic: spec.topic ?? topicForRef(spec.ruleRefs[0] ?? ''),
     concept: spec.concept,
     prompt: spec.prompt,
     choices,

@@ -5,6 +5,7 @@ import { BuoyScene } from './BuoyScene.tsx';
 import { ScenarioScene } from './ScenarioScene.tsx';
 import { SignalScene } from './SignalScene.tsx';
 import { DistressScene } from './DistressScene.tsx';
+import { CoastalLightScene } from './CoastalLightScene.tsx';
 
 /** Maps a scene, which is plain data from `core`, to the component that draws it. */
 export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean }) {
@@ -23,5 +24,7 @@ export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean 
       return <SignalScene signalId={scene.signalId} compact={compact} />;
     case 'distress':
       return <DistressScene visual={scene.visual} compact={compact} />;
+    case 'coastal':
+      return <CoastalLightScene character={scene.character} compact={compact} />;
   }
 }

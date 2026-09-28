@@ -216,7 +216,7 @@ describe('scenario drills', () => {
   it('exposes one source per situation, all marked generated', () => {
     const sources = scenarioSources();
     expect(sources).toHaveLength(SPECS.length);
-    expect(sources.every((s) => s.generated && s.topic === 'steering')).toBe(true);
+    expect(sources.every((s) => s.generated && s.topic.startsWith('colreg-b'))).toBe(true);
     expect(new Set(sources.map((s) => s.concept)).size).toBe(sources.length);
   });
 });

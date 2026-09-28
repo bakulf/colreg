@@ -328,7 +328,7 @@ describe('question generator', () => {
     const sources = lightSources();
     expect(sources.length).toBeGreaterThan(8);
     expect(sources.every((s) => s.generated)).toBe(true);
-    expect(sources.every((s) => s.topic === 'lights')).toBe(true);
+    expect(sources.every((s) => s.topic === 'colreg-c')).toBe(true);
     expect(new Set(sources.map((s) => s.concept)).size).toBe(sources.length);
   });
 

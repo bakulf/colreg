@@ -1,16 +1,19 @@
 import { useMemo, useState } from 'react';
-import { TOPICS, TOPIC_LABELS } from '../core/types.ts';
-import type { Topic } from '../core/types.ts';
+import { TOPIC_INFO, topicsOf } from '../core/types.ts';
+import type { Domain, Topic } from '../core/types.ts';
 import { countByTopic } from '../core/questions/index.ts';
 import type { Deck } from '../core/srs.ts';
 import { counts, readiness, weakest } from '../core/srs.ts';
 import type { Mode } from '../App.tsx';
+import { MarkIcon } from './MarkIcon.tsx';
 
 const LENGTHS = [10, 20, 40] as const;
 
 interface Props {
+  domain: Domain;
   topics: Topic[];
   onToggleTopic: (topic: Topic) => void;
+  onSetTopics: (topics: Topic[], on: boolean) => void;
   length: number;
   onSetLength: (n: number) => void;
   deck: Deck;
@@ -21,9 +24,55 @@ interface Props {
   onImport: (text: string) => boolean;
 }
 
+const FOOTNOTES: Record<Domain, string> = {
+  colreg:
+    'Rule text from MSN 1781 (M+F), the UK text of the Collision Regulations, © Crown copyright, Open Government Licence v3.0.',
+  iala: 'Marks drawn from the IALA Maritime Buoyage System, Region A. No Admiralty chart data is used.',
+  coastal:
+    'Characters follow IALA Recommendation R0110 (Ed. 5.0, 2021); ranges IALA R0202 (Ed. 2.1, 2017). Lights and positions are invented; no Admiralty data is used.',
+};
+
+const HEADINGS: Record<Domain, string> = {
+  colreg: 'Parts of the Rules',
+  iala: 'Mark categories',
+  coastal: 'Topics',
+};
+
+const INTRO: Record<Domain, { title: string; sub: string }> = {
+  colreg: {
+    title: 'Collision Regulations',
+    sub: 'The International Regulations for Preventing Collisions at Sea 1972, drilled Part by Part.',
+  },
+  iala: {
+    title: 'IALA Buoyage — Region A',
+    sub: 'The IALA Maritime Buoyage System as used in UK and European waters, by day and by night.',
+  },
+  coastal: {
+    title: 'Lights ashore',
+    sub: 'Lighthouses, beacons and sector lights: their characters under IALA R0110, and how far they are seen under R0202.',
+  },
+};
+
+/**
+ * Part B is the one Part the Convention divides further, into three Sections.
+ * The picker mirrors that: the Sections sit under their Part, and the Part
+ * header toggles all three.
+ */
+const COLREG_LAYOUT: readonly (Topic | { part: string; sections: Topic[] })[] = [
+  'colreg-a',
+  { part: 'Steering and sailing rules', sections: ['colreg-b1', 'colreg-b2', 'colreg-b3'] },
+  'colreg-c',
+  'colreg-d',
+  'colreg-e',
+  'colreg-f',
+  'colreg-annexes',
+];
+
 export function HomeView({
+  domain,
   topics,
   onToggleTopic,
+  onSetTopics,
   length,
   onSetLength,
   deck,
@@ -35,86 +84,152 @@ export function HomeView({
 }: Props) {
   const [importError, setImportError] = useState<string | null>(null);
   const byTopic = useMemo(countByTopic, []);
-  const fixed = topics.reduce((n, t) => n + byTopic[t].fixed, 0);
-  const generators = topics.reduce((n, t) => n + byTopic[t].generated, 0);
+  const own = topicsOf(domain);
+  const chosen = topics.filter((t) => TOPIC_INFO[t].domain === domain);
+  const fixed = chosen.reduce((n, t) => n + byTopic[t].fixed, 0);
+  const generators = chosen.reduce((n, t) => n + byTopic[t].generated, 0);
   const available = fixed + generators;
 
   const now = Date.now();
   const due = counts(deck, concepts, now);
   const ready = readiness(deck, concepts, now);
-  const weak = weakest(deck, 5);
+  const conceptSet = new Set(concepts);
+  const weak = weakest(
+    Object.fromEntries(Object.entries(deck).filter(([c]) => conceptSet.has(c))),
+    5,
+  );
   const started = due.due + due.resting > 0;
+  const intro = INTRO[domain];
+
+  const row = (topic: Topic, nested = false) => {
+    const info = TOPIC_INFO[topic];
+    const on = topics.includes(topic);
+    const n = byTopic[topic];
+    return (
+      <button
+        key={topic}
+        type="button"
+        className={`topic${nested ? ' nested' : ''}`}
+        aria-pressed={on}
+        onClick={() => onToggleTopic(topic)}
+      >
+        {domain === 'iala' ? (
+          <MarkIcon topic={topic} />
+        ) : (
+          <span className="code" aria-hidden="true">
+            {nested ? info.code.replace('B/', '') : info.code}
+          </span>
+        )}
+        <span className="topic-text">
+          <span className="topic-title">
+            {nested ? `Section ${info.code.replace('B/', '')} — ` : ''}
+            {info.title}
+          </span>
+          <span className="topic-span">
+            {info.span} · {n.fixed + n.generated} drills
+          </span>
+        </span>
+        <span className="check" aria-hidden="true" />
+      </button>
+    );
+  };
 
   return (
     <>
-      {started && (
-        <div className="card">
-          <h2>Where you are</h2>
-          <div className="readiness">
-            <div className="bigpct">{Math.round(ready * 100)}%</div>
-            <div className="muted">
-              of the {concepts.length} concepts in these topics you would still recall now
+      <section className="hero">
+        <div className="hero-text">
+          <h2>{intro.title}</h2>
+          <p>{intro.sub}</p>
+          {started ? (
+            <div className="duerow">
+              <span>
+                <b>{due.due}</b> due
+              </span>
+              <span>
+                <b>{due.fresh}</b> new
+              </span>
+              <span>
+                <b>{due.resting}</b> resting
+              </span>
             </div>
-          </div>
-          <div className="duerow">
-            <span>
-              <b>{due.due}</b> due
-            </span>
-            <span>
-              <b>{due.fresh}</b> not yet seen
-            </span>
-            <span>
-              <b>{due.resting}</b> resting
-            </span>
-          </div>
+          ) : (
+            <p className="hero-hint">
+              {concepts.length} concepts to learn. Start with Study and the scheduler takes
+              it from there.
+            </p>
+          )}
         </div>
-      )}
+        <Ring value={started ? ready : 0} label={started ? 'recall' : 'not started'} />
+      </section>
 
       <div className="card">
-        <h2>Topics</h2>
-        <div className="topics">
-          {TOPICS.map((topic) => {
-            const on = topics.includes(topic);
-            return (
-              <button
-                key={topic}
-                className="topic"
-                aria-pressed={on}
-                onClick={() => onToggleTopic(topic)}
-              >
-                <span className="tick" aria-hidden="true">{on ? '✓' : ''}</span>
-                <span>{TOPIC_LABELS[topic]}</span>
-                <span className="count">
-                  {byTopic[topic].fixed}
-                  {byTopic[topic].generated > 0 && (
-                    <span className="gen"> + {byTopic[topic].generated} drawn</span>
-                  )}
-                </span>
-              </button>
-            );
-          })}
+        <div className="card-head">
+          <h2>{HEADINGS[domain]}</h2>
+          <span className="card-tools">
+            <button type="button" className="link" onClick={() => onSetTopics(own, true)}>
+              All
+            </button>
+            <button type="button" className="link" onClick={() => onSetTopics(own, false)}>
+              None
+            </button>
+          </span>
         </div>
+
+        {domain === 'colreg' ? (
+          <div className="topics">
+            {COLREG_LAYOUT.map((entry) => {
+              if (typeof entry === 'string') return row(entry);
+              const allOn = entry.sections.every((t) => topics.includes(t));
+              return (
+                <div className="part-group" key={entry.part}>
+                  <button
+                    type="button"
+                    className="topic part"
+                    aria-pressed={allOn}
+                    onClick={() => onSetTopics(entry.sections, !allOn)}
+                  >
+                    <span className="code" aria-hidden="true">
+                      B
+                    </span>
+                    <span className="topic-text">
+                      <span className="topic-title">{entry.part}</span>
+                      <span className="topic-span">Rules 4–19, in three Sections</span>
+                    </span>
+                    <span className="check" aria-hidden="true" />
+                  </button>
+                  {entry.sections.map((t) => row(t, true))}
+                </div>
+              );
+            })}
+          </div>
+        ) : domain === 'iala' ? (
+          <div className="topics grid">{own.map((t) => row(t))}</div>
+        ) : (
+          <div className="topics">{own.map((t) => row(t))}</div>
+        )}
       </div>
 
       <div className="card">
-        <h2>Length</h2>
+        <h2>Session</h2>
         <div className="lengths">
           {LENGTHS.map((n) => (
             <button
               key={n}
+              type="button"
               className="chip"
               aria-pressed={length === n}
               onClick={() => onSetLength(n)}
             >
-              {n} questions
+              {n}
             </button>
           ))}
           <button
+            type="button"
             className="chip"
             aria-pressed={length === Number.MAX_SAFE_INTEGER}
             onClick={() => onSetLength(Number.MAX_SAFE_INTEGER)}
           >
-            Everything
+            All
           </button>
         </div>
         <p className="kbdhint">
@@ -127,38 +242,62 @@ export function HomeView({
           )}
           .
         </p>
+
+        <div className="actions">
+          <button
+            type="button"
+            className="primary"
+            disabled={available === 0}
+            onClick={() => onStart('review')}
+          >
+            {due.due > 0 ? `Review ${due.due} due` : 'Study'}
+          </button>
+          <button
+            type="button"
+            className="secondary"
+            disabled={available === 0}
+            onClick={() => onStart('practice')}
+          >
+            Random practice
+          </button>
+        </div>
+        <p className="kbdhint">
+          Study follows the scheduler — most overdue first, then anything you have not
+          met. Practice ignores it and shuffles.
+        </p>
       </div>
 
-      <div className="actions">
-        <button
-          className="primary"
-          disabled={available === 0}
-          onClick={() => onStart('review')}
-        >
-          {due.due > 0 ? `Review ${due.due} due` : 'Study'}
-        </button>
-        <button
-          className="secondary"
-          disabled={available === 0}
-          onClick={() => onStart('practice')}
-        >
-          Random practice
-        </button>
-      </div>
-      <p className="kbdhint">
-        Review follows the scheduler — most overdue first, then anything you have not
-        met. Practice ignores it and shuffles.
-      </p>
+      {weak.length > 0 && (
+        <div className="card">
+          <h2>Hardest for you</h2>
+          <div className="bars">
+            {weak.map((card) => (
+              <div className="bar" key={card.concept}>
+                <span>{card.concept}</span>
+                <span className="num">
+                  {card.lapses > 0 ? `${card.lapses} lapse${card.lapses === 1 ? '' : 's'}` : 'new'}
+                </span>
+                <span className="track">
+                  <span
+                    className="fill hard"
+                    style={{ width: `${((card.difficulty - 1) / 9) * 100}%` }}
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {started && (
-        <div className="card" style={{ marginTop: '1rem' }}>
+        <div className="card">
           <h2>Your record</h2>
           <p className="kbdhint" style={{ marginTop: 0 }}>
-            Everything is kept on this device only. Clearing site data loses it, so
-            export if it matters.
+            Everything is kept on this device only, for both COLREG and IALA. Clearing
+            site data loses it, so export if it matters.
           </p>
           <div className="actions">
-            <button className="secondary" onClick={onExport}>
+            <button type="button" className="secondary" onClick={onExport}>
               Export
             </button>
             <label className="secondary filebtn">
@@ -180,7 +319,7 @@ export function HomeView({
                 }}
               />
             </label>
-            <button className="secondary" onClick={onReset}>
+            <button type="button" className="secondary danger" onClick={onReset}>
               Reset
             </button>
           </div>
@@ -192,32 +331,37 @@ export function HomeView({
         </div>
       )}
 
-      {weak.length > 0 && (
-        <div className="card" style={{ marginTop: '1rem' }}>
-          <h2>Hardest for you</h2>
-          <div className="bars">
-            {weak.map((card) => (
-              <div className="bar" key={card.concept}>
-                <span>{card.concept}</span>
-                <span className="num">
-                  {card.lapses > 0 ? `${card.lapses} lapse${card.lapses === 1 ? '' : 's'}` : 'new'}
-                </span>
-                <span className="track">
-                  <span
-                    className="fill hard"
-                    style={{ width: `${((card.difficulty - 1) / 9) * 100}%` }}
-                  />
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       <p className="footnote">
-        Rule text from MSN 1781 (M+F), the UK text of the Collision Regulations,
-        © Crown copyright, Open Government Licence v3.0.
+        {FOOTNOTES[domain]}
       </p>
     </>
+  );
+}
+
+/** Recall as a dial: the share of concepts you would still get right now. */
+function Ring({ value, label }: { value: number; label: string }) {
+  const r = 34;
+  const c = 2 * Math.PI * r;
+  return (
+    <div className="ring">
+      <svg viewBox="0 0 84 84" aria-hidden="true">
+        <circle cx="42" cy="42" r={r} className="ring-track" />
+        {/* Skipped at zero: a round cap on an empty arc still draws a dot. */}
+        {value > 0 && (
+        <circle
+          cx="42"
+          cy="42"
+          r={r}
+          className="ring-fill"
+          strokeDasharray={`${c * value} ${c}`}
+          transform="rotate(-90 42 42)"
+        />
+        )}
+      </svg>
+      <div className="ring-label">
+        <b>{Math.round(value * 100)}%</b>
+        <span>{label}</span>
+      </div>
+    </div>
   );
 }

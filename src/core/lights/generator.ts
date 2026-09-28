@@ -185,7 +185,7 @@ export function composeLightDrill(vessel: VesselState, rng: Rng): LightDrill {
 
   const question: Question = {
     id: `lgt-gen-${conceptFor(vessel)}-${aspectDeg}`,
-    topic: 'lights',
+    topic: 'colreg-c',
     concept: conceptFor(vessel),
     prompt: 'A clear night at sea. What are you looking at?',
     choices: texts.map((text, i) => ({ id: String.fromCharCode(97 + i), text })),
@@ -216,7 +216,7 @@ export function lightSources(): QuestionSource[] {
 
   return [...byConcept.entries()].map(([concept, variants]) => ({
     id: `gen-${concept}`,
-    topic: 'lights' as const,
+    topic: 'colreg-c' as const,
     concept,
     difficulty: 2 as const,
     generated: true,
