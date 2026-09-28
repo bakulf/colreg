@@ -43,6 +43,10 @@
   --accent: #6d3fb0;
 }
 
+.app[data-domain='tidal'] {
+  --accent: #0e7490;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -1340,6 +1344,10 @@ kbd {
   --tint: #6d3fb0;
 }
 
+.subject[data-domain='tidal'] {
+  --tint: #0e7490;
+}
+
 .subject:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--tint) 40%, var(--border));
@@ -1430,4 +1438,94 @@ kbd {
 .hero-link {
   display: inline-block;
   margin-top: 0.6rem;
+}
+
+/* --- tidal streams --- */
+
+.diamond {
+  margin: 0 auto 1rem;
+  max-width: 18rem;
+  padding: 0.5rem 0.7rem 0.6rem;
+  border-radius: 0.75rem;
+  background: #fbf8ef;
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
+.diamond table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.86rem;
+  text-align: center;
+}
+
+.diamond thead th {
+  font-weight: 700;
+  color: #7a3f9a;
+  padding: 0.2rem;
+}
+
+.diamond thead small {
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.diamond-mark {
+  margin-right: 0.15rem;
+}
+
+.diamond-sub th {
+  font-size: 0.72rem;
+  color: var(--muted) !important;
+  border-bottom: 1px solid var(--border);
+}
+
+.diamond tbody th {
+  color: var(--muted);
+  font-weight: 600;
+  padding: 0.12rem 0.3rem;
+}
+
+.diamond tbody td {
+  padding: 0.12rem 0.3rem;
+}
+
+.diamond tr.lit {
+  background: color-mix(in srgb, var(--warn) 25%, #fff);
+}
+
+.triangle-one {
+  max-width: 22rem;
+  margin: 0 auto 1rem;
+}
+
+.scene.triangle {
+  margin-bottom: 0.4rem;
+  box-shadow: inset 0 0 0 1px var(--border);
+  background: #f7fafc;
+}
+
+.triangle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.triangle-grid .scene.triangle {
+  margin-bottom: 0;
+}
+
+.triangle-pick {
+  margin-bottom: 1rem;
+}
+
+.triangle-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  justify-content: center;
+  margin: 0.45rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
 }

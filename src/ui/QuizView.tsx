@@ -60,7 +60,12 @@ export function QuizView({ session, onAnswer, onNext, onQuit }: Props) {
       </div>
 
       <div className="card">
-        {question.scene && <SceneView scene={question.scene} />}
+        {/* After answering, a worked solution replaces the question's picture. */}
+        {answered && question.afterScene ? (
+          <SceneView scene={question.afterScene} />
+        ) : (
+          question.scene && <SceneView scene={question.scene} />
+        )}
         <p className="prompt">{question.prompt}</p>
 
         <div className="choices">

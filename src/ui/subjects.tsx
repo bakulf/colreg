@@ -46,6 +46,17 @@ const icons: Record<Domain, ReactNode> = {
       <rect x="20" y="32" width="8" height="3" fill="#b4540a" />
     </svg>
   ),
+  // A vector triangle, with the stream's three arrows.
+  tidal: (
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <path d="M8 38 L38 10" stroke={INK} strokeWidth="2.4" />
+      <path d="M8 38 L20 40" stroke="#ffd08a" strokeWidth="2.4" />
+      <path d="M20 40 L38 10" stroke={INK} strokeWidth="2.4" opacity="0.7" />
+      <circle cx="8" cy="38" r="3.4" fill="none" stroke={INK} strokeWidth="1.8" />
+      <rect x="35" y="7" width="6" height="6" fill="none" stroke={INK} strokeWidth="1.8" />
+      <path d="M11 35 l2 -4 M14 33 l2 -4" stroke={INK} strokeWidth="1.6" />
+    </svg>
+  ),
   // A compass rose.
   compass: (
     <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -85,6 +96,13 @@ export const SUBJECTS: readonly Subject[] = [
     title: 'The magnetic compass',
     blurb: 'Variation, deviation, checks and types',
     icon: icons.compass,
+  },
+  {
+    domain: 'tidal',
+    hash: '#/streams',
+    title: 'Tidal streams',
+    blurb: 'Diamonds, course to steer, EP, races',
+    icon: icons.tidal,
   },
 ];
 

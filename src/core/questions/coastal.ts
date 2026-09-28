@@ -175,12 +175,12 @@ export const COASTAL_QUESTIONS: Question[] = [
     topic: 'coastal-notation',
     concept: 'coastal:notation:elevation-datum',
     difficulty: 2,
-    prompt: 'On an Admiralty chart a light is marked "Fl.10s 24m 20M". The 24 m is its elevation above:',
+    prompt: 'On an Admiralty chart a light is marked "Fl.10s24m20M". The 24m is its elevation above:',
     answer: 'Mean High Water Springs (MHWS)',
     distractors: ['Chart datum', 'Mean sea level', 'The ground on which the tower stands'],
     ruleRefs: ['Chart notation'],
     explanation:
-      'Heights of lights, like other heights on Admiralty charts, are above MHWS, so the figure is the least the light will be above the sea at almost any state of tide. It is not the height of the structure. Depths and drying heights use chart datum instead.',
+      'The elevation of the light’s focal plane above the chart’s height datum, which the notes under the title state — on Admiralty charts MHWS for lights, beacons and land. So it is about the least height above the sea the light will be. It is not the height of the structure. Depths and drying heights use chart datum; vertical clearances under bridges and cables, on new editions, use HAT.',
   }),
   mcq({
     id: 'cst-chart-range',
@@ -196,7 +196,7 @@ export const COASTAL_QUESTIONS: Question[] = [
     ],
     ruleRefs: ['Chart notation', 'IALA R0202'],
     explanation:
-      'Nominal range, as R0202 defines it. It says how bright the light is, nothing about your height of eye or tonight’s weather. To know when you will see it you work out both the luminous range for the visibility you have and the geographic range, and take the smaller.',
+      'Chart 5011: “Charted ranges are nominal ranges.” Nominal range, as R0202 defines it, says how bright the light is, nothing about your height of eye or tonight’s weather. To know when you will see it, work out the luminous range for the visibility you have and the geographic range, and take the smaller. Charts before 1971 printed the lesser of geographic range (for a 15-foot eye) and luminous range, and an old chart not yet corrected may still show it.',
   }),
   mcq({
     id: 'cst-chart-white',

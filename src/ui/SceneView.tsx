@@ -8,6 +8,7 @@ import { DistressScene } from './DistressScene.tsx';
 import { CoastalLightScene } from './CoastalLightScene.tsx';
 import { CompassRoseScene } from './CompassRoseScene.tsx';
 import { DeviationCardScene } from './DeviationCardScene.tsx';
+import { TidalDiamondScene, TidalPickScene, TidalTriangleScene } from './TidalScenes.tsx';
 
 /** Maps a scene, which is plain data from `core`, to the component that draws it. */
 export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean }) {
@@ -32,5 +33,11 @@ export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean 
       return <CompassRoseScene rose={scene.rose} compact={compact} />;
     case 'deviation-card':
       return <DeviationCardScene card={scene.card} compact={compact} />;
+    case 'tidal-diamond':
+      return <TidalDiamondScene diamond={scene.diamond} highlight={scene.highlight} />;
+    case 'tidal-triangle':
+      return <TidalTriangleScene diagram={scene.diagram} compact={compact} />;
+    case 'tidal-pick':
+      return <TidalPickScene diagrams={scene.diagrams} />;
   }
 }

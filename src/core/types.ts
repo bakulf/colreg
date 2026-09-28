@@ -11,13 +11,14 @@ import type { MarkKind } from './buoyage/model.ts';
 import type { Scenario } from './scenarios/model.ts';
 import type { Character } from './coastal/model.ts';
 import type { DeviationCard, RoseVariation } from './compass/model.ts';
+import type { Diamond, TriangleDiagram } from './tidal/model.ts';
 
 /**
  * The bodies of rules the app drills, kept apart: a session is drawn from one
  * of them and never mixes them. They are different documents with different
  * authorities, and the syllabus treats them separately.
  */
-export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass';
+export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass' | 'tidal';
 
 /**
  * COLREG topics follow the structure of the Convention itself — its Parts, with
@@ -26,7 +27,9 @@ export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass';
  * categories of the IALA Maritime Buoyage System. Lights on aids to
  * navigation follow the IALA recommendations that govern them: R0110 for their
  * rhythmic characters, R0202 for their range. The compass follows the items of
- * the RYA Coastal Skipper / Yachtmaster Offshore syllabus, section 2.
+ * the RYA Coastal Skipper / Yachtmaster Offshore syllabus, section 2, and tidal
+ * streams section 4 — with the estimated position of section 1, which is where
+ * the stream is allowed for after the event.
  */
 export type Topic =
   | 'colreg-a'
@@ -51,7 +54,11 @@ export type Topic =
   | 'compass-variation'
   | 'compass-deviation'
   | 'compass-checks'
-  | 'compass-types';
+  | 'compass-types'
+  | 'tidal-sources'
+  | 'tidal-cts'
+  | 'tidal-ep'
+  | 'tidal-hazards';
 
 export interface TopicInfo {
   domain: Domain;
@@ -186,6 +193,30 @@ export const TOPIC_INFO: Record<Topic, TopicInfo> = {
     title: 'Types of compass',
     span: 'Steering, hand-bearing, fluxgate, gyro',
   },
+  'tidal-sources': {
+    domain: 'tidal',
+    code: 'Info',
+    title: 'Tidal stream information',
+    span: 'Diamonds, atlases and almanacs; springs and neaps',
+  },
+  'tidal-cts': {
+    domain: 'tidal',
+    code: 'CTS',
+    title: 'Allowing for the stream: course to steer',
+    span: 'The triangle, one in sixty, leeway, speed over the ground',
+  },
+  'tidal-ep': {
+    domain: 'tidal',
+    code: 'EP',
+    title: 'Estimated position',
+    span: 'Syllabus 1: the stream and leeway allowed for after the event',
+  },
+  'tidal-hazards': {
+    domain: 'tidal',
+    code: 'Races',
+    title: 'Races, overfalls and seeing the stream',
+    span: 'Tide rips and races; tidal observation from buoys and beacons',
+  },
 };
 
 export const TOPICS: readonly Topic[] = Object.keys(TOPIC_INFO) as Topic[];
@@ -199,6 +230,7 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
   iala: 'IALA',
   coastal: 'Lights',
   compass: 'Compass',
+  tidal: 'Tidal streams',
 };
 
 /** 'Part B/III — Conduct of vessels in restricted visibility', 'Lateral marks'. */
@@ -268,6 +300,23 @@ export type Scene =
       /** The steering compass's deviation card. */
       type: 'deviation-card';
       card: DeviationCard;
+    }
+  | {
+      /** A chart's table of tidal stream rates for one diamond. */
+      type: 'tidal-diamond';
+      diamond: Diamond;
+      /** Row to pick out, hours from HW. */
+      highlight: number | undefined;
+    }
+  | {
+      /** A vector triangle, drawn with the conventional arrows. */
+      type: 'tidal-triangle';
+      diagram: TriangleDiagram;
+    }
+  | {
+      /** Four triangles, labelled A to D, to choose between. */
+      type: 'tidal-pick';
+      diagrams: TriangleDiagram[];
     };
 
 export interface Question {
@@ -290,6 +339,8 @@ export interface Question {
   difficulty: Difficulty;
   /** Optional picture the question is about. */
   scene?: Scene;
+  /** A picture shown only after answering: the worked solution. */
+  afterScene?: Scene;
 }
 
 /**

@@ -62,7 +62,9 @@ export function App() {
   const [length, setLength] = useState(20);
   // One session per domain, so moving to IALA mid-way through a COLREG paper
   // does not lose it — and a paper can never contain both.
-  const [sessions, setSessions] = useState<Sessions>({ colreg: null, iala: null, coastal: null, compass: null });
+  const [sessions, setSessions] = useState<Sessions>(
+    () => Object.fromEntries(SUBJECTS.map((s) => [s.domain, null])) as Sessions,
+  );
   const [deck, setDeck] = useState<Deck>(loadDeck);
   const [route, setRoute] = useState<Route>(readRoute);
   const [modal, setModal] = useState<string | null>(null);

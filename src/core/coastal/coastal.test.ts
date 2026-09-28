@@ -187,3 +187,20 @@ describe('coastal drills', () => {
     for (const s of sources) expect(s.generate(rng).concept, s.id).toBe(s.concept);
   });
 });
+
+describe('chart notation, as chart 5011 prints it', () => {
+  it('writes one, two and several ranges as P14 does', async () => {
+    const { rangeText } = await import('./generator.ts');
+    expect(rangeText([15])).toBe('15M');
+    expect(rangeText([15, 10])).toBe('15/10M');
+    expect(rangeText([15, 7, 10])).toBe('15-7M');
+    expect(rangeText([7, 5, 6])).toBe('7-5M');
+  });
+
+  it('prints the full description without spaces, as P16 does', () => {
+    for (const q of sample(decodeDrill, 100)) {
+      const line = q.prompt.split('\n\n')[1] ?? '';
+      expect(line, q.prompt).toMatch(/^\S+\d+m\d+(\/\d+|-\d+)?M$/);
+    }
+  });
+});

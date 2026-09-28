@@ -32,6 +32,8 @@ const FOOTNOTES: Record<Domain, string> = {
   iala: 'Marks follow IALA Recommendation R1001, The IALA Maritime Buoyage System (Ed. 2.0, 2023). No Admiralty chart data is used.',
   coastal:
     'Characters follow IALA Recommendation R0110 (Ed. 5.0, 2021); ranges IALA R0202 (Ed. 2.1, 2017). Lights and positions are invented; no Admiralty data is used.',
+  tidal:
+    'Topics follow sections 4 and 1 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Diamonds, ports and passages are invented for practice.',
   compass:
     'Topics follow section 2 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Variations and deviation cards are invented for practice; use the ones for your own chart and boat.',
 };
@@ -41,6 +43,7 @@ const HEADINGS: Record<Domain, string> = {
   iala: 'Mark categories',
   coastal: 'Topics',
   compass: 'Syllabus items',
+  tidal: 'Syllabus items',
 };
 
 const INTRO: Record<Domain, { title: string; sub: string }> = {
@@ -55,6 +58,10 @@ const INTRO: Record<Domain, { title: string; sub: string }> = {
   coastal: {
     title: 'Lights ashore',
     sub: 'Lighthouses, beacons and sector lights: their characters under IALA R0110, and how far they are seen under R0202.',
+  },
+  tidal: {
+    title: 'Tidal streams',
+    sub: 'Reading the diamonds, and allowing for the stream — without a plotter. Each step is a question you can answer in your head; the app draws the triangle once you have.',
   },
   compass: {
     title: 'The magnetic compass',

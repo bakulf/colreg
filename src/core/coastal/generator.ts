@@ -1,7 +1,7 @@
 import type { Question, QuestionSource, Rng } from '../types.ts';
 import { pick, shuffle } from '../rng.ts';
 import type { Character, LightColour } from './model.ts';
-import { CATALOGUE, characterId, looksSame, notation, spoken } from './model.ts';
+import { CATALOGUE, COLOUR_NAMES, characterId, looksSame, notation, spoken } from './model.ts';
 import {
   GEO_K,
   GEO_K_ALT,
@@ -151,8 +151,8 @@ interface ChartLight {
   character: Character;
   colours: LightColour[];
   elevationM: number;
-  /** Longest and shortest range, the same if one colour. */
-  ranges: [number, number];
+  /** Nominal range of each colour, in the order of `colours`. */
+  ranges: number[];
 }
 
 /** What lighthouses and sectored lights actually use; quick groups are for marks. */
@@ -163,9 +163,20 @@ const SECTORED: readonly Character[] = CATALOGUE.filter(
     ['Fl', 'Oc', 'Iso', 'LFl'].includes(c.cls),
 );
 
+/**
+ * As chart 5011 (P16) prints it, with no spaces: 'Fl(3)WRG.15s13m7-5M'. One
+ * range as '15M'; two different ranges as '15/10M', in the order of the
+ * colours; three or more as '15-7M', the greatest and the least only.
+ */
+export function rangeText(ranges: readonly number[]): string {
+  const distinct = [...new Set(ranges)];
+  if (distinct.length === 1) return `${distinct[0]}M`;
+  if (ranges.length === 2) return `${ranges[0]}/${ranges[1]}M`;
+  return `${Math.max(...ranges)}-${Math.min(...ranges)}M`;
+}
+
 function chartText(l: ChartLight): string {
-  const range = l.ranges[0] === l.ranges[1] ? `${l.ranges[0]}M` : `${l.ranges[0]}-${l.ranges[1]}M`;
-  return `${notation(l.character, l.colours)} ${l.elevationM}m ${range}`;
+  return `${notation(l.character, l.colours)}${l.elevationM}m${rangeText(l.ranges)}`;
 }
 
 function colourList(colours: readonly LightColour[]): string {
@@ -200,8 +211,19 @@ function buildChartLight(rng: Rng): ChartLight {
   const colours = pick<LightColour[]>([['W', 'R', 'G'], ['W', 'R'], ['W', 'G'], ['W']], rng);
   const elevationM = pick([9, 12, 15, 17, 21, 24, 28, 31, 36, 42, 55], rng);
   const high = pick([10, 12, 14, 15, 16, 18, 20, 22, 25], rng);
-  const low = colours.length === 1 ? high : high - pick([2, 3, 4, 5], rng);
-  return { character, colours, elevationM, ranges: [high, low] };
+  // White the strongest, as in 5011's own example (white 7, green 5, red
+  // between); with three colours one coloured sector is the least and the
+  // other lies between.
+  const low = high - pick([2, 3, 4, 5], rng);
+  const ranges =
+    colours.length === 1
+      ? [high]
+      : colours.length === 2
+        ? [high, low]
+        : rng.next() < 0.5
+          ? [high, low, low + 1]
+          : [high, low + 1, low];
+  return { character, colours, elevationM, ranges };
 }
 
 function decodeDrill(rng: Rng): Question {
@@ -211,26 +233,45 @@ function decodeDrill(rng: Rng): Question {
     l = buildChartLight(rng);
   }
   const c = l.character;
-  const multi = l.colours.length > 1;
-  const rangeRight = multi
-    ? `nominal range ${l.ranges[0]} M for the strongest colour, normally the white, down to ${l.ranges[1]} M for the weakest`
-    : `nominal range ${l.ranges[0]} M`;
-  const sectors = multi ? `${colourList(l.colours)} sectors` : 'white';
+  const n = l.colours.length;
+  const hi = Math.max(...l.ranges);
+  const lo = Math.min(...l.ranges);
+  const names = l.colours.map((x) => COLOUR_NAMES[x]);
+  const rangeRight =
+    n === 1
+      ? `nominal range ${hi} M`
+      : n === 2
+        ? `nominal range ${l.ranges[0]} M in the ${names[0]}, ${l.ranges[1]} M in the ${names[1]}`
+        : `nominal ranges from ${hi} M down to ${lo} M, depending on the sector’s colour`;
+  const sectors = n > 1 ? `${colourList(l.colours)} sectors` : 'white';
 
   const answer = `${cycleText(c)}; ${sectors}; ${l.elevationM} m above MHWS; ${rangeRight}`;
   const candidates = [
     // Elevation and range read the wrong way round.
-    `${cycleText(c)}; ${sectors}; ${l.ranges[0]} m above MHWS; nominal range ${l.elevationM} M`,
+    `${cycleText(c)}; ${sectors}; ${hi} m above MHWS; nominal range ${l.elevationM} M`,
     // Elevation taken from chart datum, as soundings are.
     `${cycleText(c)}; ${sectors}; ${l.elevationM} m above chart datum; ${rangeRight}`,
     // Range taken as luminous range for tonight rather than nominal.
-    `${cycleText(c)}; ${sectors}; ${l.elevationM} m above MHWS; visible tonight at ${l.ranges[0]} M whatever the visibility`,
+    `${cycleText(c)}; ${sectors}; ${l.elevationM} m above MHWS; visible tonight at ${hi} M whatever the visibility`,
   ];
-  if (multi) {
+  if (n === 2) {
+    // The two ranges given to the wrong colours.
     candidates.push(
-      `${cycleText(c)}; ${sectors}; ${l.elevationM} m above MHWS; the white reaches only ${l.ranges[1]} M and the coloured sectors ${l.ranges[0]} M`,
+      `${cycleText(c)}; ${sectors}; ${l.elevationM} m above MHWS; nominal range ${l.ranges[1]} M in the ${names[0]}, ${l.ranges[0]} M in the ${names[1]}`,
     );
   }
+  if (n === 3) {
+    // The span read as a change with the weather.
+    candidates.push(
+      `${cycleText(c)}; ${sectors}; ${l.elevationM} m above MHWS; nominal range ${hi} M, falling to ${lo} M in poor visibility`,
+    );
+  }
+  const rangeNote =
+    n === 2
+      ? ' Two different ranges are written with a stroke, in the order of the colours.'
+      : n === 3
+        ? ' Three or more ranges are written with a dash, giving only the greatest and the least; the list of lights has each one.'
+        : '';
   return mcq(
     `cst-decode-${chartText(l)}`,
     'coastal-notation',
@@ -239,11 +280,9 @@ function decodeDrill(rng: Rng): Question {
     answer,
     shuffle(candidates, rng).slice(0, 3),
     ['Chart notation', 'IALA R0202'],
-    `Character first (${notation(c, l.colours)}: ${cycleText(c)}${
-      multi ? `, showing ${colourList(l.colours)} in different sectors` : ', and white because no colour is given'
-    }), then the elevation — on Admiralty charts measured above MHWS, not chart datum, so it is the least height the light will be — then the range. Admiralty charts print the nominal range, the luminous range in a meteorological visibility of 10 miles (IALA R0202); on a clearer or murkier night it carries further or less far, and the earth's curve may hide it sooner.${
-      multi ? ' With two ranges, coloured glass absorbs light, so the white normally carries furthest.' : ''
-    }`,
+    `Read it in order. Character: ${notation(c, l.colours)}, ${cycleText(c)}${
+      n > 1 ? `, showing ${colourList(l.colours)} in different sectors` : ', white because no colour is given'
+    }. Elevation: ${l.elevationM}m, the height of the light above the chart’s height datum — MHWS on Admiralty charts — not above chart datum, so about the least height the light will be. Range: ${rangeText(l.ranges)}; Admiralty charts print nominal ranges (chart 5011), the luminous range in a meteorological visibility of 10 miles (IALA R0202), so on a clearer or murkier night the light carries further or less far, and the earth’s curve may hide it sooner.${rangeNote}`,
     2,
   );
 }
@@ -379,7 +418,7 @@ function risingDrill(rng: Rng): Question {
       `cst-rise-${H}-${h}-${nominal}`,
       'coastal-range',
       'coastal:range:rising',
-      `A lighthouse is charted as Fl(2)10s ${H}m ${nominal}M. Visibility is good, about 10 miles. Your height of eye is ${h} m. At what distance off should it rise above the horizon?`,
+      `A lighthouse is charted as Fl(2)10s${H}m${nominal}M. Visibility is good, about 10 miles. Your height of eye is ${h} m. At what distance off should it rise above the horizon?`,
       fmt(geo),
       wrong.map(fmt),
       ['Horizon geometry', 'IALA R0202'],
@@ -401,7 +440,7 @@ function noRiseDrill(rng: Rng): Question {
       `cst-norise-${H}-${h}-${nominal}`,
       'coastal-range',
       'coastal:range:no-rising',
-      `A light is charted as Oc.4s ${H}m ${nominal}M. Visibility is about 10 miles, height of eye ${h} m. What happens as you approach from seaward?`,
+      `A light is charted as Oc.4s${H}m${nominal}M. Visibility is about 10 miles, height of eye ${h} m. What happens as you approach from seaward?`,
       answer,
       [
         `It rises above the horizon at ${fmt(geo)}`,
@@ -465,7 +504,7 @@ function firstSightDrill(rng: Rng): Question {
       `cst-first-${H}-${h}-${nominal}-${vis}`,
       'coastal-range',
       'coastal:range:first-sighting',
-      `A light is charted as Fl.5s ${H}m ${nominal}M. Height of eye ${h} m; meteorological visibility ${vis} miles. At about what distance will you first see it?`,
+      `A light is charted as Fl.5s${H}m${nominal}M. Height of eye ${h} m; meteorological visibility ${vis} miles. At about what distance will you first see it?`,
       fmt(first),
       wrong.map(fmt),
       ['Horizon geometry', 'IALA R0202'],

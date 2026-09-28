@@ -181,3 +181,21 @@ describe('compass renderers', () => {
     for (const h of ['000°C', '090°C', '180°C', '330°C']) expect(card).toContain(h);
   });
 });
+
+describe('tidal renderers', () => {
+  it('draws the table, a triangle and a pick of four', async () => {
+    const { TidalDiamondScene, TidalTriangleScene, TidalPickScene } = await import('./TidalScenes.tsx');
+    const { makeDiamond, ctsDiagram, epDiagram, fromPolar } = await import('../core/tidal/model.ts');
+    const d = makeDiamond('C', 'Portmoor', 70, 2.6, 0);
+    const table = renderToStaticMarkup(<TidalDiamondScene diamond={d} highlight={2} />);
+    expect(table).toContain('HW Portmoor');
+    expect(table).toContain('class="lit"');
+    const stream = fromPolar(150, 1.4);
+    const tri = renderToStaticMarkup(<TidalTriangleScene diagram={ctsDiagram(40, 8, 6, stream)} />);
+    expect(tri).toContain('<svg');
+    const pick = renderToStaticMarkup(
+      <TidalPickScene diagrams={[ctsDiagram(40, 8, 6, stream), epDiagram(40, 6, stream), ctsDiagram(40, 8, 6, stream), epDiagram(40, 6, stream)]} />,
+    );
+    expect(pick.match(/<svg/g)).toHaveLength(4);
+  });
+});

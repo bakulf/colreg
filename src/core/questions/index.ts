@@ -9,6 +9,8 @@ import { COASTAL_QUESTIONS } from './coastal.ts';
 import { coastalSources } from '../coastal/generator.ts';
 import { COMPASS_QUESTIONS } from './compass.ts';
 import { compassSources } from '../compass/generator.ts';
+import { TIDAL_QUESTIONS } from './tidal.ts';
+import { tidalSources } from '../tidal/generator.ts';
 import { lightSources } from '../lights/generator.ts';
 import { shapeSources } from '../shapes/generator.ts';
 import { buoyageSources } from '../buoyage/generator.ts';
@@ -25,6 +27,7 @@ export const ALL_QUESTIONS: readonly Question[] = [
   ...BUOYAGE_QUESTIONS,
   ...COASTAL_QUESTIONS,
   ...COMPASS_QUESTIONS,
+  ...TIDAL_QUESTIONS,
 ];
 
 /**
@@ -44,6 +47,7 @@ export const ALL_SOURCES: readonly QuestionSource[] = [
   ...ruleIndexSources(),
   ...coastalSources(),
   ...compassSources(),
+  ...tidalSources(),
 ];
 
 export function sourcesForTopics(topics: readonly Topic[]): QuestionSource[] {

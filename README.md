@@ -2,16 +2,17 @@
 
 A drill app for the collision regulations, built to prepare for the RYA
 Yachtmaster Shorebased instructor exam. Covers IRPCS (COLREGs), IALA buoyage in
-Regions A and B, lights ashore, and the magnetic compass.
+Regions A and B, lights ashore, the magnetic compass, and tidal streams.
 
 ## Separate sections, never mixed
 
 The home page has one tile per subject — COLREG, IALA buoyage, lights ashore,
-the magnetic compass — each showing how much of it you would recall now and
+the magnetic compass, tidal streams — each showing how much of it you would recall now and
 what is due. Each subject is its own section with its own topics, its own
 session and its own progress summary, and a paper is drawn from one of them
 only. The list lives in `src/ui/subjects.tsx`; adding a subject there adds its
-tile and its route (`#/colreg`, `#/iala`, `#/lights`, `#/compass`).
+tile and its route (`#/colreg`, `#/iala`, `#/lights`, `#/compass`,
+`#/streams`).
 
 COLREG is divided the way the Convention divides itself: Part A (General),
 Part B in its three Sections — I, any condition of visibility; II, vessels in
@@ -39,8 +40,10 @@ that govern them:
   it. Drills flash the light at true speed and ask for the chart notation;
   distractors are recoloured to the answer's colour, so the rhythm is the
   question.
-- **Reading the chart** — what `Fl(3)WRG.15s 21m 18-14M` says, and sector
-  limits as true bearings from seaward.
+- **Reading the chart** — what `Fl(3)WRG.15s21m18-14M` says, written as
+  chart 5011 prints it (two ranges `18/14M` in the order of the colours, three
+  or more `18-14M`, greatest and least), and sector limits as true bearings
+  from seaward.
 - **Range** — IALA R0202 (E-200-2, Ed. 2.1, December 2017): nominal range is
   the luminous range in 10 miles visibility, and luminous range for any other
   visibility comes from Allard's law, as R0202 prescribes. Geographic range is
@@ -64,6 +67,28 @@ deviation applied to a hand-bearing compass. `compass.test.ts` re-reads every
 generated prompt and recomputes its answer independently.
 
 Roses and cards are invented for practice.
+
+### Tidal streams, without a plotter
+
+Divided by the items of section 4 of the syllabus — tidal stream information,
+allowing for streams in a course to steer, races and overfalls, observing the
+stream — with the estimated position of section 1, which is the same triangle
+worked after the event.
+
+On a phone there is no chart and no plotter, so the chartwork is split into
+the steps an examiner checks, and each is a question for the head: which row
+of the diamond applies, the rate interpolated by range (round ranges, simple
+fractions), which way and how far to steer up-tide by the one-in-sixty rule
+(streams straight across the track, at rates that give whole degrees), leeway
+into the wind, then variation; arrival times with a fair or foul stream; the
+EP as the stream's drift from the DR. One drill shows four triangles and asks
+which is built right — the construction itself, which is what the examiner
+looks at. After answering, the app draws the exact triangle with the
+conventional arrows (one for the water track, two ground, three stream), and
+the tests check that the mental answer and the exact solution agree within a
+degree.
+
+Diamonds, ports and passages are invented.
 
 The IALA recommendations are published at
 [github.com/IALAPublications/Recommendations](https://github.com/IALAPublications/Recommendations).
@@ -139,6 +164,7 @@ src/core/          pure TypeScript — no React, no DOM
   topics.ts        which Part a citation belongs to, which category a mark
   coastal/         lights ashore: R0110 characters, R0202 and geographic range, drills
   compass/         variation, deviation cards, conversions, and their drills
+  tidal/           diamonds, rates, the vector triangle, CTS and EP, and their drills
   rng.ts           seeded RNG, so a session is reproducible from its seed
   rules.ts         index of IRPCS Rules 1–41
   regs/            the full text of Rules 1–41 and Annexes I–IV, and citation parsing
@@ -262,7 +288,7 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M13** — IALA Region B: reversed lateral and preferred channel marks, by day and by night
 - [x] **M14** — home page with a tile per subject
 - [x] **M15** — the magnetic compass: variation, deviation card, checks, types
-- [ ] Tidal streams: course to steer, estimated position, set, drift and leeway
+- [x] **M16** — tidal streams: diamonds, rates by range, course to steer by one in sixty, leeway, EP, triangles
 - [ ] Tides: heights, secondary ports, clearances
 - [ ] Meteorology
 
