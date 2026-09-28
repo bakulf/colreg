@@ -38,8 +38,9 @@ describe('topics', () => {
           return false;
         }
       },
-      iala: (ref) => /^IALA( Region)?( A)?$/.test(ref),
+      iala: (ref) => /^IALA( Region [AB])?$|^IALA A$/.test(ref),
       coastal: (ref) => /^IALA R0(110|202)$|^Chart notation$|^Horizon geometry$/.test(ref),
+      compass: (ref) => ref === 'Compass',
     };
     for (const { source, question } of samples) {
       const domain = TOPIC_INFO[source.topic].domain;

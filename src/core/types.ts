@@ -10,13 +10,14 @@ import type { VesselState } from './lights/model.ts';
 import type { MarkKind } from './buoyage/model.ts';
 import type { Scenario } from './scenarios/model.ts';
 import type { Character } from './coastal/model.ts';
+import type { DeviationCard, RoseVariation } from './compass/model.ts';
 
 /**
  * The bodies of rules the app drills, kept apart: a session is drawn from one
  * of them and never mixes them. They are different documents with different
  * authorities, and the syllabus treats them separately.
  */
-export type Domain = 'colreg' | 'iala' | 'coastal';
+export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass';
 
 /**
  * COLREG topics follow the structure of the Convention itself — its Parts, with
@@ -24,7 +25,8 @@ export type Domain = 'colreg' | 'iala' | 'coastal';
  * "the rules in this Part", never a grouping of our own. IALA topics follow the
  * categories of the IALA Maritime Buoyage System. Lights on aids to
  * navigation follow the IALA recommendations that govern them: R0110 for their
- * rhythmic characters, R0202 for their range.
+ * rhythmic characters, R0202 for their range. The compass follows the items of
+ * the RYA Coastal Skipper / Yachtmaster Offshore syllabus, section 2.
  */
 export type Topic =
   | 'colreg-a'
@@ -37,6 +39,7 @@ export type Topic =
   | 'colreg-f'
   | 'colreg-annexes'
   | 'iala-lateral'
+  | 'iala-lateral-b'
   | 'iala-cardinal'
   | 'iala-isolated-danger'
   | 'iala-safe-water'
@@ -44,7 +47,11 @@ export type Topic =
   | 'iala-wreck'
   | 'coastal-characters'
   | 'coastal-notation'
-  | 'coastal-range';
+  | 'coastal-range'
+  | 'compass-variation'
+  | 'compass-deviation'
+  | 'compass-checks'
+  | 'compass-types';
 
 export interface TopicInfo {
   domain: Domain;
@@ -97,9 +104,15 @@ export const TOPIC_INFO: Record<Topic, TopicInfo> = {
   },
   'iala-lateral': {
     domain: 'iala',
-    code: 'Lateral',
-    title: 'Lateral marks',
-    span: 'Port, starboard, preferred channel',
+    code: 'Lateral A',
+    title: 'Lateral marks — Region A',
+    span: 'Red to port, green to starboard',
+  },
+  'iala-lateral-b': {
+    domain: 'iala',
+    code: 'Lateral B',
+    title: 'Lateral marks — Region B',
+    span: 'Green to port, red to starboard',
   },
   'iala-cardinal': {
     domain: 'iala',
@@ -149,6 +162,30 @@ export const TOPIC_INFO: Record<Topic, TopicInfo> = {
     title: 'Range',
     span: 'Nominal, luminous and geographic; rising and dipping',
   },
+  'compass-variation': {
+    domain: 'compass',
+    code: 'Var',
+    title: 'Variation',
+    span: 'Allowing for it; its change with time and position',
+  },
+  'compass-deviation': {
+    domain: 'compass',
+    code: 'Dev',
+    title: 'Deviation',
+    span: 'Its causes; allowing for it with a deviation card',
+  },
+  'compass-checks': {
+    domain: 'compass',
+    code: 'Check',
+    title: 'Checking for deviation',
+    span: 'Transits and comparison — checks, not correction',
+  },
+  'compass-types': {
+    domain: 'compass',
+    code: 'Types',
+    title: 'Types of compass',
+    span: 'Steering, hand-bearing, fluxgate, gyro',
+  },
 };
 
 export const TOPICS: readonly Topic[] = Object.keys(TOPIC_INFO) as Topic[];
@@ -159,8 +196,9 @@ export function topicsOf(domain: Domain): Topic[] {
 
 export const DOMAIN_LABELS: Record<Domain, string> = {
   colreg: 'COLREG',
-  iala: 'IALA A',
+  iala: 'IALA',
   coastal: 'Lights',
+  compass: 'Compass',
 };
 
 /** 'Part B/III — Conduct of vessels in restricted visibility', 'Lateral marks'. */
@@ -220,6 +258,16 @@ export type Scene =
       /** A light ashore at night, showing its character in real time. */
       type: 'coastal';
       character: Character;
+    }
+  | {
+      /** A chart's compass rose, with its variation printed as on the chart. */
+      type: 'compass-rose';
+      rose: RoseVariation;
+    }
+  | {
+      /** The steering compass's deviation card. */
+      type: 'deviation-card';
+      card: DeviationCard;
     };
 
 export interface Question {

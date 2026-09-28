@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { Domain, Topic } from './core/types.ts';
-import { DOMAIN_LABELS, TOPICS } from './core/types.ts';
+import { TOPICS } from './core/types.ts';
 import type { QuizSession } from './core/quiz.ts';
 import {
   advance,
@@ -21,28 +21,30 @@ import { RegsView } from './ui/RegsView.tsx';
 import { RegModal } from './ui/RegModal.tsx';
 import { OpenRefProvider } from './ui/RegText.tsx';
 import { subscribeToUpdate } from './pwa.ts';
+import { SUBJECTS, subjectOf } from './ui/subjects.tsx';
+import { SubjectsView } from './ui/SubjectsView.tsx';
 
 export type Mode = 'practice' | 'review';
 
 /**
  * Where you are, kept in the URL hash so the back button works on a phone and
- * a rule can be linked to: nothing for COLREG, '#/iala', '#/lights', '#/regs' or
- * '#/regs/r17-a-ii'.
+ * a rule can be linked to: nothing for the home page, '#/colreg', '#/iala',
+ * '#/lights', '#/compass', '#/regs' or '#/regs/r17-a-ii'.
  */
-type Route = { view: Domain } | { view: 'regs'; anchor: string | undefined };
+type Route = { view: 'home' } | { view: Domain } | { view: 'regs'; anchor: string | undefined };
 
 function readRoute(): Route {
   const hash = window.location.hash;
-  if (hash === '#/iala') return { view: 'iala' };
-  if (hash === '#/lights') return { view: 'coastal' };
+  const subject = SUBJECTS.find((s) => s.hash === hash);
+  if (subject) return { view: subject.domain };
   const m = /^#\/regs(?:\/([a-z0-9-]+))?$/.exec(hash);
-  return m ? { view: 'regs', anchor: m[1] } : { view: 'colreg' };
+  return m ? { view: 'regs', anchor: m[1] } : { view: 'home' };
 }
 
 function hashOf(route: Route): string {
+  if (route.view === 'home') return '';
   if (route.view === 'regs') return `#/regs${route.anchor ? `/${route.anchor}` : ''}`;
-  if (route.view === 'iala') return '#/iala';
-  return route.view === 'coastal' ? '#/lights' : '';
+  return subjectOf(route.view).hash;
 }
 
 function go(route: Route) {
@@ -60,7 +62,7 @@ export function App() {
   const [length, setLength] = useState(20);
   // One session per domain, so moving to IALA mid-way through a COLREG paper
   // does not lose it — and a paper can never contain both.
-  const [sessions, setSessions] = useState<Sessions>({ colreg: null, iala: null, coastal: null });
+  const [sessions, setSessions] = useState<Sessions>({ colreg: null, iala: null, coastal: null, compass: null });
   const [deck, setDeck] = useState<Deck>(loadDeck);
   const [route, setRoute] = useState<Route>(readRoute);
   const [modal, setModal] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export function App() {
 
   useEffect(() => subscribeToUpdate((apply) => setUpdate(apply ? { apply } : null)), []);
 
-  const domain: Domain | null = route.view === 'regs' ? null : route.view;
+  const domain: Domain | null = route.view === 'regs' || route.view === 'home' ? null : route.view;
   const session = domain ? sessions[domain] : null;
 
   useEffect(() => {
@@ -199,6 +201,11 @@ export function App() {
     return true;
   }, []);
 
+  const conceptsOf = useCallback(
+    (d: Domain) => [...new Set(sourcesForDomain(d, topics).map((s) => s.concept))],
+    [topics],
+  );
+
   const showingResults = session !== null && isFinished(session);
   const inQuiz = (d: Domain) => {
     const s = sessions[d];
@@ -206,40 +213,43 @@ export function App() {
   };
 
   return (
-    <div className="app" data-domain={domain ?? 'colreg'}>
+    <div className="app" data-domain={domain ?? (route.view === 'regs' ? 'colreg' : 'home')}>
       <header className="masthead">
         <div className="masthead-inner">
-          <div className="brand">
+          <button type="button" className="brand" onClick={() => go({ view: 'home' })}>
             <Burgee />
             <div>
               <h1>COLREG</h1>
               <span className="sub">Yachtmaster rules trainer</span>
             </div>
-          </div>
-          <nav className="tabs" aria-label="Sections">
-            {(['colreg', 'iala', 'coastal'] as const).map((d) => (
+          </button>
+          {route.view !== 'home' && (
+            <nav className="crumbs" aria-label="Where you are">
               <button
-                key={d}
                 type="button"
-                aria-pressed={route.view === d}
-                onClick={() => go({ view: d })}
+                onClick={() => go(route.view === 'regs' ? { view: 'colreg' } : { view: 'home' })}
               >
-                {DOMAIN_LABELS[d]}
-                {inQuiz(d) && <span className="live" aria-label="(quiz in progress)" />}
+                ‹ {route.view === 'regs' ? 'Collision Regulations' : 'All subjects'}
               </button>
-            ))}
-            <button
-              type="button"
-              aria-pressed={route.view === 'regs'}
-              onClick={() => go({ view: 'regs', anchor: undefined })}
-            >
-              COLREG text
-            </button>
-          </nav>
+              <span className="here">
+                {route.view === 'regs' ? 'COLREG text' : subjectOf(route.view).title}
+              </span>
+            </nav>
+          )}
         </div>
       </header>
 
       <main className="page">
+        {route.view === 'home' && (
+          <SubjectsView
+            deck={deck}
+            conceptsOf={conceptsOf}
+            inQuiz={inQuiz}
+            onOpen={(d) => go({ view: d })}
+            onOpenText={() => go({ view: 'regs', anchor: undefined })}
+          />
+        )}
+
         {route.view === 'regs' && (
           <RegsView anchor={route.anchor} onGo={(anchor) => go({ view: 'regs', anchor })} />
         )}
@@ -261,6 +271,9 @@ export function App() {
                 onReset={onReset}
                 onExport={onExport}
                 onImport={onImport}
+                onOpenText={
+                  domain === 'colreg' ? () => go({ view: 'regs', anchor: undefined }) : undefined
+                }
               />
             )}
 

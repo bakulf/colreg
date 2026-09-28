@@ -7,6 +7,8 @@ import { SOUND_QUESTIONS } from './sound.ts';
 import { BUOYAGE_QUESTIONS } from './buoyage.ts';
 import { COASTAL_QUESTIONS } from './coastal.ts';
 import { coastalSources } from '../coastal/generator.ts';
+import { COMPASS_QUESTIONS } from './compass.ts';
+import { compassSources } from '../compass/generator.ts';
 import { lightSources } from '../lights/generator.ts';
 import { shapeSources } from '../shapes/generator.ts';
 import { buoyageSources } from '../buoyage/generator.ts';
@@ -22,6 +24,7 @@ export const ALL_QUESTIONS: readonly Question[] = [
   ...SOUND_QUESTIONS,
   ...BUOYAGE_QUESTIONS,
   ...COASTAL_QUESTIONS,
+  ...COMPASS_QUESTIONS,
 ];
 
 /**
@@ -40,6 +43,7 @@ export const ALL_SOURCES: readonly QuestionSource[] = [
   ...distressSources(),
   ...ruleIndexSources(),
   ...coastalSources(),
+  ...compassSources(),
 ];
 
 export function sourcesForTopics(topics: readonly Topic[]): QuestionSource[] {

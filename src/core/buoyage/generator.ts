@@ -5,6 +5,8 @@ import type { MarkKind } from './model.ts';
 import {
   ALL_MARKS,
   conceptFor,
+  inRegion,
+  regionOf,
   describeAction,
   describeBody,
   describeMark,
@@ -20,14 +22,20 @@ import {
  * rhythm. Watching it flash does, and counting six against nine under time
  * pressure is exactly the skill.
  *
- * No two marks in Region A share a body or a character, so unlike Part C there
- * is no shared-answer problem here — every picture has exactly one mark.
+ * No two marks in one region share a body or a character, so unlike Part C
+ * there is no shared-answer problem here — every picture has exactly one mark.
+ * Across regions they do: a red can is port-hand in A and does not exist in B,
+ * a red flash is port in A and starboard in B. So a lateral drill names its
+ * region, and its distractors are drawn from that region only.
  */
 
 export type BuoyMode = 'day' | 'night';
 
 function distractorsFor(kind: MarkKind, mode: BuoyMode, rng: Rng): MarkKind[] {
-  const others = ALL_MARKS.map((m) => m.kind).filter((k) => k !== kind);
+  const region = regionOf(kind) ?? 'A';
+  const others = ALL_MARKS.map((m) => m.kind).filter(
+    (k) => k !== kind && inRegion(k, region),
+  );
 
   // Prefer the marks a student actually confuses: by day the other cardinals
   // and anything with a similar topmark; by night anything with the same
@@ -68,6 +76,8 @@ export function composeBuoyDrill(kind: MarkKind, mode: BuoyMode, rng: Rng): Buoy
   const mark = markAt(kind);
   const distractors = distractorsFor(kind, mode, rng);
   const texts = [describeMark(kind), ...distractors.map(describeMark)];
+  const region = regionOf(kind);
+  const where = region ? `Region ${region}. ` : '';
 
   const question: Question = {
     id: `buo-gen-${mode}-${kind}`,
@@ -75,15 +85,16 @@ export function composeBuoyDrill(kind: MarkKind, mode: BuoyMode, rng: Rng): Buoy
     concept: conceptFor(kind, mode),
     prompt:
       mode === 'night'
-        ? 'Night. You can see nothing of the buoy but its light. Watch a full cycle — some run to ten seconds — then say what it is.'
-        : 'Daylight. What mark is this?',
+        ? `${where}Night. You can see nothing of the buoy but its light. Watch a full cycle — some run to ten seconds — then say what it is.`
+        : `${where}Daylight. What mark is this?`,
     choices: texts.map((text, i) => ({ id: String.fromCharCode(97 + i), text })),
     correct: 'a',
-    ruleRefs: ['IALA Region A'],
+    // Shared marks are the same in both regions, so they cite the system.
+    ruleRefs: [region ? `IALA Region ${region}` : 'IALA'],
     explanation:
       (mode === 'night'
         ? `${mark.light.label} — ${mark.light.spoken}. By day she is ${describeBody(kind)}, with ${describeTopmark(kind)}. ${describeAction(kind)}`
-        : `${describeBody(kind)}, with ${describeTopmark(kind)}. Her light is ${mark.light.label}, ${mark.light.spoken}. ${describeAction(kind)}`) +
+        : `${capitalise(describeBody(kind))}, with ${describeTopmark(kind)}. Her light is ${mark.light.label}, ${mark.light.spoken}. ${describeAction(kind)}`) +
       noteFor(kind, mode),
     difficulty: mode === 'night' ? 3 : 2,
     scene: { type: 'buoy', kind, mode },
@@ -92,10 +103,17 @@ export function composeBuoyDrill(kind: MarkKind, mode: BuoyMode, rng: Rng): Buoy
   return { question, kind, mode, distractors };
 }
 
+function capitalise(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 /** The facts about a mark that the description alone does not carry. */
 function noteFor(kind: MarkKind, mode: BuoyMode): string {
   if (kind.startsWith('cardinal') && mode === 'night') {
     return ' East three, south six, west nine, north continuous, as on a clock face. The long flash after the south group only stops six being miscounted as nine; it carries no meaning of its own.';
+  }
+  if (regionOf(kind) === 'B') {
+    return ' Region B reverses the lateral colours and keeps the shapes: green to port, red to starboard — "red right returning" — but still a can to port and a cone to starboard.';
   }
   if (kind.startsWith('preferred')) {
     return ' The body tells you what to do; the band tells you where the main channel goes. The 2+1 rhythm is the giveaway: no plain lateral mark uses composite group flashing.';

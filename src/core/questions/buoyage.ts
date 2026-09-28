@@ -154,4 +154,68 @@ export const BUOYAGE_QUESTIONS: Question[] = [
     explanation:
       'Introduced after the Tricolor collisions in the Dover Strait in 2002. The light alternates blue and yellow, one second each with a half-second interval, and the buoy stays in place until the wreck is charted and conventionally marked.',
   }),
+  mcq({
+    id: 'buo-region-b-where',
+    topic: 'iala-lateral-b',
+    concept: 'iala-b:where',
+    difficulty: 1,
+    prompt: 'Where is IALA Region B in use?',
+    answer: 'North, Central and South America, Japan, the Republic of Korea and the Philippines',
+    distractors: [
+      'Europe, Africa and Australia',
+      'The whole of Asia and the Pacific',
+      'The southern hemisphere',
+    ],
+    ruleRefs: ['IALA Region B'],
+    explanation:
+      'IALA R1001: the rules for System B were drawn up for North, Central and South America, Japan, the Republic of Korea and the Philippines, and the 1980 conference combined A and B into one system with two regions. Region A covers Europe, Africa, Australia, New Zealand, the Gulf and most of Asia. The exact boundaries are on the chart and in the Admiralty List of Lights.',
+  }),
+  mcq({
+    id: 'buo-region-b-stbd',
+    topic: 'iala-lateral-b',
+    concept: 'iala-b:starboard-hand',
+    difficulty: 1,
+    prompt: 'In IALA Region B, a starboard-hand lateral mark is:',
+    answer: 'Red, conical, with a red light if lit',
+    distractors: [
+      'Green, conical, with a green light if lit',
+      'Red, can shaped, with a red light if lit',
+      'Green, can shaped, with a white light if lit',
+    ],
+    ruleRefs: ['IALA Region B'],
+    explanation:
+      'R1001 Table 2: in Region B the colours are reversed — red to starboard, green to port — and the shapes are not: a cone is still starboard-hand and a can still port-hand. The American mnemonic is "red right returning": returning from seaward, keep the red marks on your right.',
+  }),
+  mcq({
+    id: 'buo-region-b-same',
+    topic: 'iala-lateral-b',
+    concept: 'iala-b:what-changes',
+    difficulty: 2,
+    prompt: 'Sailing from Region A into Region B, what changes in the buoyage?',
+    answer: 'Only the colours of the lateral and preferred channel marks, and of their lights',
+    distractors: [
+      'The lateral colours, and the cardinal marks are reversed too',
+      'The shapes of the lateral marks: cans become starboard-hand',
+      'The lateral colours, and safe water marks become green and white',
+    ],
+    ruleRefs: ['IALA Region B'],
+    explanation:
+      'R1001: "The Cardinal marks in Region A and Region B, and their use, are the same", and so are isolated danger, safe water, special and emergency wreck marks. Shapes and topmark shapes of lateral marks do not change either: a can is port-hand in both regions. Only red and green swap sides.',
+  }),
+  mcq({
+    id: 'buo-region-b-preferred',
+    topic: 'iala-lateral-b',
+    concept: 'iala-b:preferred-channel',
+    difficulty: 3,
+    prompt: 'In Region B you see a green can buoy with one broad red horizontal band, showing Fl(2+1)G. What is it, and which side do you leave it?',
+    answer: 'A preferred channel to starboard mark — leave it to port; the main channel lies to starboard',
+    distractors: [
+      'A preferred channel to port mark — leave it to starboard',
+      'A port-hand mark that has been repainted — leave it to starboard',
+      'An isolated danger mark — keep well clear on either side',
+    ],
+    ruleRefs: ['IALA Region B'],
+    explanation:
+      'R1001 Table 4. The body decides what you do: a green can is a Region B port-hand mark, so leave it to port. The band decides where the main channel goes: red, the starboard-hand colour in Region B, so the preferred channel is to starboard of it. The same buoy in Region A colours would be red with a green band.',
+  }),
 ];

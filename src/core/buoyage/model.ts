@@ -1,15 +1,21 @@
 /**
- * IALA Maritime Buoyage System, Region A.
+ * The IALA Maritime Buoyage System, as IALA Recommendation R1001 (Ed. 2.0,
+ * June 2023) describes it.
  *
  * A mark is described by what it is made of — body shape, colour pattern,
  * topmark, light character — and the drills are derived from that, so the
  * picture and the answer cannot drift apart.
  *
- * Region A is the system in force in UK and European waters and the one the
- * RYA syllabus examines. Region B reverses the lateral colours and keeps the
- * shapes; that difference is covered by a written question rather than by a
- * second set of marks.
+ * There are two regions, and they differ only in the lateral marks: Region A
+ * (Europe, Africa, Australia, most of Asia) puts red to port and green to
+ * starboard; Region B (the Americas, Japan, Korea, the Philippines) reverses
+ * the colours and keeps the shapes — can to port, cone to starboard, in both.
+ * Cardinal, isolated danger, safe water, special and wreck marks are the same
+ * everywhere. So the lateral and preferred channel marks exist once per
+ * region, and every other mark once.
  */
+
+export type Region = 'A' | 'B';
 
 export type BuoyColour = 'red' | 'green' | 'yellow' | 'black' | 'white' | 'blue';
 
@@ -54,6 +60,10 @@ export type MarkKind =
   | 'lateral-stbd'
   | 'preferred-stbd'
   | 'preferred-port'
+  | 'lateral-port-b'
+  | 'lateral-stbd-b'
+  | 'preferred-stbd-b'
+  | 'preferred-port-b'
   | 'cardinal-n'
   | 'cardinal-e'
   | 'cardinal-s'
@@ -190,6 +200,54 @@ export const MARKS: Record<MarkKind, Mark> = {
       10000,
     ),
   },
+  'lateral-port-b': {
+    kind: 'lateral-port-b',
+    shape: 'can',
+    body: { type: 'horizontal', colours: ['green'] },
+    topmark: 'can',
+    topmarkColour: 'green',
+    light: flashes('Fl.G.5s', 'one green flash every five seconds', 'green', [0], 500, 5000),
+  },
+  'lateral-stbd-b': {
+    kind: 'lateral-stbd-b',
+    shape: 'conical',
+    body: { type: 'horizontal', colours: ['red'] },
+    topmark: 'cone-up',
+    topmarkColour: 'red',
+    light: flashes('Fl.R.5s', 'one red flash every five seconds', 'red', [0], 500, 5000),
+  },
+  'preferred-stbd-b': {
+    // Region B: green body with a red band — a port-hand mark, so leave it to
+    // port, and the band says the main channel runs to starboard of it.
+    kind: 'preferred-stbd-b',
+    shape: 'can',
+    body: { type: 'horizontal', colours: ['green', 'red', 'green'] },
+    topmark: 'can',
+    topmarkColour: 'green',
+    light: flashes(
+      'Fl(2+1)G.10s',
+      'a group of two green flashes then a single one, every ten seconds',
+      'green',
+      [1000, 2000, 0],
+      500,
+      10000,
+    ),
+  },
+  'preferred-port-b': {
+    kind: 'preferred-port-b',
+    shape: 'conical',
+    body: { type: 'horizontal', colours: ['red', 'green', 'red'] },
+    topmark: 'cone-up',
+    topmarkColour: 'red',
+    light: flashes(
+      'Fl(2+1)R.10s',
+      'a group of two red flashes then a single one, every ten seconds',
+      'red',
+      [1000, 2000, 0],
+      500,
+      10000,
+    ),
+  },
   'cardinal-n': {
     kind: 'cardinal-n',
     shape: 'pillar',
@@ -292,16 +350,33 @@ export function markAt(kind: MarkKind): Mark {
   return MARKS[kind];
 }
 
+/** The region a mark belongs to, or undefined for the marks both share. */
+export function regionOf(kind: MarkKind): Region | undefined {
+  if (kind.endsWith('-b')) return 'B';
+  if (kind.startsWith('lateral') || kind.startsWith('preferred')) return 'A';
+  return undefined;
+}
+
+/** Whether a mark can be met in a region: its own laterals and everything shared. */
+export function inRegion(kind: MarkKind, region: Region): boolean {
+  const own = regionOf(kind);
+  return own === undefined || own === region;
+}
+
 /** What the mark is, in the words the system uses. */
 export function describeMark(kind: MarkKind): string {
   switch (kind) {
     case 'lateral-port':
+    case 'lateral-port-b':
       return 'A port-hand lateral mark';
     case 'lateral-stbd':
+    case 'lateral-stbd-b':
       return 'A starboard-hand lateral mark';
     case 'preferred-stbd':
+    case 'preferred-stbd-b':
       return 'A preferred channel to starboard mark';
     case 'preferred-port':
+    case 'preferred-port-b':
       return 'A preferred channel to port mark';
     case 'cardinal-n':
       return 'A north cardinal mark';
@@ -326,13 +401,19 @@ export function describeMark(kind: MarkKind): string {
 export function describeAction(kind: MarkKind): string {
   switch (kind) {
     case 'lateral-port':
+    case 'lateral-port-b':
       return 'Leave it to port when following the conventional direction of buoyage.';
     case 'lateral-stbd':
+    case 'lateral-stbd-b':
       return 'Leave it to starboard when following the conventional direction of buoyage.';
     case 'preferred-stbd':
       return 'The body is a port-hand mark, so leave it to port. The green band says the main channel lies to starboard of it.';
     case 'preferred-port':
       return 'The body is a starboard-hand mark, so leave it to starboard. The red band says the main channel lies to port of it.';
+    case 'preferred-stbd-b':
+      return 'The body is a Region B port-hand mark, so leave it to port. The red band says the main channel lies to starboard of it.';
+    case 'preferred-port-b':
+      return 'The body is a Region B starboard-hand mark, so leave it to starboard. The green band says the main channel lies to port of it.';
     case 'cardinal-n':
       return 'Pass to the north of it: the safe water lies on the named side.';
     case 'cardinal-e':
@@ -377,9 +458,9 @@ export function describeTopmark(kind: MarkKind): string {
     case 'none':
       return 'no topmark';
     case 'can':
-      return 'a single red can topmark';
+      return `a single ${m.topmarkColour} can topmark`;
     case 'cone-up':
-      return 'a single green cone, point up';
+      return `a single ${m.topmarkColour} cone, point up`;
     case 'cones-up':
       return 'two black cones, both points upwards';
     case 'cones-base':

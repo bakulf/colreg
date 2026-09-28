@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { ALL_MARKS, MARKS, describeMark, markAt } from './model.ts';
+import { ALL_MARKS, MARKS, describeMark, inRegion, markAt, regionOf } from './model.ts';
 import { allBuoyDrills, buoyageSources, composeBuoyDrill } from './generator.ts';
 import { createRng } from '../rng.ts';
 
-describe('IALA Region A marks', () => {
+describe('IALA marks', () => {
   it('gives every mark a light whose segments fill its period exactly', () => {
     for (const mark of ALL_MARKS) {
       const total = mark.light.segments.reduce((n, s) => n + s.ms, 0);
@@ -48,6 +48,25 @@ describe('IALA Region A marks', () => {
     expect(MARKS['lateral-stbd'].body.colours).toEqual(['green']);
   });
 
+  it('reverses the lateral colours in Region B and keeps the shapes (R1001 Tables 2 and 4)', () => {
+    expect(MARKS['lateral-port-b'].shape).toBe('can');
+    expect(MARKS['lateral-port-b'].body.colours).toEqual(['green']);
+    expect(MARKS['lateral-port-b'].topmarkColour).toBe('green');
+    expect(MARKS['lateral-stbd-b'].shape).toBe('conical');
+    expect(MARKS['lateral-stbd-b'].body.colours).toEqual(['red']);
+    expect(MARKS['lateral-stbd-b'].topmarkColour).toBe('red');
+    expect(MARKS['preferred-stbd-b'].body.colours).toEqual(['green', 'red', 'green']);
+    expect(MARKS['preferred-stbd-b'].shape).toBe('can');
+    expect(MARKS['preferred-port-b'].body.colours).toEqual(['red', 'green', 'red']);
+    expect(MARKS['preferred-port-b'].shape).toBe('conical');
+    const lit = (k: Parameters<typeof markAt>[0]) =>
+      markAt(k).light.segments.find((s) => s.colour)?.colour;
+    expect(lit('lateral-port-b')).toBe('green');
+    expect(lit('lateral-stbd-b')).toBe('red');
+    expect(lit('preferred-stbd-b')).toBe('green');
+    expect(lit('preferred-port-b')).toBe('red');
+  });
+
   it('builds a preferred channel mark from a lateral body and a contrasting band', () => {
     // Red body, green band: a port-hand mark, so leave it to port, and the
     // main channel lies to starboard.
@@ -59,7 +78,12 @@ describe('IALA Region A marks', () => {
 
   it('uses composite group flashing only for the preferred channel marks', () => {
     const composite = ALL_MARKS.filter((m) => m.light.label.includes('+1'));
-    expect(composite.map((m) => m.kind).sort()).toEqual(['preferred-port', 'preferred-stbd']);
+    expect(composite.map((m) => m.kind).sort()).toEqual([
+      'preferred-port',
+      'preferred-port-b',
+      'preferred-stbd',
+      'preferred-stbd-b',
+    ]);
   });
 
   it('agrees the isolated danger topmark with its rhythm', () => {
@@ -97,6 +121,17 @@ describe('buoyage drills', () => {
       expect(texts.length).toBeGreaterThanOrEqual(3);
       expect(drill.question.correct).toBe('a');
       expect(texts[0]).toBe(describeMark(drill.kind));
+    }
+  });
+
+  it('names the region in every lateral drill and draws distractors from it alone', () => {
+    for (const drill of allBuoyDrills(createRng(11))) {
+      const region = regionOf(drill.kind);
+      if (region) expect(drill.question.prompt.startsWith(`Region ${region}.`), drill.kind).toBe(true);
+      else expect(drill.question.prompt, drill.kind).not.toMatch(/^Region/);
+      for (const d of drill.distractors) {
+        expect(inRegion(d, region ?? 'A'), `${drill.kind} offers ${d}`).toBe(true);
+      }
     }
   });
 

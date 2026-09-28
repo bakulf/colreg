@@ -43,6 +43,11 @@ export function topicForMark(kind: MarkKind): Topic {
     case 'preferred-port':
     case 'preferred-stbd':
       return 'iala-lateral';
+    case 'lateral-port-b':
+    case 'lateral-stbd-b':
+    case 'preferred-port-b':
+    case 'preferred-stbd-b':
+      return 'iala-lateral-b';
     case 'cardinal-n':
     case 'cardinal-e':
     case 'cardinal-s':

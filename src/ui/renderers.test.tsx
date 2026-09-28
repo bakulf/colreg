@@ -165,3 +165,19 @@ describe('CoastalLightScene', () => {
     }
   });
 });
+
+describe('compass renderers', () => {
+  it('draws the rose with its printed variation, and the card with every heading', async () => {
+    const { CompassRoseScene } = await import('./CompassRoseScene.tsx');
+    const { DeviationCardScene } = await import('./DeviationCardScene.tsx');
+    const { makeCard } = await import('../core/compass/model.ts');
+    const rose = renderToStaticMarkup(
+      <CompassRoseScene rose={{ minutes: -255, year: 2009, annualMinutes: 8 }} />,
+    );
+    // React escapes the minute sign in markup.
+    expect(rose).toContain('4°15&#x27;W');
+    expect(rose).toContain('(8&#x27;E)');
+    const card = renderToStaticMarkup(<DeviationCardScene card={makeCard(5, 40, 0)} />);
+    for (const h of ['000°C', '090°C', '180°C', '330°C']) expect(card).toContain(h);
+  });
+});

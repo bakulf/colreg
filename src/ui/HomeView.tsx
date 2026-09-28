@@ -22,20 +22,25 @@ interface Props {
   onReset: () => void;
   onExport: () => void;
   onImport: (text: string) => boolean;
+  /** Only in COLREG: opens the full text of the Rules. */
+  onOpenText?: () => void;
 }
 
 const FOOTNOTES: Record<Domain, string> = {
   colreg:
     'Rule text from MSN 1781 (M+F), the UK text of the Collision Regulations, © Crown copyright, Open Government Licence v3.0.',
-  iala: 'Marks drawn from the IALA Maritime Buoyage System, Region A. No Admiralty chart data is used.',
+  iala: 'Marks follow IALA Recommendation R1001, The IALA Maritime Buoyage System (Ed. 2.0, 2023). No Admiralty chart data is used.',
   coastal:
     'Characters follow IALA Recommendation R0110 (Ed. 5.0, 2021); ranges IALA R0202 (Ed. 2.1, 2017). Lights and positions are invented; no Admiralty data is used.',
+  compass:
+    'Topics follow section 2 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Variations and deviation cards are invented for practice; use the ones for your own chart and boat.',
 };
 
 const HEADINGS: Record<Domain, string> = {
   colreg: 'Parts of the Rules',
   iala: 'Mark categories',
   coastal: 'Topics',
+  compass: 'Syllabus items',
 };
 
 const INTRO: Record<Domain, { title: string; sub: string }> = {
@@ -44,12 +49,16 @@ const INTRO: Record<Domain, { title: string; sub: string }> = {
     sub: 'The International Regulations for Preventing Collisions at Sea 1972, drilled Part by Part.',
   },
   iala: {
-    title: 'IALA Buoyage — Region A',
-    sub: 'The IALA Maritime Buoyage System as used in UK and European waters, by day and by night.',
+    title: 'IALA Buoyage — Regions A and B',
+    sub: 'The IALA Maritime Buoyage System, by day and by night. Region A is UK and European waters; Region B, the Americas, Japan, Korea and the Philippines, reverses the lateral colours.',
   },
   coastal: {
     title: 'Lights ashore',
     sub: 'Lighthouses, beacons and sector lights: their characters under IALA R0110, and how far they are seen under R0202.',
+  },
+  compass: {
+    title: 'The magnetic compass',
+    sub: 'True, magnetic and compass: variation from the chart, deviation from the card, and how to check it. Work to the nearest degree.',
   },
 };
 
@@ -81,6 +90,7 @@ export function HomeView({
   onReset,
   onExport,
   onImport,
+  onOpenText,
 }: Props) {
   const [importError, setImportError] = useState<string | null>(null);
   const byTopic = useMemo(countByTopic, []);
@@ -140,6 +150,11 @@ export function HomeView({
         <div className="hero-text">
           <h2>{intro.title}</h2>
           <p>{intro.sub}</p>
+          {onOpenText && (
+            <button type="button" className="link hero-link" onClick={onOpenText}>
+              Read the Rules in full ›
+            </button>
+          )}
           {started ? (
             <div className="duerow">
               <span>

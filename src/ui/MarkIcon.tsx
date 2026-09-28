@@ -38,6 +38,14 @@ export function MarkIcon({ topic }: { topic: Topic }) {
         </g>
       );
       break;
+    case 'iala-lateral-b':
+      body = (
+        <g stroke={BLACK} strokeWidth={0.8}>
+          <rect x={5} y={14} width={10} height={16} fill={GREEN} />
+          <path d="M 21 30 L 26 12 L 31 30 Z" fill={RED} />
+        </g>
+      );
+      break;
     case 'iala-cardinal':
       body = (
         <g>

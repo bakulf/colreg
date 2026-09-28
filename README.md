@@ -1,14 +1,17 @@
 # COLREG
 
 A drill app for the collision regulations, built to prepare for the RYA
-Yachtmaster Shorebased instructor exam. Covers IRPCS (COLREGs) and IALA Region A
-buoyage.
+Yachtmaster Shorebased instructor exam. Covers IRPCS (COLREGs), IALA buoyage in
+Regions A and B, lights ashore, and the magnetic compass.
 
 ## Separate sections, never mixed
 
-COLREG, IALA buoyage and lights ashore are separate sections of the app, each
-with its own topics, its own session and its own progress summary. A paper is
-drawn from one of them only.
+The home page has one tile per subject — COLREG, IALA buoyage, lights ashore,
+the magnetic compass — each showing how much of it you would recall now and
+what is due. Each subject is its own section with its own topics, its own
+session and its own progress summary, and a paper is drawn from one of them
+only. The list lives in `src/ui/subjects.tsx`; adding a subject there adds its
+tile and its route (`#/colreg`, `#/iala`, `#/lights`, `#/compass`).
 
 COLREG is divided the way the Convention divides itself: Part A (General),
 Part B in its three Sections — I, any condition of visibility; II, vessels in
@@ -16,7 +19,12 @@ sight of one another; III, restricted visibility — then Parts C, D, E and F, a
 the Annexes. A question belongs to the Part its first citation is in, and
 `src/core/topics.test.ts` holds every question to that, generated ones
 included. IALA is divided by mark category: lateral, cardinal, isolated
-danger, safe water, special, and emergency wreck marking.
+danger, safe water, special, and emergency wreck marking, as IALA
+Recommendation R1001 (Ed. 2.0, June 2023) arranges them. The two regions differ
+only in the lateral marks — Region B reverses the colours and keeps the shapes —
+so lateral marks are two topics, one per region, and everything else is one.
+Every lateral drill names its region and draws its wrong answers from that
+region only: a red flash is port-hand in A and starboard-hand in B.
 
 ### Lights ashore
 
@@ -38,6 +46,24 @@ that govern them:
   visibility comes from Allard's law, as R0202 prescribes. Geographic range is
   2.08 × (√H + √h); IHO S-12 uses 2.03, and the drills are checked to give the
   same answer with either.
+
+### The magnetic compass
+
+Divided by the items of section 2 of the RYA Coastal Skipper / Yachtmaster
+Offshore syllabus: variation (allowing for it, and its change with time and
+position), deviation (its causes, and allowing for it), checking for deviation
+— "checks, but not correction" — and types of compass.
+
+Everything rests on two lines, with east positive: magnetic = compass +
+deviation, true = magnetic + variation. The drills build a situation — a
+compass rose printed as on the chart ("4°15'W 2009 (8'E)"), a deviation card
+tabulated against ship's head by compass, as in the training almanac — and
+offer as wrong answers what the classic mistakes produce: a sign the wrong
+way, a step left out, the card read for the bearing instead of the ship's head,
+deviation applied to a hand-bearing compass. `compass.test.ts` re-reads every
+generated prompt and recomputes its answer independently.
+
+Roses and cards are invented for practice.
 
 The IALA recommendations are published at
 [github.com/IALAPublications/Recommendations](https://github.com/IALAPublications/Recommendations).
@@ -112,6 +138,7 @@ src/core/          pure TypeScript — no React, no DOM
   types.ts         Question, QuestionSource, Scene, Domain, Topic
   topics.ts        which Part a citation belongs to, which category a mark
   coastal/         lights ashore: R0110 characters, R0202 and geographic range, drills
+  compass/         variation, deviation cards, conversions, and their drills
   rng.ts           seeded RNG, so a session is reproducible from its seed
   rules.ts         index of IRPCS Rules 1–41
   regs/            the full text of Rules 1–41 and Annexes I–IV, and citation parsing
@@ -119,7 +146,7 @@ src/core/          pure TypeScript — no React, no DOM
   questions/       hand-written content, one file per topic
   lights/          Rule 21 arcs, vessel lights, projection, night drills
   shapes/          day signals and their drills
-  buoyage/         IALA Region A marks and their light characters
+  buoyage/         IALA marks, Regions A and B, and their light characters
   scenarios/       encounter geometry, Rules 9–19, and their drills
   signals/         Rule 34 and 35 sound signals as timelines
   distress/        Rule 37 and Annex IV, and the signals mistaken for them
@@ -222,7 +249,7 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M0** — project, quiz engine, 65 hand-written questions (definitions 9, steering 21, lights 15, sound 11, buoyage 9)
 - [x] **M1** — Part C renderers: 24 vessel types, 39 configurations, drawn in SVG at the eight standard bearings by night and as day shapes, with generated drills
 - [x] **M2** — FSRS-style spaced repetition scheduled over concepts, graded from correctness and answer time
-- [x] **M3** — sound signals as real-time timelines at true blast lengths (audio still to come)
+- [x] **M3** — sound signals as real-time timelines at true blast lengths
 - [x] **M4** — encounter drills generated from geometry and classified by the same code that answers them, including restricted visibility
 - [x] **M5** — all twelve IALA Region A marks, by day and by night with the light character flashing at true rate
 - [x] **M7** — Rule 37 and Annex IV distress signals, Rule 36 attention signals, and the near-misses people mistake for them
@@ -231,8 +258,15 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M10** — the full text of the Regulations, with every citation in a question linked to the paragraph it cites
 - [x] **M11** — COLREG and IALA as separate sections, COLREG topics by Part and Section of the Convention, light theme
 - [x] **M12** — lights ashore: R0110 characters flashed at true rate, chart notation and sectors, R0202 luminous range and rising/dipping distances
-- [x] **M6a** — offline PWA: installable, precached, update prompt
-- [ ] **M6** — exam mode, audio for the sound signals
+- [x] **M6** — offline PWA: installable, precached, update prompt
+- [x] **M13** — IALA Region B: reversed lateral and preferred channel marks, by day and by night
+- [x] **M14** — home page with a tile per subject
+- [x] **M15** — the magnetic compass: variation, deviation card, checks, types
+- [ ] Tidal streams: course to steer, estimated position, set, drift and leeway
+- [ ] Tides: heights, secondary ports, clearances
+- [ ] Meteorology
+
+Sound signals stay as timelines, without audio, by choice. There is no exam mode.
 
 ## Deploying
 
