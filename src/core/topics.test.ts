@@ -44,6 +44,8 @@ describe('topics', () => {
       tidal: (ref) => ref === 'Tidal streams',
       tides: (ref) => ref === 'Tidal heights',
       weather: (ref) => ref === 'Meteorology',
+      position: (ref) => ref === 'Position fixing',
+      pilotage: (ref) => ref === 'Pilotage' || ref === 'IALA R0111',
     };
     for (const { source, question } of samples) {
       const domain = TOPIC_INFO[source.topic].domain;

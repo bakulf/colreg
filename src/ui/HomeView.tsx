@@ -32,6 +32,10 @@ const FOOTNOTES: Record<Domain, string> = {
   iala: 'Marks follow IALA Recommendation R1001, The IALA Maritime Buoyage System (Ed. 2.0, 2023). No Admiralty chart data is used.',
   coastal:
     'Characters follow IALA Recommendation R0110 (Ed. 5.0, 2021); ranges IALA R0202 (Ed. 2.1, 2017). Lights and positions are invented; no Admiralty data is used.',
+  position:
+    'Topics follow section 1 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus; the estimated position is with tidal streams.',
+  pilotage:
+    'Topics follow section 7 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Port traffic signals are IALA Recommendation R0111.',
   weather:
     'Topics follow section 12 of the RYA Coastal Skipper / Yachtmaster Offshore syllabus. Forecast terms are the Met Office’s own definitions. Northern hemisphere throughout.',
   tides:
@@ -50,6 +54,8 @@ const HEADINGS: Record<Domain, string> = {
   tidal: 'Syllabus items',
   tides: 'Syllabus items',
   weather: 'Syllabus items',
+  position: 'Syllabus items',
+  pilotage: 'Syllabus items',
 };
 
 const INTRO: Record<Domain, { title: string; sub: string }> = {
@@ -64,6 +70,14 @@ const INTRO: Record<Domain, { title: string; sub: string }> = {
   coastal: {
     title: 'Lights ashore',
     sub: 'Lighthouses, beacons and sector lights: their characters under IALA R0110, and how far they are seen under R0202.',
+  },
+  position: {
+    title: 'Position',
+    sub: 'Getting a fix you can trust: which marks, in what order, what a cocked hat means, radar and GNSS, and how far each can be trusted.',
+  },
+  pilotage: {
+    title: 'Pilotage',
+    sub: 'Navigating by eye close to danger: clearing lines, leading lines, the echo sounder, and the harbour’s signals.',
   },
   weather: {
     title: 'Weather',

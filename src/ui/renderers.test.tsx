@@ -241,3 +241,22 @@ describe('weather renderers', () => {
     expect(renderToStaticMarkup(<FrontStripScene highlight={2} />)).toContain('Altostratus');
   });
 });
+
+describe('position and pilotage renderers', () => {
+  it('draws the cocked hat, clearing line, leading marks and every port signal', async () => {
+    const m = await import('./PilotageScenes.tsx');
+    const { PORT_SIGNALS } = await import('../core/pilotage/model.ts');
+    expect(renderToStaticMarkup(<m.CockedHatScene danger={1} rotation={30} />)).toContain('>B<');
+    const clr = renderToStaticMarkup(<m.ClearingLineScene line={45} label="NMT" dangerSide="left" observed={50} />);
+    expect(clr).toContain('NMT 045°');
+    const hidden = renderToStaticMarkup(<m.ClearingLineScene line={45} label={undefined} dangerSide="left" observed={undefined} />);
+    expect(hidden).not.toContain('NMT');
+    expect(hidden).not.toContain('NLT');
+    for (const rear of ['left', 'right', 'inline'] as const) expect(renderToStaticMarkup(<m.LeadingMarksScene rear={rear} />)).toContain('<svg');
+    for (const s of PORT_SIGNALS) {
+      const markup = renderToStaticMarkup(<m.PortSignalScene signal={s.id} />);
+      expect(markup.includes('#ffd60a'), s.id).toBe(s.yellow);
+      expect(markup.includes('flashing'), s.id).toBe(s.flashing);
+    }
+  });
+});

@@ -76,6 +76,25 @@ const icons: Record<Domain, ReactNode> = {
       <path d="M17 34 l-2 6 M25 34 l-2 6 M33 34 l-2 6" stroke="#bfe3ff" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   ),
+  // A cocked hat: three position lines.
+  position: (
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <line x1="6" y1="36" x2="42" y2="30" stroke={INK} strokeWidth="2.2" />
+      <line x1="10" y1="8" x2="32" y2="44" stroke={INK} strokeWidth="2.2" />
+      <line x1="40" y1="8" x2="16" y2="44" stroke={INK} strokeWidth="2.2" />
+      <circle cx="24" cy="30" r="4" fill="none" stroke="#ffd08a" strokeWidth="2" />
+    </svg>
+  ),
+  // Two leading marks in line.
+  pilotage: (
+    <svg viewBox="0 0 48 48" aria-hidden="true">
+      <line x1="24" y1="40" x2="24" y2="28" stroke={INK} strokeWidth="2.6" />
+      <path d="M16 30 L32 30 L24 18 Z" fill={INK} />
+      <line x1="24" y1="18" x2="24" y2="10" stroke={INK} strokeWidth="2" />
+      <path d="M18 4 L30 4 L24 13 Z" fill="#ffd08a" />
+      <path d="M6 42 Q12 39 18 42 T30 42 T42 42" stroke={INK} strokeWidth="2" fill="none" />
+    </svg>
+  ),
   // A compass rose.
   compass: (
     <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -129,6 +148,20 @@ export const SUBJECTS: readonly Subject[] = [
     title: 'Tidal streams',
     blurb: 'Diamonds, course to steer, EP, races',
     icon: icons.tidal,
+  },
+  {
+    domain: 'position',
+    hash: '#/position',
+    title: 'Position',
+    blurb: 'Visual, radar and GNSS fixes, and how far to trust them',
+    icon: icons.position,
+  },
+  {
+    domain: 'pilotage',
+    hash: '#/pilotage',
+    title: 'Pilotage',
+    blurb: 'Clearing lines, leading lines, soundings, port signals',
+    icon: icons.pilotage,
   },
   {
     domain: 'weather',

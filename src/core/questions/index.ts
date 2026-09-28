@@ -15,6 +15,8 @@ import { TIDES_QUESTIONS } from './tides.ts';
 import { tidesSources } from '../tides/generator.ts';
 import { WEATHER_QUESTIONS } from './weather.ts';
 import { weatherSources } from '../weather/generator.ts';
+import { PILOTAGE_QUESTIONS, POSITION_QUESTIONS } from './pilotage.ts';
+import { pilotageSources, positionSources } from '../pilotage/generator.ts';
 import { lightSources } from '../lights/generator.ts';
 import { shapeSources } from '../shapes/generator.ts';
 import { buoyageSources } from '../buoyage/generator.ts';
@@ -34,6 +36,8 @@ export const ALL_QUESTIONS: readonly Question[] = [
   ...TIDAL_QUESTIONS,
   ...TIDES_QUESTIONS,
   ...WEATHER_QUESTIONS,
+  ...POSITION_QUESTIONS,
+  ...PILOTAGE_QUESTIONS,
 ];
 
 /**
@@ -56,6 +60,8 @@ export const ALL_SOURCES: readonly QuestionSource[] = [
   ...tidalSources(),
   ...tidesSources(),
   ...weatherSources(),
+  ...positionSources(),
+  ...pilotageSources(),
 ];
 
 export function sourcesForTopics(topics: readonly Topic[]): QuestionSource[] {

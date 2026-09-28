@@ -39,7 +39,16 @@ export interface TideCurve {
  * of them and never mixes them. They are different documents with different
  * authorities, and the syllabus treats them separately.
  */
-export type Domain = 'colreg' | 'iala' | 'coastal' | 'compass' | 'tidal' | 'tides' | 'weather';
+export type Domain =
+  | 'colreg'
+  | 'iala'
+  | 'coastal'
+  | 'compass'
+  | 'tidal'
+  | 'tides'
+  | 'weather'
+  | 'position'
+  | 'pilotage';
 
 /**
  * COLREG topics follow the structure of the Convention itself — its Parts, with
@@ -93,7 +102,17 @@ export type Topic =
   | 'weather-forecasts'
   | 'weather-breezes'
   | 'weather-fog'
-  | 'weather-barometer';
+  | 'weather-barometer'
+  | 'position-visual'
+  | 'position-mixed'
+  | 'position-radar'
+  | 'position-gnss'
+  | 'position-accuracy'
+  | 'pilotage-signals'
+  | 'pilotage-planning'
+  | 'pilotage-clearing'
+  | 'pilotage-soundings'
+  | 'pilotage-transits';
 
 export interface TopicInfo {
   domain: Domain;
@@ -330,6 +349,66 @@ export const TOPIC_INFO: Record<Topic, TopicInfo> = {
     title: 'The barometer as a forecasting aid',
     span: 'Tendency and what it warns of',
   },
+  'position-visual': {
+    domain: 'position',
+    code: 'Visual',
+    title: 'Techniques of visual fixing',
+    span: 'Choosing marks, their order, the cocked hat',
+  },
+  'position-mixed': {
+    domain: 'position',
+    code: 'Mixed',
+    title: 'Fixes from a mixture of position lines',
+    span: 'Bearing and depth, running fixes',
+  },
+  'position-radar': {
+    domain: 'position',
+    code: 'Radar',
+    title: 'Radar fixes',
+    span: 'Ranges, bearings and good targets',
+  },
+  'position-gnss': {
+    domain: 'position',
+    code: 'GNSS',
+    title: 'Satellite position and waypoints',
+    span: 'Fixing from a waypoint; datum; checks',
+  },
+  'position-accuracy': {
+    domain: 'position',
+    code: 'Accuracy',
+    title: 'Accuracy and areas of uncertainty',
+    span: 'Which methods to trust, and how much',
+  },
+  'pilotage-signals': {
+    domain: 'pilotage',
+    code: 'Signals',
+    title: 'Harbour regulations and control signals',
+    span: 'Port traffic signals (IALA R0111), local rules',
+  },
+  'pilotage-planning': {
+    domain: 'pilotage',
+    code: 'Plan',
+    title: 'Methods of pre-planning',
+    span: 'The pilotage plan, and using it on deck',
+  },
+  'pilotage-clearing': {
+    domain: 'pilotage',
+    code: 'Clearing',
+    title: 'Clearing lines',
+    span: 'NMT and NLT, and which side is safe',
+  },
+  'pilotage-soundings': {
+    domain: 'pilotage',
+    code: 'Depth',
+    title: 'Use of soundings',
+    span: 'Reducing the sounder to chart datum; contours',
+  },
+  'pilotage-transits': {
+    domain: 'pilotage',
+    code: 'Transits',
+    title: 'Transits and leading lines',
+    span: 'Which way to steer to stay on the line',
+  },
 };
 
 export const TOPICS: readonly Topic[] = Object.keys(TOPIC_INFO) as Topic[];
@@ -346,6 +425,8 @@ export const DOMAIN_LABELS: Record<Domain, string> = {
   tidal: 'Tidal streams',
   tides: 'Tides',
   weather: 'Weather',
+  position: 'Position',
+  pilotage: 'Pilotage',
 };
 
 /** 'Part B/III — Conduct of vessels in restricted visibility', 'Lateral marks'. */
@@ -460,6 +541,32 @@ export type Scene =
       boatAt: number | undefined;
       /** Which way the isobars close up, for the spacing drill. */
       tight: number | undefined;
+    }
+  | {
+      /** Three position lines forming a triangle, with a danger by one corner. */
+      type: 'cocked-hat';
+      /** Index of the corner (A, B, C) nearest the danger. */
+      danger: number;
+      rotation: number;
+    }
+  | {
+      /** A clearing line on a chart sketch, with the danger to one side. */
+      type: 'clearing-line';
+      line: number;
+      label: 'NLT' | 'NMT' | undefined;
+      dangerSide: 'left' | 'right';
+      /** Your bearing of the mark, if you are drawn. */
+      observed: number | undefined;
+    }
+  | {
+      /** Two leading marks as seen ahead. */
+      type: 'leading-marks';
+      rear: 'left' | 'right' | 'inline';
+    }
+  | {
+      /** A port traffic signal column. */
+      type: 'port-signal';
+      signal: string;
     }
   | {
       type: 'tide-levels';

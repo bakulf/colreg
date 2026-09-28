@@ -13,6 +13,7 @@ import { TideCurveScene, TideLevelsScene } from './TideScenes.tsx';
 import { LuminousDiagramScene } from './LuminousDiagramScene.tsx';
 import { CloudScene } from './CloudScene.tsx';
 import { FrontStripScene, SynopticScene } from './WeatherScenes.tsx';
+import { ClearingLineScene, CockedHatScene, LeadingMarksScene, PortSignalScene } from './PilotageScenes.tsx';
 
 /** Maps a scene, which is plain data from `core`, to the component that draws it. */
 export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean }) {
@@ -49,6 +50,16 @@ export function SceneView({ scene, compact }: { scene: Scene; compact?: boolean 
       return <FrontStripScene highlight={scene.highlight} />;
     case 'synoptic':
       return <SynopticScene system={scene.system} boatAt={scene.boatAt} tight={scene.tight} />;
+    case 'cocked-hat':
+      return <CockedHatScene danger={scene.danger} rotation={scene.rotation} />;
+    case 'clearing-line':
+      return (
+        <ClearingLineScene line={scene.line} label={scene.label} dangerSide={scene.dangerSide} observed={scene.observed} />
+      );
+    case 'leading-marks':
+      return <LeadingMarksScene rear={scene.rear} />;
+    case 'port-signal':
+      return <PortSignalScene signal={scene.signal} />;
     case 'luminous-diagram':
       return <LuminousDiagramScene mark={scene.mark} />;
     case 'tide-levels':

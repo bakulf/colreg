@@ -55,6 +55,14 @@
   --accent: #4f46e5;
 }
 
+.app[data-domain='position'] {
+  --accent: #334e68;
+}
+
+.app[data-domain='pilotage'] {
+  --accent: #4d7c0f;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -1364,6 +1372,14 @@ kbd {
   --tint: #4f46e5;
 }
 
+.subject[data-domain='position'] {
+  --tint: #334e68;
+}
+
+.subject[data-domain='pilotage'] {
+  --tint: #4d7c0f;
+}
+
 .subject:hover {
   transform: translateY(-1px);
   border-color: color-mix(in srgb, var(--tint) 40%, var(--border));
@@ -1644,4 +1660,15 @@ kbd {
 
 .cloud-photo figcaption a {
   color: inherit;
+}
+
+/* --- position and pilotage --- */
+
+.scene.chart,
+.scene.view,
+.scene.signals {
+  max-width: 22rem;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: inset 0 0 0 1px var(--border);
 }

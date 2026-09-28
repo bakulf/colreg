@@ -2,8 +2,8 @@
 
 A drill app for the collision regulations, built to prepare for the RYA
 Yachtmaster Shorebased instructor exam. Covers IRPCS (COLREGs), IALA buoyage in
-Regions A and B, lights ashore, the magnetic compass, tides, tidal streams, and
-the weather.
+Regions A and B, lights ashore, the magnetic compass, tides, tidal streams,
+position fixing, pilotage, and the weather.
 
 ## Separate sections, never mixed
 
@@ -13,7 +13,7 @@ what is due. Each subject is its own section with its own topics, its own
 session and its own progress summary, and a paper is drawn from one of them
 only. The list lives in `src/ui/subjects.tsx`; adding a subject there adds its
 tile and its route (`#/colreg`, `#/iala`, `#/lights`, `#/compass`,
-`#/tides`, `#/streams`, `#/weather`).
+`#/tides`, `#/streams`, `#/position`, `#/pilotage`, `#/weather`).
 
 ### Every sum in the head
 
@@ -104,6 +104,19 @@ the tests check that the mental answer and the exact solution agree within a
 degree.
 
 Diamonds, ports and passages are invented.
+
+### Position and pilotage
+
+Two sections, as the syllabus has them. Position (section 1): choosing the
+three marks with the widest cuts, taking the one near the beam last, which
+corner of a cocked hat to plot near danger, fixing from a waypoint on the
+reciprocal, radar ranges against bearings, datums and GNSS checks, and how far
+each method can be trusted. Pilotage (section 7): the port traffic signals of
+IALA Recommendation R0111, the pilotage plan, clearing lines (NMT and NLT —
+which side is safe, and how to label one), leading marks (which way to steer),
+and reducing an echo sounder reading to chart datum. The clearing-line and
+leading-line rules are tested against the geometry itself, not just against
+each other.
 
 ### Weather
 
@@ -212,6 +225,7 @@ src/core/          pure TypeScript — no React, no DOM
   tidal/           diamonds, rates, the vector triangle, CTS and EP, and their drills
   tides/           levels and datums, twelfths, secondary ports, and their drills
   weather/         Beaufort, forecast terms, clouds and their photo credits, fronts
+  pilotage/        position fixing and pilotage: geometry, port signals, drills
   rng.ts           seeded RNG, so a session is reproducible from its seed
   rules.ts         index of IRPCS Rules 1–41
   regs/            the full text of Rules 1–41 and Annexes I–IV, and citation parsing
@@ -337,6 +351,7 @@ sidelight cut-off, whistle frequencies — are asked.
 - [x] **M15** — the magnetic compass: variation, deviation card, checks, types
 - [x] **M16** — tidal streams: diamonds, rates by range, course to steer by one in sixty, leeway, EP, triangles
 - [x] **M17** — tides: datums, clearances, twelfths, secondary ports, Solent anomalies
+- [x] **M19** — position fixing and pilotage: visual fixes, cocked hat, waypoints, radar, clearing and leading lines, soundings, port traffic signals (IALA R0111)
 - [x] **M18** — weather: Beaufort, Met Office terms, cloud photographs, a depression's passage, winds round lows and highs, breezes, fog, barometer
 
 Sound signals stay as timelines, without audio, by choice. There is no exam mode.
