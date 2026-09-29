@@ -463,7 +463,7 @@ export const CATALOGUE: readonly Character[] = [
   light('Oc', [], 6, ['R']),
 ];
 
-/** A stable id for a character: 'Fl(3).15s', 'Q(6)+LFl.15s'. */
+/** A stable id for a character: 'Fl(3)15s', 'Q(6)+LFl.15s'. */
 export function characterId(c: Character): string {
   return notation(c).replace(/\./g, '-');
 }

@@ -111,8 +111,8 @@ export const LIGHT_QUESTIONS: Question[] = [
     id: 'lgt-fishing-gear',
     concept: 'rule26:outlying-gear',
     difficulty: 3,
-    prompt: 'A vessel engaged in fishing other than trawling has gear extending more than 150 metres horizontally from the vessel. She shall exhibit:',
-    answer: 'An all-round white light, or a cone apex upwards, in the direction of the gear',
+    prompt: 'A vessel engaged in fishing other than trawling shows her all-round red over white. Her gear extends more than 150 metres horizontally from the vessel. What does she show in addition, to mark the gear?',
+    answer: 'An all-round white light in the direction of the gear; by day, a cone apex upwards',
     distractors: [
       'An all-round red light in the direction of the gear',
       'Two all-round white lights in a vertical line in the direction of the gear',
@@ -120,7 +120,12 @@ export const LIGHT_QUESTIONS: Question[] = [
     ],
     ruleRefs: ['Rule 26(c)(ii)'],
     explanation:
-      'Rule 26(c)(ii). The 150 metre threshold and the "in the direction of the gear" are both examinable; the light tells you which side you must not pass.',
+      'Rule 26(c): red over white are her fishing lights whatever her gear, under (c)(i). The outlying gear adds one more under (c)(ii): an all-round white light, set off from the red over white towards the gear, or by day a cone apex upwards on that side. So by night you see red over white with a single white light beside them, and that white light tells you which side not to pass. The 150 metre threshold is examinable too.',
+    afterScene: {
+      type: 'lights',
+      vessel: { kind: 'fishing', lengthM: 18, makingWay: false, gearSide: 'port' },
+      aspectDeg: 0,
+    },
   }),
   mcq({
     id: 'lgt-nuc',

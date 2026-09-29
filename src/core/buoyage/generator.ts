@@ -118,6 +118,9 @@ function noteFor(kind: MarkKind, mode: BuoyMode): string {
   if (kind.startsWith('preferred')) {
     return ' The body tells you what to do; the band tells you where the main channel goes. The 2+1 rhythm is the giveaway: no plain lateral mark uses composite group flashing.';
   }
+  if (kind === 'isolated-danger') {
+    return ' White, not red, although the body is black and red: red and green lights belong to lateral marks only. Two flashes for the two black balls of the topmark. The colour is part of the answer: Fl(2) in white is reserved to isolated danger marks, but Fl(2)R or Fl(2)G is a lateral mark, which may use any rhythm except (2+1). And on a lighthouse ashore, Fl(2) white is simply that light’s character — look it up.';
+  }
   if (kind === 'safe-water') {
     return ' Safe water lights are deliberately unlike anything else in the system: isophase, occulting, one long flash every ten seconds, or Morse A.';
   }

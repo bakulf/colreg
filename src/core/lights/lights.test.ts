@@ -5,7 +5,6 @@ import type { VesselState } from './model.ts';
 import {
   aspectLabel,
   project,
-  projectScene,
   signature,
   visibleLights,
 } from './project.ts';
@@ -15,6 +14,9 @@ import {
   composeLightDrill,
   fairAspects,
   lightSources,
+  ANY_TOW,
+  answerCount,
+  hidesYellow,
   sharedGroup,
 } from './generator.ts';
 import { createRng } from '../rng.ts';
@@ -186,7 +188,7 @@ describe('question generator', () => {
       for (let i = 0; i < 20; i++) {
         const drill = composeLightDrill(vessel, r);
         expect(
-          projectScene(lightsFor(drill.vessel), drill.aspectDeg).length,
+          visibleLights(drill.vessel, drill.aspectDeg).length,
           `${vessel.kind} at ${drill.aspectDeg}`,
         ).toBeGreaterThanOrEqual(1);
       }
@@ -209,7 +211,7 @@ describe('question generator', () => {
     // shows her two lights. A plain sailing vessel qualifies only end-on; a
     // 7-metre motorboat showing a single all-round white never does.
     const hasRichAspect = (v: (typeof VESSEL_POOL)[number]) =>
-      fairAspects(v).some((deg) => projectScene(lightsFor(v), deg).length >= 2);
+      fairAspects(v).some((deg) => visibleLights(v, deg).length >= 2);
 
     const rich = VESSEL_POOL.filter(hasRichAspect);
     expect(rich.length).toBeGreaterThan(VESSEL_POOL.length / 2);
@@ -218,7 +220,7 @@ describe('question generator', () => {
       for (let i = 0; i < 10; i++) {
         const drill = composeLightDrill(vessel, r);
         expect(
-          projectScene(lightsFor(drill.vessel), drill.aspectDeg).length,
+          visibleLights(drill.vessel, drill.aspectDeg).length,
           `${vessel.kind} at ${drill.aspectDeg}`,
         ).toBeGreaterThanOrEqual(2);
       }
@@ -254,6 +256,10 @@ describe('question generator', () => {
 
         for (const other of VESSEL_POOL) {
           if (signature(other, aspectDeg) !== answerKey) continue;
+          // A towing vessel with her yellow light out of sight is not offered
+          // at all; the explanation says why.
+          if (hidesYellow(other, aspectDeg)) continue;
+          if (answerText === ANY_TOW[other.kind] && other.kind === vessel.kind) continue;
           // Case-insensitive: all but the first alternative have their article
           // lowercased so the option reads as one sentence.
           expect(
@@ -265,12 +271,13 @@ describe('question generator', () => {
     }
   });
 
-  it('collects a sailing vessel and a vessel under tow into one answer', () => {
+  it('draws a vessel under tow with her tug, so she is not taken for a yacht', () => {
     // Rule 24(e) gives the tow sidelights and a sternlight: exactly Rule 25(a).
+    // With the towing vessel in the picture, the two no longer look the same.
     const sailing = VESSEL_POOL.find((v) => v.kind === 'sailing' && !v.tricolour && !v.optionalRedGreen)!;
-    const group = sharedGroup(sailing, 0).map((v) => v.kind);
-    expect(group).toContain('sailing');
-    expect(group).toContain('towed');
+    expect(sharedGroup(sailing, 0).map((v) => v.kind)).not.toContain('towed');
+    const towed = VESSEL_POOL.find((v) => v.kind === 'towed')!;
+    expect(visibleLights(towed, 180).some((l) => l.colour === 'yellow')).toBe(true);
   });
 
   it('collects a motorsailing yacht with a power-driven vessel of her size', () => {
@@ -288,7 +295,7 @@ describe('question generator', () => {
       for (let i = 0; i < 15; i++) {
         const { aspectDeg, group } = composeLightDrill(vessel, r);
         expect(
-          group.length,
+          answerCount(group),
           `${vessel.kind} at ${aspectDeg}: ${group.length} vessels share this picture`,
         ).toBeLessThanOrEqual(3);
       }

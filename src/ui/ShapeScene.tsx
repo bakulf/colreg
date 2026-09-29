@@ -1,6 +1,6 @@
 import type { VesselState } from '../core/lights/model.ts';
-import type { Shape, ShapeForm } from '../core/shapes/model.ts';
-import { FORWARD, shapesFor } from '../core/shapes/model.ts';
+import type { DayTow, Shape, ShapeForm } from '../core/shapes/model.ts';
+import { FORWARD, dayTowFor, shapesFor } from '../core/shapes/model.ts';
 
 /**
  * Day signals, drawn on the masts and yard that carry them.
@@ -8,7 +8,8 @@ import { FORWARD, shapesFor } from '../core/shapes/model.ts';
  * Shapes are black and all-round visible, so there is no aspect and no colour
  * to read — only how many, which forms, in what order, and on which side. The
  * drawing shows a bare mast per occupied column so that "on the side where the
- * obstruction is" has somewhere to be.
+ * obstruction is" has somewhere to be. A tow is drawn whole, towing vessel
+ * and tow with the towline between, since her shapes are split between them.
  */
 
 const WIDTH = 460;
@@ -109,23 +110,133 @@ function ShapeMark({ form, cx, cy }: { form: ShapeForm; cx: number; cy: number }
   }
 }
 
-export function ShapeScene({ vessel, compact = false }: { vessel: VesselState; compact?: boolean }) {
-  const shapes: Shape[] = shapesFor(vessel);
+/**
+ * One vessel's masts and shapes, centred on `cx`. `scale` shrinks the rig when
+ * two vessels share the picture; `staffDx` moves a single staff off centre, for
+ * the diamond a partly submerged tow carries at her after end.
+ */
+function Rig({
+  shapes,
+  cx,
+  base,
+  scale = 1,
+  staffDx = 0,
+}: {
+  shapes: Shape[];
+  cx: number;
+  base: number;
+  scale?: number;
+  staffDx?: number;
+}) {
   const columns = [...new Set(shapes.map((s) => s.column))].sort((a, b) => a - b);
   // The forward signal hangs on its own staff, not from the yard.
   const yard = columns.filter((c) => c !== FORWARD);
+  const size = SIZE * scale;
 
   const maxRow = Math.max(0, ...shapes.map((s) => s.row));
   const xOf = (col: number) =>
-    col === FORWARD ? WIDTH / 2 - 1.75 * COLUMN_GAP : WIDTH / 2 + col * COLUMN_GAP;
-  const yOf = (row: number) => ROW_BASE + (maxRow - row) * ROW_GAP;
+    cx + staffDx + (col === FORWARD ? -1.75 * COLUMN_GAP : col * COLUMN_GAP) * scale;
+  const top = base - (BASELINE - ROW_BASE) * scale;
+  const yOf = (row: number) => top + (maxRow - row) * ROW_GAP * scale;
+
+  return (
+    <g>
+      {/* A yard joining the outer columns, so side signals hang from something. */}
+      {yard.length > 1 && (
+        <line
+          x1={xOf(yard[0]!)}
+          y1={yOf(0) + size * 0.75}
+          x2={xOf(yard[yard.length - 1]!)}
+          y2={yOf(0) + size * 0.75}
+          stroke={INK}
+          strokeWidth="2"
+          opacity="0.45"
+        />
+      )}
+
+      {columns.map((col) => (
+        <line
+          key={col}
+          x1={xOf(col)}
+          y1={yOf(maxRow) - size}
+          x2={xOf(col)}
+          y2={base}
+          stroke={INK}
+          strokeWidth="2"
+          opacity="0.45"
+        />
+      ))}
+
+      {shapes.map((s, i) => (
+        <g key={i} transform={`translate(${xOf(s.column)} ${yOf(s.row)}) scale(${scale})`}>
+          <ShapeMark form={s.form} cx={0} cy={0} />
+        </g>
+      ))}
+    </g>
+  );
+}
+
+/** A hull in profile, bow to the left: the tow is drawn heading left, tug first. */
+function Hull({ cx, length, freeboard }: { cx: number; length: number; freeboard: number }) {
+  const x0 = cx - length / 2;
+  const x1 = cx + length / 2;
+  return (
+    <polygon
+      points={`${x0},${BASELINE - freeboard} ${x1},${BASELINE - freeboard} ${x1 - 4},${BASELINE} ${x0 + 10},${BASELINE}`}
+      fill={INK}
+      opacity="0.8"
+    />
+  );
+}
+
+const TUG_X = WIDTH * 0.27;
+const TOW_X = WIDTH * 0.7;
+const TOW_SCALE = 0.62;
+
+/**
+ * The whole tow by day. Nothing here is to scale: a real towline is several
+ * ship-lengths, and what matters is which half carries which shape.
+ */
+function TowScene({ tow }: { tow: DayTow }) {
+  const submerged = tow.tow.kind === 'submerged-tow';
+  const towLength = submerged ? 150 : 120;
+  const towFreeboard = submerged ? 3 : 12;
+  return (
+    <g>
+      <path
+        d={`M ${TUG_X + 36} ${BASELINE - 10} Q ${(TUG_X + TOW_X) / 2} ${BASELINE + 2} ${TOW_X - towLength / 2} ${BASELINE - towFreeboard + 2}`}
+        stroke={INK}
+        strokeWidth="1.4"
+        fill="none"
+        opacity="0.6"
+      />
+      <Hull cx={TUG_X} length={72} freeboard={14} />
+      <Hull cx={TOW_X} length={towLength} freeboard={towFreeboard} />
+      <Rig shapes={shapesFor(tow.tug)} cx={TUG_X} base={BASELINE - 14} scale={TOW_SCALE} />
+      <Rig
+        shapes={shapesFor(tow.tow)}
+        cx={TOW_X}
+        base={BASELINE - towFreeboard}
+        scale={TOW_SCALE}
+        staffDx={submerged ? towLength / 2 - 8 : 0}
+      />
+    </g>
+  );
+}
+
+export function ShapeScene({ vessel, compact = false }: { vessel: VesselState; compact?: boolean }) {
+  const tow = dayTowFor(vessel);
 
   return (
     <svg
       className={compact ? 'scene day small' : 'scene day'}
       viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
       role="img"
-      aria-label="Daylight scene showing the day signals of a vessel"
+      aria-label={
+        tow
+          ? 'Daylight scene showing two vessels joined by a line, with their day signals'
+          : 'Daylight scene showing the day signals of a vessel'
+      }
     >
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
@@ -137,35 +248,11 @@ export function ShapeScene({ vessel, compact = false }: { vessel: VesselState; c
       <rect width={WIDTH} height={HEIGHT} fill="url(#sky)" />
       <line x1="0" y1={BASELINE} x2={WIDTH} y2={BASELINE} stroke="#6b93ab" strokeWidth="1" />
 
-      {/* A yard joining the outer columns, so side signals hang from something. */}
-      {yard.length > 1 && (
-        <line
-          x1={xOf(yard[0]!)}
-          y1={yOf(0) + SIZE * 0.75}
-          x2={xOf(yard[yard.length - 1]!)}
-          y2={yOf(0) + SIZE * 0.75}
-          stroke={INK}
-          strokeWidth="2"
-          opacity="0.45"
-        />
+      {tow ? (
+        <TowScene tow={tow} />
+      ) : (
+        <Rig shapes={shapesFor(vessel)} cx={WIDTH / 2} base={BASELINE} />
       )}
-
-      {columns.map((col) => (
-        <line
-          key={col}
-          x1={xOf(col)}
-          y1={yOf(maxRow) - SIZE}
-          x2={xOf(col)}
-          y2={BASELINE}
-          stroke={INK}
-          strokeWidth="2"
-          opacity="0.45"
-        />
-      ))}
-
-      {shapes.map((s, i) => (
-        <ShapeMark key={i} form={s.form} cx={xOf(s.column)} cy={yOf(s.row)} />
-      ))}
     </svg>
   );
 }

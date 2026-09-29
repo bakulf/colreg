@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  daySignature,
   hasDaySignal,
   shapeConceptFor,
   shapeSignature,
@@ -85,7 +86,7 @@ describe('day generator', () => {
     for (const vessel of pool) {
       for (let i = 0; i < 10; i++) {
         const { distractors } = composeShapeDrill(vessel, r);
-        const sigs = [vessel, ...distractors].map(shapeSignature);
+        const sigs = [vessel, ...distractors].map(daySignature);
         expect(new Set(sigs).size, `${vessel.kind}`).toBe(sigs.length);
       }
     }

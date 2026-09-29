@@ -1,5 +1,5 @@
 import type { Light, LightColour, VesselState } from './model.ts';
-import { ARCS, arcContains, lightsFor } from './model.ts';
+import { ARCS, arcContains, sceneLightsFor } from './model.ts';
 
 /**
  * Projecting a vessel's lights onto the observer's eye.
@@ -49,8 +49,9 @@ export function projectScene(lights: readonly Light[], aspectDeg: number): Proje
   return lights.filter((l) => isVisible(l, aspectDeg)).map((l) => project(l, aspectDeg));
 }
 
+/** Everything the observer sees, a tow's partner included. */
 export function visibleLights(vessel: VesselState, aspectDeg: number): ProjectedLight[] {
-  return projectScene(lightsFor(vessel), aspectDeg);
+  return projectScene(sceneLightsFor(vessel), aspectDeg);
 }
 
 /**
@@ -58,13 +59,26 @@ export function visibleLights(vessel: VesselState, aspectDeg: number): Projected
  *
  * Two scenarios with the same signature produce the same picture, so the
  * generator uses this to guarantee that no distractor is indistinguishable
- * from the correct answer. Positions are rounded coarsely — about a tenth of
- * the vessel's half-length — because a difference finer than that is not
- * something anyone can read off a night scene.
+ * from the correct answer. It records the arrangement, not the measurements:
+ *
+ * - heights only as an order, which light is above which. At night nobody can
+ *   judge that two whites are 2 metres apart rather than 4.5: dead ahead a
+ *   ship's two masthead lights in line look like a towing column.
+ * - horizontal positions only relative to the other lights, rounded to about
+ *   a tenth of the vessel's half-length. A lone light has nothing to be
+ *   measured against, so its height and position say nothing at all.
  */
 export function signature(vessel: VesselState, aspectDeg: number): string {
-  return visibleLights(vessel, aspectDeg)
-    .map((l) => `${l.colour}@${l.x.toFixed(1)},${l.y.toFixed(1)}`)
+  const lights = visibleLights(vessel, aspectDeg);
+  if (lights.length === 0) return '';
+  const minX = Math.min(...lights.map((l) => l.x));
+  const levels = [...new Set(lights.map((l) => Math.round(l.y * 20)))].sort((a, b) => a - b);
+  return lights
+    .map((l) => {
+      const x = (Math.round((l.x - minX) * 10) / 10).toFixed(1);
+      const level = levels.indexOf(Math.round(l.y * 20));
+      return `${l.colour}${l.flashing ? '*' : ''}@${x},${level}`;
+    })
     .sort()
     .join('|');
 }
@@ -79,7 +93,7 @@ export function signature(vessel: VesselState, aspectDeg: number): string {
  * sector instead of once per bearing.
  */
 export function visibleKey(vessel: VesselState, aspectDeg: number): string {
-  return lightsFor(vessel)
+  return sceneLightsFor(vessel)
     .filter((l) => isVisible(l, aspectDeg))
     .map((l) => `${l.colour}:${l.u}:${l.v}:${l.w}:${l.flashing ? 'f' : ''}${l.dim ? 'd' : ''}`)
     .sort()

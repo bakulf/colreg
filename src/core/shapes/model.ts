@@ -362,3 +362,80 @@ export function shapeConceptFor(v: VesselState): string {
       return `shapes:${v.kind}`;
   }
 }
+
+// --- tows by day ---------------------------------------------------------------
+
+/**
+ * A tow is drawn whole by day: the towing vessel ahead, the tow astern, the
+ * towline between. The shapes of Rule 24 and Rule 27(c) are split between the
+ * two — both carry the diamond of a long tow, a partly submerged tow carries
+ * its own at its after end, and only the towing vessel carries ball, diamond,
+ * ball — so neither half means much without the other.
+ */
+export interface DayTow {
+  tug: VesselState;
+  tow: VesselState;
+}
+
+export function dayTowFor(v: VesselState): DayTow | undefined {
+  const towed = (towLengthM: number): VesselState => ({
+    kind: 'towed',
+    lengthM: 60,
+    makingWay: true,
+    towLengthM,
+  });
+  switch (v.kind) {
+    case 'towing':
+    case 'restricted-towing':
+      return { tug: v, tow: towed(v.towLengthM ?? 150) };
+    case 'towed':
+      return {
+        tug: { kind: 'towing', lengthM: 30, makingWay: true, towLengthM: v.towLengthM ?? 150 },
+        tow: v,
+      };
+    case 'submerged-tow':
+      return { tug: { kind: 'towing', lengthM: 30, makingWay: true, towLengthM: 150 }, tow: v };
+    default:
+      return undefined;
+  }
+}
+
+/** The day picture's fingerprint, a tow's two halves included. */
+export function daySignature(v: VesselState): string {
+  const t = dayTowFor(v);
+  return t ? `tow:${shapeSignature(t.tug)}/${shapeSignature(t.tow)}` : shapeSignature(v);
+}
+
+/** What the whole tow is, as an option in a day drill. */
+export function describeTowByDay(v: VesselState): string {
+  const long = (v.towLengthM ?? 0) > 200;
+  switch (v.kind) {
+    case 'submerged-tow':
+      return 'A vessel towing an inconspicuous, partly submerged vessel or object';
+    case 'restricted-towing':
+      return long
+        ? 'A towing operation which severely restricts the towing vessel’s ability to deviate, the tow exceeding 200 metres'
+        : 'A towing operation which severely restricts the towing vessel’s ability to deviate, the tow 200 metres or less';
+    default:
+      return long
+        ? 'A vessel towing astern, the tow exceeding 200 metres'
+        : 'A vessel towing astern, the tow 200 metres or less';
+  }
+}
+
+/** Which shapes each half of the tow carries, and why. */
+export function explainTowByDay(v: VesselState): string {
+  const long = (v.towLengthM ?? 0) > 200;
+  switch (v.kind) {
+    case 'submerged-tow':
+      return 'The diamond is on the tow, at or near her aftermost extremity: Rule 24(g)(iv). The towing vessel shows nothing because this tow is not over 200 metres; if it were, she would show a diamond under Rule 24(a)(v) and the tow a second one, as far forward as practicable.';
+    case 'restricted-towing':
+      return long
+        ? 'The towing vessel shows ball, diamond, ball — Rule 27(c) adds the shapes of Rule 27(b)(ii) to her towing shapes — and beside them the diamond of Rule 24(a)(v), because the tow exceeds 200 metres. The tow shows her own diamond under Rule 24(e)(iii).'
+        : 'The towing vessel shows ball, diamond, ball: Rule 27(c) adds the shapes of Rule 27(b)(ii) to her towing shapes, and Rule 24(a) gives none for a tow of 200 metres or less. Without the tow in sight she would look like any vessel restricted in her ability to manoeuvre. The tow shows nothing.';
+    default:
+      return long
+        ? 'Both the towing vessel and the tow show a diamond where it can best be seen: Rule 24(a)(v) and Rule 24(e)(iii), and only when the length of tow exceeds 200 metres.'
+        : 'Neither shows anything: Rule 24 gives a diamond only when the length of tow exceeds 200 metres. A short tow has no day signal at all, which is why a towline is so easily missed by day.';
+  }
+}

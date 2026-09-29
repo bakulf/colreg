@@ -545,3 +545,79 @@ export function lightsFor(v: VesselState): Light[] {
       return [...anchorLights(v.lengthM), ...stack(['red', 'red'], 0.85)];
   }
 }
+
+// --- tows and the vessel moving them -----------------------------------------
+
+/**
+ * The vessel doing the towing or pushing, for a vessel that cannot be under
+ * way on her own account. A tow's lights alone are two or three lights with
+ * no context — Rule 24(g)'s white lights at the waterline could be anything —
+ * and at sea you would never see them without the tug. So she is drawn too.
+ *
+ * `u` and `v` place the partner's centre in the tow's half-lengths. The gap
+ * between tug and tow is compressed: a real tow-line is several ship-lengths,
+ * which would not fit a picture drawn at any useful scale.
+ */
+export interface Partner {
+  vessel: VesselState;
+  relation: 'towed-by' | 'pushed-by' | 'alongside';
+  u: number;
+  v: number;
+}
+
+export function partnerFor(v: VesselState): Partner | undefined {
+  switch (v.kind) {
+    case 'towed':
+    case 'submerged-tow': {
+      const tug: VesselState = {
+        kind: 'towing',
+        lengthM: 30,
+        makingWay: true,
+        towLengthM: v.towLengthM ?? 150,
+      };
+      return { vessel: tug, relation: 'towed-by', u: 0, v: 1 + partnerScale(tug, v) + 0.6 };
+    }
+    case 'pushed-ahead': {
+      const pusher: VesselState = { kind: 'pushing', lengthM: 40, makingWay: true };
+      return { vessel: pusher, relation: 'pushed-by', u: 0, v: -(1 + partnerScale(pusher, v)) };
+    }
+    case 'towed-alongside': {
+      const tug: VesselState = { kind: 'pushing', lengthM: 40, makingWay: true };
+      return { vessel: tug, relation: 'alongside', u: -0.35, v: -(1 - partnerScale(tug, v)) };
+    }
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * The partner's size relative to the tow, not allowed below 0.6: a tug drawn
+ * to her true scale beside a long tow has lights too close together to read.
+ */
+function partnerScale(partner: VesselState, tow: VesselState): number {
+  return Math.max(0.6, partner.lengthM / tow.lengthM);
+}
+
+/** Everything in the picture: her own lights, and her partner's if she has one. */
+export function sceneLightsFor(v: VesselState): Light[] {
+  const own = lightsFor(v);
+  const partner = partnerFor(v);
+  if (!partner) return own;
+
+  const s = partnerScale(partner.vessel, v);
+  const theirs = lightsFor(partner.vessel).map((l) => ({
+    ...l,
+    u: partner.u + l.u * s,
+    v: partner.v + l.v * s,
+    w: l.w * s,
+  }));
+  const all = [...own, ...theirs];
+
+  // Centre the pair and shrink it to the width one vessel beam-on takes, so it
+  // fits the frame at the renderer's fixed scale.
+  const vs = all.map((l) => l.v);
+  const mid = (Math.max(...vs) + Math.min(...vs)) / 2;
+  const half = (Math.max(...vs) - Math.min(...vs)) / 2;
+  const k = Math.min(1, 1.2 / half);
+  return all.map((l) => ({ ...l, u: l.u * k, v: (l.v - mid) * k, w: l.w * k }));
+}

@@ -1,6 +1,6 @@
 import { useId } from 'react';
 import type { VesselState } from '../core/lights/model.ts';
-import { lightsFor } from '../core/lights/model.ts';
+import { sceneLightsFor } from '../core/lights/model.ts';
 import { aspectLabel, projectScene } from '../core/lights/project.ts';
 import type { LightColour } from '../core/lights/model.ts';
 
@@ -9,8 +9,10 @@ import type { LightColour } from '../core/lights/model.ts';
  *
  * Deliberately no hull, no silhouette, no horizon glow beyond a hint: at night
  * you see lights and nothing else, and drawing the ship would hand over the
- * aspect and the size for free. Everything on screen is derived from the model
- * and the Rule 21 arcs, so the picture cannot disagree with the answer.
+ * aspect and the size for free. A tow is drawn with the vessel towing or
+ * pushing her, as you would see them together. Everything on screen is derived
+ * from the model and the Rule 21 arcs, so the picture cannot disagree with the
+ * answer.
  */
 
 const HULL: Record<LightColour, string> = {
@@ -40,7 +42,7 @@ interface Props {
 export function LightScene({ vessel, aspectDeg, compact = false }: Props) {
   const uid = useId().replace(/:/g, '');
   const glow = `glow-${uid}`;
-  const lights = projectScene(lightsFor(vessel), aspectDeg);
+  const lights = projectScene(sceneLightsFor(vessel), aspectDeg);
 
   return (
     <svg

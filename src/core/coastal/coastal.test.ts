@@ -1,20 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { CATALOGUE, looksSame, maxPeriodS, notation, timeline, violations } from './model.ts';
 import type { Character } from './model.ts';
-import {
-  GEO_K_ALT,
-  NOMINAL_VISIBILITY_NM,
-  geographicRangeNm,
-  luminousRangeNm,
-} from './range.ts';
+import { NOMINAL_VISIBILITY_NM, geographicRangeNm, luminousRangeNm } from './range.ts';
 import {
   coastalSources,
   decodeDrill,
-  firstSightDrill,
   luminousDrill,
-  noRiseDrill,
   recogniseDrill,
-  risingDrill,
   sectorDrill,
   recolour,
 } from './generator.ts';
@@ -102,19 +94,12 @@ function sample(make: (rng: ReturnType<typeof createRng>) => Question, n = 200):
   return Array.from({ length: n }, () => make(rng));
 }
 
-function numberIn(text: string): number {
-  return Number(/([\d.]+) M/.exec(text)?.[1]);
-}
-
 describe('coastal drills', () => {
   const all = [
     ...CATALOGUE.flatMap((c) => sample((rng) => recogniseDrill(c, rng), 10)),
     ...sample(decodeDrill),
     ...sample(sectorDrill),
-    ...sample(risingDrill),
-    ...sample(noRiseDrill),
     ...sample(luminousDrill),
-    ...sample(firstSightDrill),
   ];
 
   it('always offers four distinct options with one correct', () => {
@@ -149,31 +134,6 @@ describe('coastal drills', () => {
     }
   });
 
-  it('lets "a shade over 2 × (√H + √h)" land on the right rising range', () => {
-    for (const q of sample(risingDrill)) {
-      const [, H, h] = /-(\d+)-([\d.]+)-/.exec(q.id) ?? [];
-      const sH = Math.sqrt(Number(H));
-      const sh = Math.sqrt(Number(h));
-      expect(Number.isInteger(sH) && Number.isInteger(sh * 2), q.id).toBe(true);
-      const guess = 2 * (sH + sh);
-      const closest = q.choices
-        .map((c) => ({ c, d: Math.abs(numberIn(c.text) - guess) }))
-        .sort((a, b) => a.d - b.d)[0];
-      expect(closest?.c.id, q.id).toBe(q.correct);
-    }
-  });
-
-  it('keeps the right answer to a rising range right with the other almanac constant', () => {
-    for (const q of sample(risingDrill)) {
-      const [, H, h] = /-(\d+)-([\d.]+)-/.exec(q.id) ?? [];
-      const alt = geographicRangeNm(Number(H), Number(h), GEO_K_ALT);
-      const closest = q.choices
-        .map((c) => ({ c, d: Math.abs(numberIn(c.text) - alt) }))
-        .sort((a, b) => a.d - b.d)[0];
-      expect(closest?.c.id, q.id).toBe(q.correct);
-    }
-  });
-
   it('puts sector bearings in the sector they name', () => {
     for (const q of sample(sectorDrill)) {
       const right = q.choices.find((c) => c.id === q.correct)?.text ?? '';
@@ -195,7 +155,7 @@ describe('coastal drills', () => {
 
   it('exposes one source per character and one per computed drill', () => {
     const sources = coastalSources();
-    expect(sources.length).toBe(CATALOGUE.length + 6);
+    expect(sources.length).toBe(CATALOGUE.length + 3);
     expect(new Set(sources.map((s) => s.concept)).size).toBe(sources.length);
     const rng = createRng(5);
     for (const s of sources) expect(s.generate(rng).concept, s.id).toBe(s.concept);

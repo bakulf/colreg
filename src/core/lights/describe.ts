@@ -207,7 +207,7 @@ export function ambiguityNote(v: VesselState): string | undefined {
     case 'pushed-ahead':
       return 'Sidelights and nothing above them, and no sternlight — a picture no vessel underway on her own account ever shows. If you see it, look for the pusher behind her.';
     case 'towed':
-      return 'These are exactly the lights of a sailing vessel, and nothing in the tow itself tells you otherwise. What gives it away is ahead of her: the towing vessel\'s vertical masthead lights and her yellow towing light. By day the diamond is shown by both, but only when the tow exceeds 200 metres.';
+      return 'Her own lights are exactly those of a sailing vessel, and nothing in the tow itself tells you otherwise. What gives her away is ahead of her: the towing vessel\'s vertical masthead lights and her yellow towing light. By day the diamond is shown by both, but only when the tow exceeds 200 metres.';
     case 'diving':
       return 'By night a small diving boat shows the same red white red as any vessel restricted in her ability to manoeuvre. Only the day signal, the rigid flag A, identifies her as a diving operation.';
     case 'sailing':

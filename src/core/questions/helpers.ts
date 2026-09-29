@@ -18,6 +18,8 @@ export interface QuestionSpec {
   ruleRefs: string[];
   explanation: string;
   scene?: Scene;
+  /** Shown once answered, when the picture would give the answer away. */
+  afterScene?: Scene;
 }
 
 /**
@@ -42,5 +44,6 @@ export function mcq(spec: QuestionSpec): Question {
     explanation: spec.explanation,
     difficulty: spec.difficulty,
     scene: spec.scene,
+    afterScene: spec.afterScene,
   };
 }

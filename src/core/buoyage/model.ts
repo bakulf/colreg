@@ -262,7 +262,7 @@ export const MARKS: Record<MarkKind, Mark> = {
     body: { type: 'horizontal', colours: ['black', 'yellow', 'black'] },
     topmark: 'cones-base',
     topmarkColour: 'black',
-    light: cardinalLight('VQ(3).5s', 'three very quick flashes every five seconds', 3, 5000),
+    light: cardinalLight('VQ(3)5s', 'three very quick flashes every five seconds', 3, 5000),
   },
   'cardinal-s': {
     kind: 'cardinal-s',
@@ -284,7 +284,7 @@ export const MARKS: Record<MarkKind, Mark> = {
     body: { type: 'horizontal', colours: ['yellow', 'black', 'yellow'] },
     topmark: 'cones-point',
     topmarkColour: 'black',
-    light: cardinalLight('VQ(9).10s', 'nine very quick flashes every ten seconds', 9, 10000),
+    light: cardinalLight('VQ(9)10s', 'nine very quick flashes every ten seconds', 9, 10000),
   },
   'isolated-danger': {
     kind: 'isolated-danger',
@@ -293,7 +293,7 @@ export const MARKS: Record<MarkKind, Mark> = {
     topmark: 'spheres',
     topmarkColour: 'black',
     light: flashes(
-      'Fl(2).5s',
+      'Fl(2)5s',
       'two white flashes every five seconds',
       'white',
       [1000, 0],

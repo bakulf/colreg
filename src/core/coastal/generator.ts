@@ -2,23 +2,17 @@ import type { Question, QuestionSource, Rng } from '../types.ts';
 import { pick, shuffle } from '../rng.ts';
 import type { Character, LightColour } from './model.ts';
 import { CATALOGUE, COLOUR_NAMES, characterId, looksSame, notation, spoken } from './model.ts';
-import {
-  GEO_K,
-  GEO_K_ALT,
-  NOMINAL_VISIBILITY_NM,
-  geographicRangeNm,
-  horizonNm,
-  luminousRangeNm,
-} from './range.ts';
+import { NOMINAL_VISIBILITY_NM, luminousRangeNm } from './range.ts';
 
 /**
  * Drills for lights ashore, all generated.
  *
  * Recognition drills flash a character from the catalogue and ask for its
  * chart notation. The chart and range drills build a light — elevation,
- * range, sectors — and ask what the chart is telling you or how far off it
- * will be seen, computing the answer from the same model the explanation
- * quotes.
+ * range, sectors — and ask what the chart is telling you, or how far the
+ * light carries off the luminous range diagram, computing the answer from the
+ * same model the explanation quotes. Nothing asks for a square root in the
+ * head: the geographic range is taught by the definitions, not by drill.
  */
 
 function mcq(
@@ -379,14 +373,10 @@ function sectorDrill(rng: Rng): Question {
 
 // --- range -------------------------------------------------------------------
 
-function fmt(nm: number): string {
-  return `${nm.toFixed(1)} M`;
-}
-
 /**
  * Picks numeric distractors that are clearly apart from the answer and from
- * each other, so a candidate using the other common constant, or reading a
- * diagram, still lands on the right option.
+ * each other, so a candidate reading a diagram still lands on the right
+ * option.
  */
 function spread(answer: number, candidates: number[], gap = 0.12): number[] {
   const chosen: number[] = [];
@@ -397,74 +387,6 @@ function spread(answer: number, candidates: number[], gap = 0.12): number[] {
     if (chosen.length === 3) break;
   }
   return chosen;
-}
-
-/**
- * Perfect squares, so the square roots are exact and the sum is one for the
- * head: 2.08 × (√36 + √4) is "a shade over 2 × 8". Real almanacs tabulate it;
- * these let you do it without one.
- */
-const ELEVATIONS = [9, 16, 25, 36, 49, 64, 81];
-const EYES = [1, 2.25, 4];
-
-/** 2.08 × (√H + √h), shown as the sum a navigator would do. */
-function geoWorking(H: number, h: number): string {
-  const s = Math.sqrt(H) + Math.sqrt(h);
-  return `${GEO_K} × (√${H} + √${h}) = ${GEO_K} × (${Math.sqrt(H)} + ${Math.sqrt(h)}) = ${GEO_K} × ${s} = ${fmt(GEO_K * s)} — call it "a shade over 2 × ${s}"`;
-}
-
-function risingDrill(rng: Rng): Question {
-  for (;;) {
-    const H = pick(ELEVATIONS, rng);
-    const h = pick(EYES, rng);
-    const geo = geographicRangeNm(H, h);
-    const nominal = Math.ceil(geo) + pick([3, 5, 8], rng);
-    const wrong = spread(Math.round(geo * 10) / 10, [
-      Math.round(horizonNm(H) * 10) / 10,
-      Math.round(GEO_K * Math.sqrt(H + h) * 10) / 10,
-      nominal,
-      Math.round((geo + horizonNm(h)) * 10) / 10,
-      Math.round(geo * 1.25 * 10) / 10,
-    ]);
-    if (wrong.length < 3) continue;
-    return mcq(
-      `cst-rise-${H}-${h}-${nominal}`,
-      'coastal-range',
-      'coastal:range:rising',
-      `A lighthouse is charted as Fl(2)10s${H}m${nominal}M. Visibility is good, about 10 miles. Your height of eye is ${h} m. At what distance off should it rise above the horizon?`,
-      fmt(geo),
-      wrong.map(fmt),
-      ['Horizon geometry', 'IALA R0202'],
-      `Geographic range = ${geoWorking(H, h)}. Both horizons count: the light's own and yours. The luminous range tonight is about the nominal ${nominal} M, since the visibility is the 10 miles nominal range is defined for, and that is further than the horizon — so the light really does rise, and at that moment the distance off is known. Almanacs tabulate this; some use ${GEO_K_ALT} instead of ${GEO_K}, which gives ${fmt(geographicRangeNm(H, h, GEO_K_ALT))} here.`,
-      3,
-    );
-  }
-}
-
-function noRiseDrill(rng: Rng): Question {
-  for (;;) {
-    const H = pick(ELEVATIONS.filter((e) => e >= 25), rng);
-    const h = pick(EYES, rng);
-    const geo = geographicRangeNm(H, h);
-    const nominal = Math.floor(geo) - pick([4, 6, 8], rng);
-    if (nominal < 5) continue;
-    const answer = `It never rises: it appears at about ${nominal} M, already clear above the horizon`;
-    return mcq(
-      `cst-norise-${H}-${h}-${nominal}`,
-      'coastal-range',
-      'coastal:range:no-rising',
-      `A light is charted as Oc.4s${H}m${nominal}M. Visibility is about 10 miles, height of eye ${h} m. What happens as you approach from seaward?`,
-      answer,
-      [
-        `It rises above the horizon at ${fmt(geo)}`,
-        `It rises above the horizon at ${fmt(horizonNm(H))}`,
-        `It rises at ${nominal} M, since that is its charted range`,
-      ],
-      ['Horizon geometry', 'IALA R0202'],
-      `Its geographic range is ${geoWorking(H, h)}, but it is not bright enough to carry that far: in 10 miles visibility its luminous range is its nominal ${nominal} M. The weaker limit wins, so you first see it well inside the horizon, simply switching on. A rising or dipping distance only works as a range when the luminous range is the greater.`,
-      3,
-    );
-  }
 }
 
 const VISIBILITIES = [1, 2, 3, 5, 20];
@@ -502,39 +424,6 @@ function luminousDrill(rng: Rng): Question {
   }
 }
 
-function firstSightDrill(rng: Rng): Question {
-  for (;;) {
-    const H = pick(ELEVATIONS, rng);
-    const h = pick(EYES, rng);
-    const nominal = pick([10, 14, 18, 22, 26], rng);
-    const vis = pick([2, 3, 5, 20], rng);
-    const geo = geographicRangeNm(H, h);
-    const lum = luminousRangeNm(nominal, vis);
-    if (Math.abs(geo - lum) / Math.max(geo, lum) < 0.18) continue;
-    const first = Math.min(geo, lum);
-    const wrong = spread(Math.round(first * 10) / 10, [Math.max(geo, lum), nominal, vis]);
-    if (wrong.length < 3) continue;
-    const lumWins = lum < geo;
-    return mcq(
-      `cst-first-${H}-${h}-${nominal}-${vis}`,
-      'coastal-range',
-      'coastal:range:first-sighting',
-      `A light is charted as Fl.5s${H}m${nominal}M. Height of eye ${h} m; meteorological visibility ${vis} miles. At about what distance will you first see it?`,
-      fmt(first),
-      wrong.map(fmt),
-      ['Horizon geometry', 'IALA R0202'],
-      `Two limits, and the nearer one applies. Geographic range: ${geoWorking(H, h)}. Luminous range from the diagram, nominal ${nominal} M in ${vis} miles visibility: about ${fmt(lum)}. ${
-        lumWins
-          ? 'The light runs out of brightness before the horizon hides it, so it appears inside its geographic range — and does not rise.'
-          : 'It is bright enough to carry beyond the horizon, so the horizon decides: it rises at its geographic range.'
-      }`,
-      3,
-      { type: 'luminous-diagram', mark: undefined },
-      { type: 'luminous-diagram', mark: { nominal, visibility: vis } },
-    );
-  }
-}
-
 // --- sources -----------------------------------------------------------------
 
 export function coastalSources(): QuestionSource[] {
@@ -550,10 +439,7 @@ export function coastalSources(): QuestionSource[] {
   const drills: [string, QuestionSource['topic'], (rng: Rng) => Question][] = [
     ['coastal:notation:decode', 'coastal-notation', decodeDrill],
     ['coastal:notation:sector-bearing', 'coastal-notation', sectorDrill],
-    ['coastal:range:rising', 'coastal-range', risingDrill],
-    ['coastal:range:no-rising', 'coastal-range', noRiseDrill],
     ['coastal:range:luminous', 'coastal-range', luminousDrill],
-    ['coastal:range:first-sighting', 'coastal-range', firstSightDrill],
   ];
   for (const [concept, topic, generate] of drills) {
     sources.push({
@@ -572,8 +458,5 @@ export {
   recogniseDrill,
   decodeDrill,
   sectorDrill,
-  risingDrill,
-  noRiseDrill,
   luminousDrill,
-  firstSightDrill,
 };

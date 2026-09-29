@@ -218,4 +218,20 @@ export const BUOYAGE_QUESTIONS: Question[] = [
     explanation:
       'R1001 Table 4. The body decides what you do: a green can is a Region B port-hand mark, so leave it to port. The band decides where the main channel goes: red, the starboard-hand colour in Region B, so the preferred channel is to starboard of it. The same buoy in Region A colours would be red with a green band.',
   }),
+  mcq({
+    id: 'buo-fl2-colour',
+    topic: 'iala-lateral',
+    concept: 'iala-a:fl2-colour',
+    difficulty: 2,
+    prompt: 'Region A, at night: a buoy shows two red flashes every 5 seconds — Fl(2)R.5s. What is it?',
+    answer: 'A port-hand lateral mark: red is lateral, and laterals may use any rhythm except (2+1)',
+    distractors: [
+      'An isolated danger mark, because it flashes in twos',
+      'A preferred channel mark',
+      'A special mark',
+    ],
+    ruleRefs: ['IALA A'],
+    explanation:
+      'Colour first. Red and green lights are used only on lateral marks, and in Region A red is port-hand. Flashing in twos is reserved to isolated danger marks only when the light is white (IALA R1001 and R0110). The one rhythm a plain lateral may not use is composite (2+1), which marks a preferred channel.',
+  }),
 ];
